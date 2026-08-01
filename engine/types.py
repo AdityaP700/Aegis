@@ -12,5 +12,5 @@ class ExecutionRequest(BaseModel):
 class ExecutionResponse(BaseModel):
     status : str
     result : Any | None = None
-    error : Any | None = None
+    error : str | None = None
     metadata : dict[str,Any ]= Field(default_factory=dict)
