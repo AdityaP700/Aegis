@@ -1,6 +1,6 @@
 from tools.registry import ToolRegistry
 from engine.types import ExecutionRequest
-
+import time
 
 class Executor:
     """The LLM decides what should be done.
@@ -10,8 +10,11 @@ class Executor:
         self.registry = registry
 
     def execute(self, request: ExecutionRequest):
-
+        start = time.perf_counter()
         tool = self.registry.get(request.tool)
+        response = tool.execute(request)
+        end=time.perf_counter()
+        duration_ms=(end-start)*1000
+        response.metadata["duration_ms"]=round(duration_ms,3)
 
-        return tool.execute(request)
-
+        return response
