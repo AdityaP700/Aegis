@@ -1,5 +1,6 @@
 from abc import abstractmethod
 from tools.base import BaseTool
+import ast
 from engine.types import ExecutionRequest, ExecutionResponse
 class CalculatorTool(BaseTool):
     @property
@@ -14,7 +15,7 @@ class CalculatorTool(BaseTool):
         expression = request.arguments["expression"]
 
         try:
-            result = eval(expression)
+            result = ast.parse(expression)
             return ExecutionResponse(
                 status = "success",
                 result=result,

@@ -99,3 +99,5 @@ In the Aegis execution flow, a user submits a natural language prompt that the L
 the Executor then consults the Tool Registry to retrieve the matching tool implementation (such as CalculatorTool), invokes its execute method, and receives a structured ExecutionResponse (success with result or failure with error) which it forwards unchanged, while the components maintain clear responsibilities—ExecutionRequest and ExecutionResponse as standard formats,
 
 BaseTool as the contract, the Registry for name-to-implementation mapping, the Executor purely as orchestrator, tools for actual work, and the LLM for deciding and preparing the request—with future enhancements planned for retries, timeouts, metrics, tracing, and logging.
+
+- ast.parse() : it is an X-Ray Architecture Machine: It can scan a complex blueprint for a house or an engine. It doesn't build the house; it just gives you a map of the layout so you can look for hidden security flaws before giving the builder approval.
