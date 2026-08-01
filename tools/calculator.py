@@ -7,7 +7,7 @@ class CalculatorTool(BaseTool):
     def name(self)->str:
         return "calculator"
     def _evaluate(self ,node:ast.AST)-> float | int:
-        if isinstance(node,ast.Constant):
+        if isinstance(node,ast.Constant) and isinstance(node.value, (int, float)):
             return node.value
 
         elif isinstance(node,ast.BinOp):
@@ -24,37 +24,14 @@ class CalculatorTool(BaseTool):
                 if right_value==0:
                     raise ZeroDivisionError("cannot divide by zero")
                 return left_value/right_value
-
+        else:
+            raise ValueError(f"Invalid non-numeric item detected: {type(node).__name__}")
     def execute(
         self,
         request : ExecutionRequest
     )->ExecutionResponse:
         expression = request.arguments["expression"]
 
-        try:
-            result = ast.parse(expression,mode='eval')
-            final_math_result = self._evaluate(result.body)
-            return ExecutionResponse(
-                status = "success",
-                result=final_math_result,
-                metadata={
-                    "tool":self.name
-                }
-            )
 
-        except Exception as e:
-            return ExecutionResponse(
-                status = "failed",
-                error= str(e),
-                metadata={
-                    # the name of the method is allowed right??
-                    "tool":self.name
-                }
-            )
-
-
-
-
-
-
-
+        result = ast.parse(expression,mode='eval')
+        return self._evaluate(result.body)

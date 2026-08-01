@@ -1,5 +1,5 @@
 from tools.registry import ToolRegistry
-from engine.types import ExecutionRequest
+from engine.types import ExecutionRequest,ExecutionResponse
 import time
 
 class Executor:
@@ -11,10 +11,27 @@ class Executor:
 
     def execute(self, request: ExecutionRequest):
         start = time.perf_counter()
-        tool = self.registry.get(request.tool)
-        response = tool.execute(request)
-        end=time.perf_counter()
-        duration_ms=(end-start)*1000
-        response.metadata["duration_ms"]=round(duration_ms,3)
+        tool_name=request.tool
+        try:
+
+            tool = self.registry.get(tool_name)
+            raw_result = tool.execute(request)
+            response=ExecutionResponse(
+                status="success",
+                result=raw_result,
+                metadata={
+                    "tool":tool_name
+                }
+            )
+        except Exception as e:
+            # 4. Catch any Exception globally and Build a Failure Response
+            response = ExecutionResponse(
+                    status="failed",
+                    error=str(e),
+                    metadata={"tool": tool_name}
+            )
+        end = time.perf_counter()
+        duration_ms = (end - start) * 1000
+        response.metadata["duration_ms"] = round(duration_ms, 3)
 
         return response

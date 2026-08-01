@@ -13,7 +13,7 @@ executor = Executor(registry)
 request = ExecutionRequest(
     tool="calculator",
     arguments={
-        "expression": "25 * (17 + 3) - 8"
+        "expression": "weather"
     }
 )
 
