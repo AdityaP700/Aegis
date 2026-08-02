@@ -28,10 +28,13 @@ class CalculatorTool(BaseTool):
             raise ValueError(f"Invalid non-numeric item detected: {type(node).__name__}")
     def execute(
         self,
-        request : ExecutionRequest
+        request : ExecutionRequest,
+        trace : list
     )->ExecutionResponse:
+        trace.append(f"Calculator Tool: Received request for expression :'{request.arguments.get('expression')}'")
         expression = request.arguments["expression"]
 
 
         result = ast.parse(expression,mode='eval')
+        trace.append("Calculator Tool : Matching record found in database. Returning results.")
         return self._evaluate(result.body)

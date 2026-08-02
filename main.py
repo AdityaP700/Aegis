@@ -14,10 +14,10 @@ executor = Executor(registry)
 request = ExecutionRequest(
     tool="weather",
     arguments={
-        "city": "12341"
+        "city": "London"
     }
 )
 
-response = executor.execute(request,max_attempt=5,wait=3.0)
+response = executor.execute(request)
 
 print(response.model_dump())

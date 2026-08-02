@@ -39,11 +39,14 @@ class WeatherTool(BaseTool):
             raise ValueError(f"Invalid city name detected:{city}")
     def execute(
         self,
-        request : ExecutionRequest
+        request : ExecutionRequest,
+        trace : list
     )->dict:
+        trace.append(f"WeatherTool: Received request for city '{request.arguments.get('city')}'")
         expression = request.arguments["city"]
-        
+
         result=self._estimate(expression)
+        trace.append("WeatherTool: Matching record found in database. Returning results.")
         return result
 
 

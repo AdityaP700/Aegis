@@ -1,7 +1,7 @@
 #this is the language every component speaks
 # we will define the contracts
 
-from typing import Any
+from typing import Any,List
 from pydantic import BaseModel ,Field
 
 #define two of the classes : executioneRequest ,ExecutionResponse
@@ -14,3 +14,4 @@ class ExecutionResponse(BaseModel):
     result : Any | None = None
     error : str | None = None
     metadata : dict[str,Any ]= Field(default_factory=dict)
+    trace : List[str]=[]
