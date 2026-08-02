@@ -59,7 +59,7 @@ class Executor:
                     "failed_attempts": attempt
                     }
             )
-                if attempt < max_attempt:
+                if attempt < final_max_attempts:
                     print(f"Attempt {attempt} retrying in {wait}s...")
                     time.sleep(final_wait)
                 else:
