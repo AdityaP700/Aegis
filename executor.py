@@ -9,27 +9,36 @@ class Executor:
     def __init__(self, registry: ToolRegistry):
         self.registry = registry
 
-    def execute(self, request: ExecutionRequest):
+    def execute(self, request: ExecutionRequest,max_attempt:int  = 3 , wait : float = 1.0):
         start = time.perf_counter()
         tool_name=request.tool
-        try:
-
-            tool = self.registry.get(tool_name)
-            raw_result = tool.execute(request)
-            response=ExecutionResponse(
+        for attempt in range(1,max_attempt+1):
+            try:
+                tool = self.registry.get(tool_name)
+                raw_result = tool.execute(request)
+                response=ExecutionResponse(
                 status="success",
                 result=raw_result,
                 metadata={
-                    "tool":tool_name
+                    "tool":tool_name,
+                    "attempts_taken": attempt
                 }
             )
-        except Exception as e:
+            except Exception as e:
             # 4. Catch any Exception globally and Build a Failure Response
-            response = ExecutionResponse(
+                response = ExecutionResponse(
                     status="failed",
                     error=str(e),
-                    metadata={"tool": tool_name}
+                    metadata={"tool": tool_name,
+                    "failed_attempts": attempt
+                    }
             )
+                if attempt < max_attempt:
+                    print(f"Attempt {attempt} retrying in {wait}s...")
+                    time.sleep(wait)
+                else:
+                    print(f"All {max_attempt} attempts exhausted")
+
         end = time.perf_counter()
         duration_ms = (end - start) * 1000
         response.metadata["duration_ms"] = round(duration_ms, 3)

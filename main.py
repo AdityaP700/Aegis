@@ -14,7 +14,7 @@ executor = Executor(registry)
 request = ExecutionRequest(
     tool="weather",
     arguments={
-        "city": "Jakarta"
+        "city": "jakarta"
     }
 )
 
