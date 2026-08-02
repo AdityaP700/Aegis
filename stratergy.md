@@ -112,3 +112,11 @@ time.perf_counter()
 ✅ Built a safe AST interpreter
 ✅ Execution timing (perf_counter())
 ✅ Structured metadata
+
+
+<!-- if city_lower in WEATHER_DATA:
+            return {
+                #if exists then return in terms of value ,not types
+                "temperature":WEATHER_DATA[city_lower]["temperature"],
+                "condition":WEATHER_DATA[city_lower]["condition"]
+            } -->
