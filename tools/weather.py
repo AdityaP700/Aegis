@@ -42,7 +42,7 @@ class WeatherTool(BaseTool):
         request : ExecutionRequest
     )->dict:
         expression = request.arguments["city"]
-
+        
         result=self._estimate(expression)
         return result
 

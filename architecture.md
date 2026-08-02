@@ -78,3 +78,15 @@ But where should that variable live?
 Not inside Weather.
 
 Imagine tomorrow.
+
+for the current retryable sandboxed logic which is being implemented
+### things i would change
+- Return immediately after a successful execution (don't continue looping).
+
+- Retry only transient exceptions (TimeoutError, maybe ConnectionError), not permanent ones like ValueError or ZeroDivisionError.
+
+ValueError is a specific type of error that occurs when a function gets an argument with the correct data type but an invalid value
+
+A TypeError is a built-in error triggered when you use a piece of data incorrectly based on its data type.The Cause: You are forcing a data type to do something it cannot do.JavaScript Example: Trying to treat a standard variable like a function, such as writing let x = 10; x();.
+
+The difference between max_attempts (with an s) and max_attempt (without an s) in that code comes down to two different concepts in Python: class configuration storage versus function parameter overrides.Here is exactly why they are named differently and how they work together:1. self.max_attempts (Inside __init__)This is an Instance Variable. It defines the permanent, global baseline default configuration for your Executor object. It uses the plural "attempts" because it represents the total pool of possible tries allowed by default across the whole system lifespan.2. max_attempt (Inside the execute function signature)This is a Local Parameter Override. It is singular because it allows a single, specific call to the function to say: "Hey, for this one specific request, I want to change the target ceiling rule to this exact number."
