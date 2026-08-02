@@ -14,20 +14,32 @@ class Executor:
         start = time.perf_counter()
         tool_name=request.tool
         trace =[]
-        trace.append(f"Executor:Starting execution loop for tool'{tool_name}")
+        trace.append({
+            "component": "executor",
+            "event": "execution_started",
+            "tool": tool_name})
       # Smart Guard: Use the passed value. If it's empty (None),
       #  use the class default instead!
         final_max_attempts = max_attempt if max_attempt is not None else self.max_attempts
         final_wait = wait if wait is not None else self.retry_delay
         for attempt in range(1,final_max_attempts+1):
             try:
-                trace.append(f"Executor:Attempt {attempt}/{final_max_attempts}")
+                trace.append({
+                    "component": "executor",
+                    "event": "execution_success",
+                    "attempt": attempt
+                })
                 tool = self.registry.get(tool_name)
                 if not tool:
                     raise ValueError(f"Tool '{tool_name}'is not registered")
 
                 raw_result = tool.execute(request,trace)
-                trace.append(f"Executor: Tool execution successful on attempt {attempt}")
+                trace.append({
+                    "component": "executor",
+                    "event": "attempt_started",
+                    "attempt": attempt,
+                    "max_attempts": final_max_attempts
+                })
                 response=ExecutionResponse(
                     status="success",
                     result=raw_result,
@@ -43,7 +55,13 @@ class Executor:
                 return response
         # differentiating the errors
             except (KeyError) as fatal_err:
-                trace.append(f"Executor: Fatal error encountered on attempt {attempt}: {fatal_err}")
+                trace.append({
+                    "component": "executor",
+                    "event": "fatal_error_encountered",
+                    "error_type": type(fatal_err).__name__,
+                    "message": str(fatal_err),
+                    "attempt": attempt
+                })
                 response = ExecutionResponse(
                     status="failed",
                     error=f"Fatal Execution Error:{str(fatal_err)}",
@@ -58,17 +76,30 @@ class Executor:
 
             except Exception as operational_err:
             # 4. Catch any Exception globally and Build a Failure Response
-                trace.append(f"Executor: Operational glitch on attempt {attempt}: {operational_err}")
+                trace.append({
+                    "component": "executor",
+                    "event": "operational_error_encountered",
+                    "error_type": type(operational_err).__name__,
+                    "message": str(operational_err),
+                    "attempt": attempt
+                })
                 response = ExecutionResponse(
                     status="failed",
+                    result=None,
                     error=str(operational_err),
-                    metadata={"tool": tool_name,
+                    metadata={
+                    "tool": tool_name,
                     "failed_attempts": attempt
                     },
                     trace=trace
             )
                 if attempt < final_max_attempts:
-                    trace.append(f"Executor: Waiting {wait}s before entering next operational retry loop.")
+                    trace.append({
+                        "component": "executor",
+                        "event": "retry_wait_initiated",
+                        "delay_seconds": wait,
+                        "next_attempt": attempt + 1
+                    })
                     print(f"Attempt {attempt} retrying in {final_wait}s...")
                     time.sleep(final_wait)
                 else:

@@ -42,11 +42,19 @@ class WeatherTool(BaseTool):
         request : ExecutionRequest,
         trace : list
     )->dict:
-        trace.append(f"WeatherTool: Received request for city '{request.arguments.get('city')}'")
-        expression = request.arguments["city"]
 
-        result=self._estimate(expression)
-        trace.append("WeatherTool: Matching record found in database. Returning results.")
+        city_name = request.arguments.get("city")
+        trace.append({"component": "weather_tool",
+            "event": "city_lookup_started",
+            "city": city_name})
+
+        result = self._estimate(city_name)
+        trace.append({
+            "component": "weather_tool",
+            "event": "city_lookup_success",
+            "city": city_name,
+            "data_found": True
+        })
         return result
 
 
