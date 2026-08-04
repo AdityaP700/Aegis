@@ -16,3 +16,6 @@ class ToolRegistry:
         return self._tools[tool_name]
     #When you want to watch the Sony TV, you yell to the dock: "Give me the Sony remote!" The dock instantly
     #pulls the correct remote out of the "Sony" slot and hands it to you.
+    def list_tools(self) -> list:
+        """List all registered tool names."""
+        return list(self._tools.keys())

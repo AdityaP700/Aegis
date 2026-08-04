@@ -54,7 +54,7 @@ class Executor:
                 response.metadata["duration_ms"] = round((end - start) * 1000, 3)
                 return response
         # differentiating the errors
-            except (KeyError) as fatal_err:
+            except (KeyError,ValueError) as fatal_err:
                 trace.append({
                     "component": "executor",
                     "event": "fatal_error_encountered",

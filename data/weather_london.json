@@ -1,0 +1,64 @@
+{
+  "status": "success",
+  "result": {
+    "city": "London",
+    "temperature": 24.71,
+    "feels_like": 24.91,
+    "condition": "Clouds",
+    "description": "overcast clouds",
+    "humidity": 64,
+    "pressure": 1009,
+    "wind_speed": 5.36,
+    "country": "GB"
+  },
+  "metadata": {
+    "tool": "weather",
+    "attempts_taken": 1,
+    "duration_ms": 969.54
+  },
+  "trace": [
+    {
+      "component": "executor",
+      "event": "execution_started",
+      "tool": "weather"
+    },
+    {
+      "component": "executor",
+      "event": "execution_success",
+      "attempt": 1
+    },
+    {
+      "component": "weather_tool",
+      "event": "api_call_started",
+      "city": "London"
+    },
+    {
+      "component": "weather_tool",
+      "event": "api_response_received",
+      "city": "London",
+      "status_code": 200
+    },
+    {
+      "component": "weather_tool",
+      "event": "response_normalized",
+      "city": "London",
+      "fields_extracted": [
+        "city",
+        "temperature",
+        "feels_like",
+        "condition",
+        "description",
+        "humidity",
+        "pressure",
+        "wind_speed",
+        "country"
+      ]
+    },
+    {
+      "component": "executor",
+      "event": "attempt_started",
+      "attempt": 1,
+      "max_attempts": 3
+    }
+  ]
+}

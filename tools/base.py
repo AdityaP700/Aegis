@@ -14,3 +14,8 @@ class BaseTool(ABC):
         request:ExecutionRequest
     )->ExecutionResponse:
       pass
+
+    @abstractmethod
+    def description(self) -> str:
+        """What this tool does."""
+        pass

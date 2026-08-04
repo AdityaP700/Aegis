@@ -1,0 +1,64 @@
+{
+  "status": "success",
+  "result": {
+    "city": "Tokyo",
+    "temperature": 24.06,
+    "feels_like": 24.43,
+    "condition": "Clouds",
+    "description": "broken clouds",
+    "humidity": 73,
+    "pressure": 1012,
+    "wind_speed": 0.45,
+    "country": "JP"
+  },
+  "metadata": {
+    "tool": "weather",
+    "attempts_taken": 1,
+    "duration_ms": 660.588
+  },
+  "trace": [
+    {
+      "component": "executor",
+      "event": "execution_started",
+      "tool": "weather"
+    },
+    {
+      "component": "executor",
+      "event": "execution_success",
+      "attempt": 1
+    },
+    {
+      "component": "weather_tool",
+      "event": "api_call_started",
+      "city": "Tokyo"
+    },
+    {
+      "component": "weather_tool",
+      "event": "api_response_received",
+      "city": "Tokyo",
+      "status_code": 200
+    },
+    {
+      "component": "weather_tool",
+      "event": "response_normalized",
+      "city": "Tokyo",
+      "fields_extracted": [
+        "city",
+        "temperature",
+        "feels_like",
+        "condition",
+        "description",
+        "humidity",
+        "pressure",
+        "wind_speed",
+        "country"
+      ]
+    },
+    {
+      "component": "executor",
+      "event": "attempt_started",
+      "attempt": 1,
+      "max_attempts": 3
+    }
+  ]
+}

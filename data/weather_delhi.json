@@ -1,0 +1,64 @@
+{
+  "status": "success",
+  "result": {
+    "city": "Delhi",
+    "temperature": 28.46,
+    "feels_like": 33.1,
+    "condition": "Rain",
+    "description": "moderate rain",
+    "humidity": 79,
+    "pressure": 1002,
+    "wind_speed": 2.08,
+    "country": "IN"
+  },
+  "metadata": {
+    "tool": "weather",
+    "attempts_taken": 1,
+    "duration_ms": 775.882
+  },
+  "trace": [
+    {
+      "component": "executor",
+      "event": "execution_started",
+      "tool": "weather"
+    },
+    {
+      "component": "executor",
+      "event": "execution_success",
+      "attempt": 1
+    },
+    {
+      "component": "weather_tool",
+      "event": "api_call_started",
+      "city": "Delhi"
+    },
+    {
+      "component": "weather_tool",
+      "event": "api_response_received",
+      "city": "Delhi",
+      "status_code": 200
+    },
+    {
+      "component": "weather_tool",
+      "event": "response_normalized",
+      "city": "Delhi",
+      "fields_extracted": [
+        "city",
+        "temperature",
+        "feels_like",
+        "condition",
+        "description",
+        "humidity",
+        "pressure",
+        "wind_speed",
+        "country"
+      ]
+    },
+    {
+      "component": "executor",
+      "event": "attempt_started",
+      "attempt": 1,
+      "max_attempts": 3
+    }
+  ]
+}
