@@ -43,11 +43,11 @@ class WeatherTool(BaseTool):
             ConnectionError: If network issues
         """
         params = {
-            "q": city,
-            "appid": self.api_key,
+            "q": city, #sending the city as the param
+            "appid": self.api_key, #sending the api key as a param
             "units": "metric"  # Celsius
         }
-
+    # Just send raw data
         response = requests.get(self.base_url, params=params, timeout=10)
 
         if response.status_code == 200:
@@ -97,6 +97,7 @@ class WeatherTool(BaseTool):
         Returns:
             Normalized weather data dict
         """
+        ##read the request -> arguments -> city -> london (lets say)
         city = request.arguments.get("city")
         if not city:
             raise ValueError("'city' argument is required")
@@ -109,7 +110,7 @@ class WeatherTool(BaseTool):
         })
 
         try:
-            # Fetch from API
+            # now define which city to be fetched
             raw_data = self._fetch_from_api(city)
 
             # Trace: API responded successfully
@@ -152,3 +153,4 @@ class WeatherTool(BaseTool):
                 "error": str(e)
             })
             raise  # Re-raise for executor to retry
+

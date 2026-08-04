@@ -32,7 +32,7 @@ class Executor:
                 tool = self.registry.get(tool_name)
                 if not tool:
                     raise ValueError(f"Tool '{tool_name}'is not registered")
-
+#identify the tool and then send to that specific tool 
                 raw_result = tool.execute(request,trace)
                 trace.append({
                     "component": "executor",
