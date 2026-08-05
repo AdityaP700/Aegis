@@ -1,0 +1,71 @@
+{
+  "status": "success",
+  "result": {
+    "query": "best Python web framework 2026",
+    "results": [
+      {
+        "title": "Top Python Web Development Frameworks in 2026",
+        "url": "https://reflex.dev/blog/top-python-web-frameworks/",
+        "snippet": "A comprehensive comparison of Reflex, Django, Flask, Gradio, Streamlit, Dash, and FastAPI\u2014the top Python web frameworks in 2026 for full-stack ...",
+        "position": 1,
+        "source": "Reflex Framework"
+      },
+      {
+        "title": "Which Python backend framework should I prioritize ...",
+        "url": "https://www.reddit.com/r/Python/comments/1r3xtww/which_python_backend_framework_should_i/",
+        "snippet": "FastAPI, Flask and Django are WEB SERVER backend frameworks. You use them to host either a web site or a REST API.",
+        "position": 2,
+        "source": "Reddit \u00b7 r/Python"
+      },
+      {
+        "title": "What Are the Best Full-stack Web App Frameworks in 2026?",
+        "url": "https://wasp.sh/resources/2026/02/24/best-frameworks-web-dev-2026",
+        "snippet": "Laravel, Rails, and Django remain the most battle-tested full-stack frameworks in 2026. y, go Laravel for PHP or Django for Python. Python's ...",
+        "position": 3,
+        "source": "Wasp framework"
+      }
+    ],
+    "total_results": 3
+  },
+  "metadata": {
+    "tool": "search",
+    "attempts_taken": 1,
+    "duration_ms": 553.171
+  },
+  "trace": [
+    {
+      "component": "executor",
+      "event": "execution_started",
+      "tool": "search"
+    },
+    {
+      "component": "executor",
+      "event": "execution_success",
+      "attempt": 1
+    },
+    {
+      "component": "search_tool",
+      "event": "search_started",
+      "query": "best Python web framework 2026",
+      "num_results": 3
+    },
+    {
+      "component": "search_tool",
+      "event": "api_response_received",
+      "query": "best Python web framework 2026",
+      "total_results_available": 107
+    },
+    {
+      "component": "search_tool",
+      "event": "results_normalized",
+      "query": "best Python web framework 2026",
+      "results_returned": 3
+    },
+    {
+      "component": "executor",
+      "event": "attempt_started",
+      "attempt": 1,
+      "max_attempts": 3
+    }
+  ]
+}

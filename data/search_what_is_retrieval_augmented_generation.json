@@ -1,0 +1,71 @@
+{
+  "status": "success",
+  "result": {
+    "query": "what is retrieval augmented generation",
+    "results": [
+      {
+        "title": "What is RAG (Retrieval-Augmented Generation)?",
+        "url": "https://aws.amazon.com/what-is/retrieval-augmented-generation/",
+        "snippet": "Retrieval-Augmented Generation (RAG) is the process of optimizing the output of a large language model, so it references an authoritative knowledge base outside",
+        "position": 1,
+        "source": "Amazon Web Services (AWS)"
+      },
+      {
+        "title": "What is RAG (Retrieval Augmented Generation)?",
+        "url": "https://www.ibm.com/think/topics/retrieval-augmented-generation",
+        "snippet": "RAG is an architecture for optimizing the performance of an artificial intelligence (AI) model by connecting it with external knowledge bases.",
+        "position": 2,
+        "source": "IBM"
+      },
+      {
+        "title": "What is Retrieval-Augmented Generation (RAG)?",
+        "url": "https://cloud.google.com/use-cases/retrieval-augmented-generation",
+        "snippet": "Retrieval-Augmented Generation, is an AI framework that combines the strengths of traditional information retrieval systems (such as search and databases)",
+        "position": 3,
+        "source": "Google Cloud"
+      }
+    ],
+    "total_results": 3
+  },
+  "metadata": {
+    "tool": "search",
+    "attempts_taken": 1,
+    "duration_ms": 614.279
+  },
+  "trace": [
+    {
+      "component": "executor",
+      "event": "execution_started",
+      "tool": "search"
+    },
+    {
+      "component": "executor",
+      "event": "execution_success",
+      "attempt": 1
+    },
+    {
+      "component": "search_tool",
+      "event": "search_started",
+      "query": "what is retrieval augmented generation",
+      "num_results": 3
+    },
+    {
+      "component": "search_tool",
+      "event": "api_response_received",
+      "query": "what is retrieval augmented generation",
+      "total_results_available": 190
+    },
+    {
+      "component": "search_tool",
+      "event": "results_normalized",
+      "query": "what is retrieval augmented generation",
+      "results_returned": 3
+    },
+    {
+      "component": "executor",
+      "event": "attempt_started",
+      "attempt": 1,
+      "max_attempts": 3
+    }
+  ]
+}

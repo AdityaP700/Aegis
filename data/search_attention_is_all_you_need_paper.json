@@ -1,0 +1,71 @@
+{
+  "status": "success",
+  "result": {
+    "query": "Attention Is All You Need paper",
+    "results": [
+      {
+        "title": "[1706.03762] Attention Is All You Need",
+        "url": "https://arxiv.org/abs/1706.03762",
+        "snippet": "We propose a new simple network architecture, the Transformer, based solely on attention mechanisms, dispensing with recurrence and convolutions entirely.",
+        "position": 1,
+        "source": "arXiv"
+      },
+      {
+        "title": "Attention is All you Need",
+        "url": "https://papers.neurips.cc/paper/7181-attention-is-all-you-need.pdf",
+        "snippet": "We propose a new simple network architecture, the Transformer, based solely on attention mechanisms, dispensing with recurrence and convolutions entirely.",
+        "position": 2,
+        "source": "NeurIPS 2026"
+      },
+      {
+        "title": "Attention Is All You Need",
+        "url": "https://en.wikipedia.org/wiki/Attention_Is_All_You_Need",
+        "snippet": "\"Attention Is All You Need\" [1] is a 2017 research paper in machine learning authored by eight scientists and engineers working at Google.",
+        "position": 3,
+        "source": "Wikipedia"
+      }
+    ],
+    "total_results": 3
+  },
+  "metadata": {
+    "tool": "search",
+    "attempts_taken": 1,
+    "duration_ms": 738.153
+  },
+  "trace": [
+    {
+      "component": "executor",
+      "event": "execution_started",
+      "tool": "search"
+    },
+    {
+      "component": "executor",
+      "event": "execution_success",
+      "attempt": 1
+    },
+    {
+      "component": "search_tool",
+      "event": "search_started",
+      "query": "Attention Is All You Need paper",
+      "num_results": 3
+    },
+    {
+      "component": "search_tool",
+      "event": "api_response_received",
+      "query": "Attention Is All You Need paper",
+      "total_results_available": 132
+    },
+    {
+      "component": "search_tool",
+      "event": "results_normalized",
+      "query": "Attention Is All You Need paper",
+      "results_returned": 3
+    },
+    {
+      "component": "executor",
+      "event": "attempt_started",
+      "attempt": 1,
+      "max_attempts": 3
+    }
+  ]
+}

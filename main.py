@@ -1,6 +1,6 @@
 import json
 from pathlib import Path
-from tools.github import GitHubTool
+from tools.search_tool import SearchTool
 from tools.registry import ToolRegistry
 from engine.types import ExecutionRequest
 from executor import Executor
@@ -21,28 +21,37 @@ def save_to_file(response, filename):
 
     print(f"  ✓ Saved: {filepath}")
 
-def test_single_repo(executor, repo):
-    """Test a single repo and print results."""
-    print(f"\n  Repo: {repo}")
+def test_single_search(executor, query, num_results=3):
+    """Test a single search query and print results."""
+    print(f"\n  🔍 Query: \"{query}\"")
 
     request = ExecutionRequest(
-        tool="github",
-        arguments={"repo": repo}
+        tool="search",
+        arguments={
+            "query": query,
+            "num_results": num_results
+        }
     )
 
     response = executor.execute(request)
 
     if response.status == "success":
-        r = response.result
-        print(f"    ⭐ {r['stars']:,} stars")
-        print(f"    🔧 Language: {r['language']}")
-        print(f"    📜 License: {r['license']}")
-        print(f"    🍴 Forks: {r['forks']:,}")
-        print(f"    ⚠️  Open Issues: {r['open_issues']}")
-        print(f"    📝 {r['description'][:100] if r['description'] else 'No description'}...")
-        print(f"    🔗 {r['url']}")
-        print(f"    ⏱️  Duration: {response.metadata.get('duration_ms')}ms")
-        save_to_file(response, f"github_{repo.replace('/', '_')}.json")
+        results = response.result.get("results", [])
+        print(f"    Found {len(results)} results:")
+
+        for i, result in enumerate(results, 1):
+            print(f"\n    {i}. {result['title']}")
+            print(f"       {result['url']}")
+            print(f"       {result['snippet'][:120]}...")
+            if result.get('source'):
+                print(f"       Source: {result['source']}")
+
+        print(f"\n    ⏱️  Duration: {response.metadata.get('duration_ms')}ms")
+        print(f"    Attempts: {response.metadata.get('attempts_taken')}")
+
+        # Save to file
+        safe_filename = f"search_{query.replace(' ', '_').lower()[:50]}.json"
+        save_to_file(response, safe_filename)
     else:
         print(f"    ❌ Failed: {response.error}")
         print(f"    Failed attempts: {response.metadata.get('failed_attempts')}")
@@ -50,27 +59,23 @@ def test_single_repo(executor, repo):
 def main():
     # Setup
     registry = ToolRegistry()
-    registry.register(GitHubTool())
+    registry.register(SearchTool())
     executor = Executor(registry)
 
     print("=" * 60)
-    print("AEGIS — GitHub Tool Testing")
+    print("AEGIS — Search Tool Testing")
     print("=" * 60)
     print(f"Tools registered: {registry.list_tools()}")
 
-    # Test cases
-    repos_to_test = [
-        "karpathy/nanoGPT",
-        "torvalds/linux",
-        "AdityaP700/exora-task",
-        "nonexistent/repo12345",     # Should fail: 404
-        "invalidformat",             # Should fail: bad format
+    # Test queries
+    queries = [
+        "Attention Is All You Need paper",
+        "best Python web framework 2026",
+        "what is retrieval augmented generation",
     ]
 
-    for repo in repos_to_test:
-        test_single_repo(executor, repo)
-
-
+    for query in queries:
+        test_single_search(executor, query)
 
 if __name__ == "__main__":
     main()
