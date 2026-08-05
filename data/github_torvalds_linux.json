@@ -1,0 +1,58 @@
+{
+  "status": "success",
+  "result": {
+    "name": "linux",
+    "full_name": "torvalds/linux",
+    "description": "Linux kernel source tree",
+    "stars": 241724,
+    "forks": 63744,
+    "language": "C",
+    "license": "NOASSERTION",
+    "open_issues": 3,
+    "topics": [],
+    "created_at": "2011-09-04T22:48:12Z",
+    "updated_at": "2026-08-05T05:24:06Z",
+    "url": "https://github.com/torvalds/linux"
+  },
+  "metadata": {
+    "tool": "github",
+    "attempts_taken": 1,
+    "duration_ms": 1006.701
+  },
+  "trace": [
+    {
+      "component": "executor",
+      "event": "execution_started",
+      "tool": "github"
+    },
+    {
+      "component": "executor",
+      "event": "execution_success",
+      "attempt": 1
+    },
+    {
+      "component": "github_tool",
+      "event": "api_call_started",
+      "repo": "torvalds/linux"
+    },
+    {
+      "component": "github_tool",
+      "event": "api_response_received",
+      "repo": "torvalds/linux",
+      "status_code": 200
+    },
+    {
+      "component": "github_tool",
+      "event": "response_normalized",
+      "repo": "torvalds/linux",
+      "stars": 241724,
+      "language": "C"
+    },
+    {
+      "component": "executor",
+      "event": "attempt_started",
+      "attempt": 1,
+      "max_attempts": 3
+    }
+  ]
+}

@@ -1,6 +1,6 @@
 import json
 from pathlib import Path
-from tools.weather import WeatherTool
+from tools.github import GitHubTool
 from tools.registry import ToolRegistry
 from engine.types import ExecutionRequest
 from executor import Executor
@@ -19,31 +19,58 @@ def save_to_file(response, filename):
             "trace": response.trace
         }, f, indent=2)
 
-    print(f"✓ Saved: {filepath}")
+    print(f"  ✓ Saved: {filepath}")
+
+def test_single_repo(executor, repo):
+    """Test a single repo and print results."""
+    print(f"\n  Repo: {repo}")
+
+    request = ExecutionRequest(
+        tool="github",
+        arguments={"repo": repo}
+    )
+
+    response = executor.execute(request)
+
+    if response.status == "success":
+        r = response.result
+        print(f"    ⭐ {r['stars']:,} stars")
+        print(f"    🔧 Language: {r['language']}")
+        print(f"    📜 License: {r['license']}")
+        print(f"    🍴 Forks: {r['forks']:,}")
+        print(f"    ⚠️  Open Issues: {r['open_issues']}")
+        print(f"    📝 {r['description'][:100] if r['description'] else 'No description'}...")
+        print(f"    🔗 {r['url']}")
+        print(f"    ⏱️  Duration: {response.metadata.get('duration_ms')}ms")
+        save_to_file(response, f"github_{repo.replace('/', '_')}.json")
+    else:
+        print(f"    ❌ Failed: {response.error}")
+        print(f"    Failed attempts: {response.metadata.get('failed_attempts')}")
 
 def main():
     # Setup
     registry = ToolRegistry()
-    registry.register(WeatherTool())
+    registry.register(GitHubTool())
     executor = Executor(registry)
 
-    # Test cities
-    cities = ["London", "Tokyo", "Delhi"]
+    print("=" * 60)
+    print("AEGIS — GitHub Tool Testing")
+    print("=" * 60)
+    print(f"Tools registered: {registry.list_tools()}")
 
-    for city in cities:
-        request = ExecutionRequest(
-            tool="weather",
-            arguments={"city": city}
-        )
+    # Test cases
+    repos_to_test = [
+        "karpathy/nanoGPT",
+        "torvalds/linux",
+        "AdityaP700/exora-task",
+        "nonexistent/repo12345",     # Should fail: 404
+        "invalidformat",             # Should fail: bad format
+    ]
 
-        response = executor.execute(request)
+    for repo in repos_to_test:
+        test_single_repo(executor, repo)
 
-        if response.status == "success":
-            r = response.result
-            print(f"\n{city}: {r['temperature']}°C, {r['condition']}, Humidity: {r['humidity']}%")
-            save_to_file(response, f"weather_{city.lower()}.json")
-        else:
-            print(f"\n{city}: Failed — {response.error}")
+
 
 if __name__ == "__main__":
     main()

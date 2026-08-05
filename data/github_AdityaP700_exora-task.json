@@ -1,0 +1,60 @@
+{
+  "status": "success",
+  "result": {
+    "name": "Exora-task",
+    "full_name": "AdityaP700/Exora-task",
+    "description": "Real time competitive reports provider",
+    "stars": 13,
+    "forks": 4,
+    "language": "TypeScript",
+    "license": "MIT",
+    "open_issues": 4,
+    "topics": [
+      "hacktoberfest"
+    ],
+    "created_at": "2025-09-21T05:06:53Z",
+    "updated_at": "2026-08-02T10:12:08Z",
+    "url": "https://github.com/AdityaP700/Exora-task"
+  },
+  "metadata": {
+    "tool": "github",
+    "attempts_taken": 1,
+    "duration_ms": 949.883
+  },
+  "trace": [
+    {
+      "component": "executor",
+      "event": "execution_started",
+      "tool": "github"
+    },
+    {
+      "component": "executor",
+      "event": "execution_success",
+      "attempt": 1
+    },
+    {
+      "component": "github_tool",
+      "event": "api_call_started",
+      "repo": "AdityaP700/exora-task"
+    },
+    {
+      "component": "github_tool",
+      "event": "api_response_received",
+      "repo": "AdityaP700/exora-task",
+      "status_code": 200
+    },
+    {
+      "component": "github_tool",
+      "event": "response_normalized",
+      "repo": "AdityaP700/exora-task",
+      "stars": 13,
+      "language": "TypeScript"
+    },
+    {
+      "component": "executor",
+      "event": "attempt_started",
+      "attempt": 1,
+      "max_attempts": 3
+    }
+  ]
+}
