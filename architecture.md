@@ -150,3 +150,8 @@ OpenWeather's docs page: https://openweathermap.org/current
 - after wards we simply go for cleaning up the mess ,keeping the necessary inputs to showcase to the client and
 
 - its done ,bro :)
+
+
+"Can Aegis execute completely different capabilities without changing its execution engine?"
+
+A reliability layer between the LLM and external capabilities.
