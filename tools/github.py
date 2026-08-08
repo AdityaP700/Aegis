@@ -1,6 +1,6 @@
 import os
 import requests
-from typing import Dict, Any
+from typing import Dict, Any,List
 from dotenv import load_dotenv
 from tools.base import BaseTool
 from engine.types import ExecutionRequest
@@ -26,6 +26,10 @@ class GitHubTool(BaseTool):
     @property
     def description(self) -> str:
         return "Fetches GitHub repo stats: stars, language, license, forks, open issues"
+
+    @property
+    def required_args(self)-> List[str]:
+        return ["repo"]
 
     def _fetch_from_api(self, repo: str) -> Dict[str, Any]:
         """

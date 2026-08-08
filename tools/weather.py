@@ -1,6 +1,6 @@
 import os
 import requests
-from typing import Dict, Any
+from typing import Dict, Any,List
 from dotenv import load_dotenv
 from tools.base import BaseTool
 from engine.types import ExecutionRequest
@@ -28,6 +28,10 @@ class WeatherTool(BaseTool):
     def description(self) -> str:
         return "Fetches current weather for a city: temperature, condition, humidity"
 
+    @property
+    def required_args(self)-> List[str]:
+        return ["city"]
+        
     def _fetch_from_api(self, city: str) -> Dict[str, Any]:
         """
         Raw API call to OpenWeather.

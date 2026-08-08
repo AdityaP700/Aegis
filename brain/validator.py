@@ -58,15 +58,11 @@ class Validator:
         return plan
 
     def _get_required_args(self, tool_name: str) -> List[str]:
-        """Get required arguments for a tool."""
-        # This could be pulled from tool metadata
-        required_args_map = {
-            "weather": ["city"],
-            "github": ["repo"],
-            "search": ["query"],
-            "calculator": ["expression"]
-        }
-        return required_args_map.get(tool_name, [])
+
+        tool = self.registry.get(tool_name)  # Use the parameter, not plan.tool
+        if tool and hasattr(tool, 'required_args'):
+            return tool.required_args  #  It's already a list
+        return []
 
     def _validate_argument_types(self, plan: ExecutionPlan) -> List[str]:
         """Validate argument types."""
@@ -113,13 +109,13 @@ class Validator:
             if domain == chosen_tool:
                 continue  # Skip the chosen tool's own signals
 
-        for kw in keywords:
-            if kw in intent_lower:
-                errors.append(
+            for kw in keywords:
+                if kw in intent_lower:
+                    errors.append(
                     f"Plausibility: intent mentions '{kw}' ({domain} signal) "
                     f"but tool is '{chosen_tool}'"
                 )
-                break  # One mismatch per domain is enough
+                    break  # One mismatch per domain is enough
 
     # Additional heuristic
         errors.extend(self._check_argument_plausibility(plan))
@@ -131,26 +127,26 @@ class Validator:
         if plan.tool == "weather":
             city = plan.arguments.get("city", "")
         # City names are rarely purely numeric
-        if city and city.strip().isdigit():
-            errors.append(f"Plausibility: city '{city}' looks like a number, not a city")
+            if city and city.strip().isdigit():
+                errors.append(f"Plausibility: city '{city}' looks like a number, not a city")
         # City names rarely contain special characters
-        if city and any(c in city for c in ["/", "\\", "<", ">"]):
-            errors.append(f"Plausibility: city '{city}' contains unusual characters")
+            if city and any(c in city for c in ["/", "\\", "<", ">"]):
+                errors.append(f"Plausibility: city '{city}' contains unusual characters")
 
         elif plan.tool == "github":
             repo = plan.arguments.get("repo", "")
         # Repo must have owner/repo format
-        if repo and "/" not in repo:
-            errors.append(f"Plausibility: repo '{repo}' missing owner/ format")
+            if repo and "/" not in repo:
+                errors.append(f"Plausibility: repo '{repo}' missing owner/ format")
         # Repo names don't have spaces
-        if repo and " " in repo:
-            errors.append(f"Plausibility: repo '{repo}' contains spaces")
+            if repo and " " in repo:
+                errors.append(f"Plausibility: repo '{repo}' contains spaces")
 
         elif plan.tool == "search":
             query = plan.arguments.get("query", "")
         # Search queries should be meaningful
-        if query and len(query) < 3:
-            errors.append(f"Plausibility: search query too short: '{query}'")
+            if query and len(query) < 3:
+                errors.append(f"Plausibility: search query too short: '{query}'")
 
         return errors
 
