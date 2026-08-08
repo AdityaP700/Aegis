@@ -7,7 +7,7 @@ class PromptBuilder:
         self.tools_metadata = tools_metadata
 
     def build_system_prompt(self) -> str:
-       
+
         tools_section = self._build_tools_section()
         examples_section = self._build_examples()
 

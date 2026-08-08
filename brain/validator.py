@@ -92,21 +92,68 @@ class Validator:
         return errors
 
     def _validate_plausibility(self, plan: ExecutionPlan) -> List[str]:
-        """Plausibility checks — does this tool even make sense?"""
+
         errors = []
 
-        # Example: If user asked about Python but Brain chose weather — reject
-        # This is a simple heuristic; in production, use embeddings
-        city_keywords = ["weather", "temperature", "rain", "sunny", "cold", "hot"]
-        github_keywords = ["github", "repo", "stars", "repository", "fork"]
+    # Signal words for each tool domain
+        signals = {
+        "weather": ["weather", "temperature", "rain", "sunny", "cold", "hot",
+                     "celsius", "forecast", "humid", "climate"],
+        "github": ["github", "repo", "stars", "repository", "fork", "pull request",
+                    "code", "open source", "license"],
+        "search": ["what is", "who is", "how to", "define", "explain", "why",
+                   "difference between", "tutorial"]
+    }
+
+        intent_lower = plan.intent.lower()
+        chosen_tool = plan.tool
+
+    # For each tool domain, check if intent has signals for a DIFFERENT tool
+        for domain, keywords in signals.items():
+            if domain == chosen_tool:
+                continue  # Skip the chosen tool's own signals
+
+        for kw in keywords:
+            if kw in intent_lower:
+                errors.append(
+                    f"Plausibility: intent mentions '{kw}' ({domain} signal) "
+                    f"but tool is '{chosen_tool}'"
+                )
+                break  # One mismatch per domain is enough
+
+    # Additional heuristic
+        errors.extend(self._check_argument_plausibility(plan))
+        return errors
+
+    def _check_argument_plausibility(self, plan: ExecutionPlan) -> List[str]:
+        errors = []
 
         if plan.tool == "weather":
-            # Check if any GitHub keywords are present (would be suspicious)
-            for kw in github_keywords:
-                if kw in plan.intent.lower():
-                    errors.append(
-                        f"Plausibility check failed: intent mentions '{kw}' but tool is 'weather'"
-                    )
-                    break
+            city = plan.arguments.get("city", "")
+        # City names are rarely purely numeric
+        if city and city.strip().isdigit():
+            errors.append(f"Plausibility: city '{city}' looks like a number, not a city")
+        # City names rarely contain special characters
+        if city and any(c in city for c in ["/", "\\", "<", ">"]):
+            errors.append(f"Plausibility: city '{city}' contains unusual characters")
+
+        elif plan.tool == "github":
+            repo = plan.arguments.get("repo", "")
+        # Repo must have owner/repo format
+        if repo and "/" not in repo:
+            errors.append(f"Plausibility: repo '{repo}' missing owner/ format")
+        # Repo names don't have spaces
+        if repo and " " in repo:
+            errors.append(f"Plausibility: repo '{repo}' contains spaces")
+
+        elif plan.tool == "search":
+            query = plan.arguments.get("query", "")
+        # Search queries should be meaningful
+        if query and len(query) < 3:
+            errors.append(f"Plausibility: search query too short: '{query}'")
 
         return errors
+
+
+
+

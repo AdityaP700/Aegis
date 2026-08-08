@@ -120,3 +120,26 @@ time.perf_counter()
                 "temperature":WEATHER_DATA[city_lower]["temperature"],
                 "condition":WEATHER_DATA[city_lower]["condition"]
             } -->
+
+LLM Raw Output (untrusted string)
+        │
+        ▼
+┌─────────────────────────┐
+│  IntentParser           │  ← Layer 1: SYNTACTIC VALIDATION
+│  "Is this valid JSON?"  │
+│  "Can I build an object?"
+└─────────────────────────┘
+        │
+        ▼
+    ExecutionPlan (valid object, but possibly WRONG)
+        │
+        ▼
+┌─────────────────────────┐
+│  Validator              │  ← Layer 2: SEMANTIC VALIDATION
+│  "Does this tool exist?"│
+│  "Are arguments complete?"
+│  "Does this make sense?"│
+└─────────────────────────┘
+        │
+        ▼
+    Validated ExecutionPlan

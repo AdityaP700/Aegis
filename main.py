@@ -7,109 +7,149 @@ from tools.registry import ToolRegistry
 from engine.types import ExecutionRequest, ExecutionPlan
 from executor import Executor
 
-def get_tools_metadata(registry: ToolRegistry) -> list:
-    """Extract tool metadata for the Brain."""
+def setup_aegis():
+    """Initialize all Aegis components. Called once at startup."""
+
+    # Registry
+    registry = ToolRegistry()
+    registry.register(WeatherTool())
+    registry.register(GitHubTool())
+    registry.register(SearchTool())
+
+    # Brain
+    tools_metadata = _extract_tools_metadata(registry)
+    brain = GeminiBrain(tools_metadata)
+
+    # Validator
+    validator = Validator(registry)
+
+    # Executor
+    executor = Executor(registry)
+
+    return brain, validator, executor
+
+
+def _extract_tools_metadata(registry: ToolRegistry) -> list:
+    """Tell the Brain what tools exist and what they need."""
+    required_args_map = {
+        "weather": ["city"],
+        "github": ["repo"],
+        "search": ["query"],
+    }
+
     metadata = []
     for tool_name, tool in registry._tools.items():
         metadata.append({
             "name": tool.name,
             "description": tool.description,
-            "required_args": ["city"] if tool_name == "weather" else
-                           ["repo"] if tool_name == "github" else
-                           ["query"] if tool_name == "search" else []
+            "required_args": required_args_map.get(tool_name, [])
         })
     return metadata
 
+
+def process_query(query: str, brain, validator, executor):
+    """
+    Full Aegis pipeline for a single user query.
+
+    User → Brain → Plan → Validate → Retry? → Execute → Response
+    """
+    print(f"\n{'─' * 60}")
+    print(f" User: {query}")
+
+    # Step 1: Think
+    plan = brain.think(query)
+    print(f" Brain: {plan.tool}({plan.arguments}) [confidence: {plan.confidence}]")
+    # returns the plan 
+    # Step 2: Validate
+    plan = validator.validate(plan)
+
+    # Step 3: Retry if needed (one attempt)
+    if plan.validation_status == "failed":
+        plan = _attempt_retry(query, plan, brain, validator)
+
+    # Step 4: Execute or fail
+    if plan.validation_status == "passed":
+        _execute_plan(plan, executor)
+    else:
+        print(f"❌ Could not create valid plan after retry.")
+        print(f"   Errors: {plan.validation_errors}")
+
+
+def _attempt_retry(query: str, plan: ExecutionPlan, brain, validator) -> ExecutionPlan:
+    """Try one Brain retry with error feedback."""
+    print(f"❌ Validation failed: {plan.validation_errors}")
+    print("🔄 Retrying with error feedback...")
+
+    previous_response = f'{{"tool": "{plan.tool}", "arguments": {plan.arguments}}}'
+    error_msg = "; ".join(plan.validation_errors)
+
+    plan = brain.retry(query, error_msg, previous_response)
+    plan = validator.validate(plan)
+
+    return plan
+
+
+def _execute_plan(plan: ExecutionPlan, executor):
+    """Convert plan to request and execute."""
+    print(f"✅ Plan: {plan.tool}({plan.arguments})")
+
+    request = ExecutionRequest(
+        tool=plan.tool,
+        arguments=plan.arguments
+    )
+
+    response = executor.execute(request)
+    _display_result(plan.tool, response)
+
+
+def _display_result(tool_name: str, response):
+    """Pretty-print the result based on tool type."""
+    if response.status != "success":
+        print(f"   ❌ Execution failed: {response.error}")
+        return
+
+    result = response.result
+
+    if tool_name == "weather":
+        print(f"   🌤️  {result['city']}: {result['temperature']}°C, {result['condition']}")
+        print(f"   💧 Humidity: {result['humidity']}%")
+
+    elif tool_name == "github":
+        print(f"   📦 {result['full_name']}")
+        print(f"   ⭐ Stars: {result['stars']:,}")
+        print(f"   🔧 Language: {result['language']}")
+        print(f"   📜 License: {result['license']}")
+
+    elif tool_name == "search":
+        results = result.get("results", [])
+        print(f"   🔍 Found {len(results)} results:")
+        for i, r in enumerate(results[:3], 1):
+            print(f"      {i}. {r['title'][:80]}")
+            print(f"         {r['snippet'][:100]}...")
+
+    print(f"   ⏱️  {response.metadata.get('duration_ms')}ms")
+
+
 def main():
     print("=" * 60)
-    print("AEGIS — Intent Planner (Sprint 3)")
+    print("AEGIS — Intent Planner")
     print("=" * 60)
 
-    # Setup Registry
-    registry = ToolRegistry()
-    registry.register(WeatherTool())
-    registry.register(GitHubTool())
-    registry.register(SearchTool())
-    print(f"\n✓ Tools registered: {registry.list_tools()}")
+    # Setup once
+    brain, validator, executor = setup_aegis()
+    print(f"✓ Brain: {brain.provider_name}")
+    print(f"✓ Tools: {executor.registry.list_tools()}")
+    print("✓ Ready\n")
 
-    # Setup Brain
-    tools_metadata = get_tools_metadata(registry)
-    brain = GeminiBrain(tools_metadata)
-    print(f"✓ Brain initialized: {brain.provider_name}")
+    # Test ONE query at a time
+    query = input("👤 You: ").strip()
 
-    # Setup Validator
-    validator = Validator(registry)
-    print("✓ Validator initialized")
+    if not query:
+        query = "What's the weather in Delhi?"
+        print(f"   (using default: '{query}')")
 
-    # Setup Executor
-    executor = Executor(registry)
-    print("✓ Executor ready")
+    process_query(query, brain, validator, executor)
 
-    # Test queries
-    queries = [
-        "What's the weather in Delhi?",
-        "How many stars does karpathy/nanoGPT have?",
-        "What is a transformer neural network?",
-        "Tell me about weather in 12345",  # Should fail plausibility
-        "asdfghjkl",                       # Should fail confidence
-    ]
-
-    for query in queries:
-        print(f"\n{'─' * 60}")
-        print(f"👤 User: {query}")
-
-        # Step 1: Brain creates ExecutionPlan
-        plan = brain.think(query)
-        print(f"🧠 Plan: {plan.tool}({plan.arguments}) [confidence: {plan.confidence}]")
-
-        # Step 2: Validate the plan
-        plan = validator.validate(plan)
-
-        if plan.validation_status == "failed":
-            print(f"❌ Validation failed: {plan.validation_errors}")
-
-            # Brain Retry (one attempt)
-            print("🔄 Brain retry with error feedback...")
-            previous_response = f'{{"tool": "{plan.tool}", "arguments": {plan.arguments}}}'
-            error_msg = "; ".join(plan.validation_errors)
-
-            plan = brain.retry(query, error_msg, previous_response)
-            plan = validator.validate(plan)
-
-            if plan.validation_status == "failed":
-                print(f"❌ Retry also failed. Falling back to search.")
-                plan = ExecutionPlan(
-                    intent="fallback search",
-                    tool="search",
-                    arguments={"query": query},
-                    confidence=0.3,
-                    validation_status="passed"
-                )
-
-        # Step 3: Convert to ExecutionRequest
-        if plan.validation_status == "passed":
-            print(f"✅ Plan validated: {plan.tool}({plan.arguments})")
-
-            request = ExecutionRequest(
-                tool=plan.tool,
-                arguments=plan.arguments
-            )
-
-            # Step 4: Execute
-            response = executor.execute(request)
-
-            if response.status == "success":
-                if plan.tool == "weather":
-                    r = response.result
-                    print(f"   🌤️  {r['city']}: {r['temperature']}°C, {r['condition']}")
-                elif plan.tool == "github":
-                    r = response.result
-                    print(f"   📦 {r['full_name']}: ⭐{r['stars']:,}")
-                elif plan.tool == "search":
-                    results = response.result.get("results", [])
-                    print(f"   🔍 Found {len(results)} results")
-            else:
-                print(f"   ❌ Execution failed: {response.error}")
 
 if __name__ == "__main__":
     main()
