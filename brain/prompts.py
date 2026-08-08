@@ -2,7 +2,7 @@ from typing import List, Dict, Any
 
 class PromptBuilder:
     def __init__(self, tools_metadata):
-        self.tools = tools_metadata
+        self.tools_metadata = tools_metadata
         self.rules = {
             "routing": [
                 "Match user intent to the most specific tool",

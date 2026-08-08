@@ -6,7 +6,7 @@ from tools.search_tool import SearchTool
 from tools.registry import ToolRegistry
 from engine.types import ExecutionRequest, ExecutionPlan
 from executor import Executor
-
+from brain.groq_brain import GroqBrain
 def setup_aegis():
     """Initialize all Aegis components. Called once at startup."""
 
@@ -18,7 +18,7 @@ def setup_aegis():
 
     # Brain
     tools_metadata = _extract_tools_metadata(registry)
-    brain = GeminiBrain(tools_metadata)
+    brain = GroqBrain(tools_metadata)
 
     # Validator
     validator = Validator(registry)
@@ -59,7 +59,7 @@ def process_query(query: str, brain, validator, executor):
     # Step 1: Think
     plan = brain.think(query)
     print(f" Brain: {plan.tool}({plan.arguments}) [confidence: {plan.confidence}]")
-    # returns the plan 
+    # returns the plan
     # Step 2: Validate
     plan = validator.validate(plan)
 

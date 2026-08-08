@@ -31,7 +31,7 @@ class ExecutionPlan(BaseModel):
     intent : str = Field(description="what the user wants to do")
     tool : str = Field(description ="Tool to execute")
     arguments : Dict[str,Any]=Field(description="Arguments for the tool")
-    confidence : float = Field(default=1.0,ge=0.0,le=0.0)
+    confidence : float = Field(default=1.0,ge=0.0,le=1.0)
     #You should use that exact syntax when you want to restrict a variable
     #  to a strict, pre-defined set o
     #when u dont want to use heavy enums
