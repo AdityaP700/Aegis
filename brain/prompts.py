@@ -1,36 +1,49 @@
 from typing import List, Dict, Any
 
 class PromptBuilder:
-
-    def __init__(self, tools_metadata: List[Dict[str, Any]]):
-
-        self.tools_metadata = tools_metadata
+    def __init__(self, tools_metadata):
+        self.tools = tools_metadata
+        self.rules = {
+            "routing": [
+                "Match user intent to the most specific tool",
+                "If multiple tools could work, pick the most direct one",
+                "If no tool matches, return 'unknown'"
+            ],
+            "argument_extraction": [
+                "Extract arguments exactly as the user stated them",
+                "Don't infer missing arguments — leave them empty",
+                "If an argument is clearly not what the tool expects, flag it"
+            ],
+            "confidence": [
+                "1.0: Direct match (e.g., 'weather in Delhi')",
+                "0.7-0.9: Implicit intent (e.g., 'is it raining?')",
+                "0.4-0.6: Ambiguous (e.g., 'Delhi')",
+                "0.1-0.3: Best guess, likely wrong",
+                "0.0: Cannot determine"
+            ]
+        }
 
     def build_system_prompt(self) -> str:
+        # Generate prompt FROM rules
+        prompt = "You are an execution planner.\n\n"
 
-        tools_section = self._build_tools_section()
-        examples_section = self._build_examples()
+        prompt += "ROUTING RULES:\n"
+        for rule in self.rules["routing"]:
+            prompt += f"- {rule}\n"
 
-        return f"""You are an execution planner. Your ONLY job is to route user queries to the correct tool.
+        prompt += "\nARGUMENT EXTRACTION RULES:\n"
+        for rule in self.rules["argument_extraction"]:
+            prompt += f"- {rule}\n"
 
-You MUST return valid JSON with this exact structure:
-{{"intent": "what user wants", "tool": "tool_name", "arguments": {{...}}, "confidence": 0.0-1.0}}
+        prompt += "\nCONFIDENCE GUIDE:\n"
+        for rule in self.rules["confidence"]:
+            prompt += f"- {rule}\n"
 
-{tools_section}
+        prompt += "\n" + self._build_tools_section()
+        prompt += "\n" + self._build_examples()
+        prompt += "\nReturn ONLY JSON."
 
-{examples_section}
-
-CRITICAL RULES:
-1. Return ONLY JSON, no explanations
-2. If user's request doesn't match any tool, use "unknown" as tool
-3. Extract ALL required arguments from the user's query
-4. Set confidence based on how certain you are:
-   - 1.0: Perfect match (e.g., "weather in Delhi" → weather tool)
-   - 0.8: Good match but some ambiguity
-   - 0.5: Unsure but best guess
-   - 0.0: No idea (use "unknown" tool)
-
-Now route this user query."""
+        return prompt
 
     def _build_tools_section(self) -> str:
         """Build the tools description section."""
