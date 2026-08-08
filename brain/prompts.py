@@ -6,8 +6,11 @@ class PromptBuilder:
         self.rules = {
             "routing": [
                 "Match user intent to the most specific tool",
-                "If multiple tools could work, pick the most direct one",
-                "If no tool matches, return 'unknown'"
+        "If multiple tools could work, pick the most direct one",
+        "If a query doesn't match weather or github, ALWAYS use search",
+        "Search can handle ANY question — weather, finance, history, definitions",
+        "Only return 'unknown' if the query is complete gibberish or empty"
+
             ],
             "argument_extraction": [
                 "Extract arguments exactly as the user stated them",
@@ -83,7 +86,16 @@ User: "Tell me about Python"
 Response: {"intent": "ambiguous request about Python", "tool": "search", "arguments": {"query": "Python programming language"}, "confidence": 0.7}
 
 User: "asdfghjkl"
-Response: {"intent": "gibberish input", "tool": "unknown", "arguments": {}, "confidence": 0.0}"""
+Response: {"intent": "gibberish input", "tool": "unknown", "arguments": {}, "confidence": 0.0}
+
+User: "what's the current market condition in NSE index on 7th august 2026"
+Response: {"intent": "search for NSE market condition", "tool": "search", "arguments": {"query": "NSE index market condition August 2026"}, "confidence": 0.8}
+
+User: "who won the world cup in 2018"
+Response: {"intent": "search for world cup 2018 winner", "tool": "search", "arguments": {"query": "who won the world cup 2018"}, "confidence": 1.0}
+
+User: "how to make pasta"
+Response: {"intent": "search for pasta recipe", "tool": "search", "arguments": {"query": "how to make pasta"}, "confidence": 1.0}"""
 
     def build_user_prompt(self, user_query: str) -> str:
         """Build the user prompt."""

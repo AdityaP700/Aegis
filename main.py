@@ -71,14 +71,14 @@ def process_query(query: str, brain, validator, executor):
     if plan.validation_status == "passed":
         _execute_plan(plan, executor)
     else:
-        print(f"❌ Could not create valid plan after retry.")
+        print(f" Could not create valid plan after retry.")
         print(f"   Errors: {plan.validation_errors}")
 
 
 def _attempt_retry(query: str, plan: ExecutionPlan, brain, validator) -> ExecutionPlan:
     """Try one Brain retry with error feedback."""
-    print(f"❌ Validation failed: {plan.validation_errors}")
-    print("🔄 Retrying with error feedback...")
+    print(f" Validation failed: {plan.validation_errors}")
+    print(" Retrying with error feedback...")
 
     previous_response = f'{{"tool": "{plan.tool}", "arguments": {plan.arguments}}}'
     error_msg = "; ".join(plan.validation_errors)
@@ -91,7 +91,7 @@ def _attempt_retry(query: str, plan: ExecutionPlan, brain, validator) -> Executi
 
 def _execute_plan(plan: ExecutionPlan, executor):
     """Convert plan to request and execute."""
-    print(f"✅ Plan: {plan.tool}({plan.arguments})")
+    print(f" Plan: {plan.tool}({plan.arguments})")
 
     request = ExecutionRequest(
         tool=plan.tool,
@@ -105,29 +105,29 @@ def _execute_plan(plan: ExecutionPlan, executor):
 def _display_result(tool_name: str, response):
     """Pretty-print the result based on tool type."""
     if response.status != "success":
-        print(f"   ❌ Execution failed: {response.error}")
+        print(f"    Execution failed: {response.error}")
         return
 
     result = response.result
 
     if tool_name == "weather":
-        print(f"   🌤️  {result['city']}: {result['temperature']}°C, {result['condition']}")
-        print(f"   💧 Humidity: {result['humidity']}%")
+        print(f"     {result['city']}: {result['temperature']}°C, {result['condition']}")
+        print(f"    Humidity: {result['humidity']}%")
 
     elif tool_name == "github":
-        print(f"   📦 {result['full_name']}")
-        print(f"   ⭐ Stars: {result['stars']:,}")
-        print(f"   🔧 Language: {result['language']}")
-        print(f"   📜 License: {result['license']}")
+        print(f"    {result['full_name']}")
+        print(f"    Stars: {result['stars']:,}")
+        print(f"    Language: {result['language']}")
+        print(f"    License: {result['license']}")
 
     elif tool_name == "search":
         results = result.get("results", [])
-        print(f"   🔍 Found {len(results)} results:")
+        print(f"    Found {len(results)} results:")
         for i, r in enumerate(results[:3], 1):
             print(f"      {i}. {r['title'][:80]}")
             print(f"         {r['snippet'][:100]}...")
 
-    print(f"   ⏱️  {response.metadata.get('duration_ms')}ms")
+    print(f"   {response.metadata.get('duration_ms')}ms")
 
 
 def main():
@@ -142,7 +142,7 @@ def main():
     print("✓ Ready\n")
 
     # Test ONE query at a time
-    query = input("👤 You: ").strip()
+    query = input(" You: ").strip()
 
     if not query:
         query = "What's the weather in Delhi?"
