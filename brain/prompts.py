@@ -11,8 +11,11 @@ class PromptBuilder:
             ],
             "argument_extraction": [
                 "Extract arguments exactly as the user stated them",
-                "Don't infer missing arguments — leave them empty",
-                "If an argument is clearly not what the tool expects, flag it"
+    "For GitHub repos: extract the username AFTER the last name",
+    "  Example: 'andrej karpathy's repo' → owner is 'karpathy', not 'andrejkarpathy'",
+    "  Example: 'repo by john smith' → owner is 'smith' or full username if given",
+    "Don't infer missing arguments — leave them empty",
+    "If an argument is clearly not what the tool expects, flag it"
             ],
             "confidence": [
                 "1.0: Direct match (e.g., 'weather in Delhi')",
