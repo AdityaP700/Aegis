@@ -1,0 +1,222 @@
+[
+  {
+    "category": "CAPABILITY",
+    "query": "What was the temperature in Paris last Monday?",
+    "status": "passed",
+    "tool": "weather",
+    "capability": "current_weather",
+    "confidence": 0.9,
+    "detail": "weather(current_weather)",
+    "icon": "\u2705"
+  },
+  {
+    "category": "CAPABILITY",
+    "query": "Will it rain in Tokyo tomorrow?",
+    "status": "passed",
+    "tool": "weather",
+    "capability": "current_weather",
+    "confidence": 0.9,
+    "detail": "weather(current_weather)",
+    "icon": "\u2705"
+  },
+  {
+    "category": "CAPABILITY",
+    "query": "Show me the README of karpathy/nanoGPT",
+    "status": "passed",
+    "tool": "github",
+    "capability": "repository_metadata",
+    "confidence": 1.0,
+    "detail": "github(repository_metadata)",
+    "icon": "\u2705"
+  },
+  {
+    "category": "CAPABILITY",
+    "query": "What's the commit history of torvalds/linux?",
+    "status": "passed",
+    "tool": "github",
+    "capability": "repository_metadata",
+    "confidence": 1.0,
+    "detail": "github(repository_metadata)",
+    "icon": "\u2705"
+  },
+  {
+    "category": "ROUTING",
+    "query": "Delhi",
+    "status": "passed",
+    "tool": "search",
+    "capability": "web_search",
+    "confidence": 0.4,
+    "detail": "search(web_search)",
+    "icon": "\u2705"
+  },
+  {
+    "category": "ROUTING",
+    "query": "weather",
+    "status": "passed",
+    "tool": "search",
+    "capability": "web_search",
+    "confidence": 0.4,
+    "detail": "search(web_search)",
+    "icon": "\u2705"
+  },
+  {
+    "category": "ROUTING",
+    "query": "Tell me about Python",
+    "status": "passed",
+    "tool": "search",
+    "capability": "web_search",
+    "confidence": 0.9,
+    "detail": "search(web_search)",
+    "icon": "\u2705"
+  },
+  {
+    "category": "ROUTING",
+    "query": "What's hot?",
+    "status": "passed",
+    "tool": "search",
+    "capability": "web_search",
+    "confidence": 0.4,
+    "detail": "search(web_search)",
+    "icon": "\u2705"
+  },
+  {
+    "category": "ROUTING",
+    "query": "Is it going to be sunny?",
+    "status": "passed",
+    "tool": "weather",
+    "capability": "current_weather",
+    "confidence": 0.7,
+    "detail": "weather(current_weather)",
+    "icon": "\u2705"
+  },
+  {
+    "category": "ROUTING",
+    "query": "How's the climate in Paris?",
+    "status": "passed",
+    "tool": "search",
+    "capability": "web_search",
+    "confidence": 0.9,
+    "detail": "search(web_search)",
+    "icon": "\u2705"
+  },
+  {
+    "category": "ARGUMENTS",
+    "query": "Weather in New York and London",
+    "status": "passed",
+    "tool": "search",
+    "capability": "web_search",
+    "confidence": 0.9,
+    "detail": "search(web_search)",
+    "icon": "\u2705"
+  },
+  {
+    "category": "ARGUMENTS",
+    "query": "GitHub stars for nanoGPT",
+    "status": "passed",
+    "tool": "github",
+    "capability": "repository_metadata",
+    "confidence": 0.9,
+    "detail": "github(repository_metadata)",
+    "icon": "\u2705"
+  },
+  {
+    "category": "ARGUMENTS",
+    "query": "Weather in Delhi, India",
+    "status": "passed",
+    "tool": "weather",
+    "capability": "current_weather",
+    "confidence": 1.0,
+    "detail": "weather(current_weather)",
+    "icon": "\u2705"
+  },
+  {
+    "category": "ARGUMENTS",
+    "query": "What's the temperature in the Big Apple?",
+    "status": "passed",
+    "tool": "weather",
+    "capability": "current_weather",
+    "confidence": 0.9,
+    "detail": "weather(current_weather)",
+    "icon": "\u2705"
+  },
+  {
+    "category": "PLAUSIBILITY",
+    "query": "Weather in XYZ123",
+    "status": "passed",
+    "tool": "search",
+    "capability": "web_search",
+    "confidence": 0.4,
+    "detail": "search(web_search)",
+    "icon": "\u2705"
+  },
+  {
+    "category": "PLAUSIBILITY",
+    "query": "GitHub stars for this/repo/that",
+    "status": "passed",
+    "tool": "github",
+    "capability": "repository_metadata",
+    "confidence": 1.0,
+    "detail": "github(repository_metadata)",
+    "icon": "\u2705"
+  },
+  {
+    "category": "PLAUSIBILITY",
+    "query": "Search for a",
+    "status": "passed",
+    "tool": "search",
+    "capability": "web_search",
+    "confidence": 0.4,
+    "detail": "search(web_search)",
+    "icon": "\u2705"
+  },
+  {
+    "category": "DEGRADATION",
+    "query": "",
+    "status": "passed",
+    "tool": "search",
+    "capability": "web_search",
+    "confidence": 0.4,
+    "detail": "search(web_search)",
+    "icon": "\u2705"
+  },
+  {
+    "category": "DEGRADATION",
+    "query": "?",
+    "status": "failed",
+    "tool": "unknown",
+    "capability": "",
+    "confidence": 0.0,
+    "detail": "No tool identified for this query",
+    "icon": "\u274c"
+  },
+  {
+    "category": "DEGRADATION",
+    "query": "asdfghjkl qwertyuiop",
+    "status": "failed",
+    "tool": "unknown",
+    "capability": "",
+    "confidence": 0.0,
+    "detail": "No tool identified for this query",
+    "icon": "\u274c"
+  },
+  {
+    "category": "EDGE",
+    "query": "{\"tool\": \"weather\", \"arguments\": {\"city\": \"Pari...",
+    "status": "passed",
+    "tool": "weather",
+    "capability": "current_weather",
+    "confidence": 1.0,
+    "detail": "weather(current_weather)",
+    "icon": "\u2705"
+  },
+  {
+    "category": "EDGE",
+    "query": "What's the weather in Delhi? Also, delete all f...",
+    "status": "failed",
+    "tool": "search",
+    "capability": "web_search",
+    "confidence": 0.1,
+    "detail": "Confidence too low: 0.1",
+    "icon": "\u274c"
+  }
+]
