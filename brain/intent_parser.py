@@ -13,7 +13,7 @@ class IntentParser:
 
         Args:
             raw_text: Raw output from LLM
-            user_query: Original user query (for fallback)
+            user_query: Original user query (for graceful fallback)
 
         Returns:
             ExecutionPlan object
@@ -25,17 +25,32 @@ class IntentParser:
         try:
             data = json.loads(cleaned)
         except json.JSONDecodeError:
-            # Fallback: return unknown plan
-            return ExecutionPlan(
-                intent="parsing failed",
-                tool="unknown",
-                arguments={},
-                confidence=0.0,
-                validation_status="failed",
-                validation_errors=[f"Failed to parse LLM response: {raw_text[:100]}"]
-            )
+            # GRACEFUL DEGRADATION: LLM failed to return valid JSON
+            if user_query:
+                # Fall back to search with the original query
+                return ExecutionPlan(
+                    intent="fallback: LLM response could not be parsed",
+                    tool="search",
+                    arguments={"query": user_query},
+                    confidence=0.1,
+                    validation_status="pending",
+                    validation_errors=[
+                        f"Failed to parse LLM response, falling back to search. "
+                        f"Raw: {raw_text[:100]}"
+                    ]
+                )
+            else:
+                # No query to fall back on — truly unknown
+                return ExecutionPlan(
+                    intent="parsing failed",
+                    tool="unknown",
+                    arguments={},
+                    confidence=0.0,
+                    validation_status="failed",
+                    validation_errors=[f"Failed to parse LLM response: {raw_text[:100]}"]
+                )
 
-        # Build ExecutionPlan
+        # Build ExecutionPlan from valid JSON
         return ExecutionPlan(
             intent=data.get("intent", "unknown"),
             tool=data.get("tool", "unknown"),
@@ -52,7 +67,7 @@ class IntentParser:
         if text.startswith("```"):
             lines = text.split("\n")
             # Remove first line (```json or ```)
-            if lines[0].startswith("```"):
+            if lines and lines[0].startswith("```"):
                 lines = lines[1:]
             # Remove last line (```)
             if lines and lines[-1].strip() == "```":

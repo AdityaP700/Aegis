@@ -1,3 +1,4 @@
+from google.protobuf import unknown_fields
 from brain.gemini_brain import GeminiBrain
 from brain.validator import Validator
 from tools.weather import WeatherTool
@@ -67,6 +68,16 @@ def process_query(query: str, brain, validator, executor):
     if plan.validation_status == "failed":
         plan = _attempt_retry(query, plan, brain, validator)
 
+
+    if plan.validation_status =="failed" or plan.tool == "unknown":
+        print("Falling back to search...")
+        plan = ExecutionPlan(
+            intent="fallback search",
+            tool="search",
+            arguments={"query": query},
+            confidence=0.3,
+            validation_status="passed"
+        )
     # Step 4: Execute or fail
     if plan.validation_status == "passed":
         _execute_plan(plan, executor)

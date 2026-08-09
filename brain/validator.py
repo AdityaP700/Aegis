@@ -1,6 +1,17 @@
 from typing import List
 from engine.types import ExecutionPlan
 from tools.registry import ToolRegistry
+"""
+Validator
+│
+├── validate()                         ← Main entry point
+│   ├── Check 1: Tool exists?
+│   ├── Check 2: Required args present?
+│   ├── Check 3: _validate_argument_types()
+│   ├── Check 4: _validate_plausibility()
+│   │   └── _check_argument_plausibility()
+│   └── Check 5: Confidence threshold
+"""
 
 class Validator:
     """
@@ -30,19 +41,22 @@ class Validator:
         elif not self.registry.get(plan.tool):
             errors.append(f"Tool '{plan.tool}' is not registered")
         else:
-            # Check 2: Required arguments present?
+    # Check 2: Required arguments present?
             tool = self.registry.get(plan.tool)
-            required_args = self._get_required_args(plan.tool)
 
-            for arg in required_args:
-                if arg not in plan.arguments or not plan.arguments[arg]:
-                    errors.append(f"Missing required argument: '{arg}'")
+    # Use the tool we already have, don't fetch again
+            if tool and hasattr(tool, 'required_args'):
+                required_args = tool.required_args
+            else:
+                required_args = []
 
-            # Check 3: Argument types correct?
-            errors.extend(self._validate_argument_types(plan))
+                for arg in required_args:
+                    if arg not in plan.arguments or not plan.arguments[arg]:
+                        errors.append(f"Missing required argument: '{arg}'")
 
-            # Check 4: Plausibility checks
-            errors.extend(self._validate_plausibility(plan))
+    # Check 3 & 4 unchanged
+                errors.extend(self._validate_argument_types(plan))
+                errors.extend(self._validate_plausibility(plan))
 
         # Check 5: Confidence threshold
         if plan.confidence < 0.3:
@@ -57,12 +71,7 @@ class Validator:
 
         return plan
 
-    def _get_required_args(self, tool_name: str) -> List[str]:
 
-        tool = self.registry.get(tool_name)  # Use the parameter, not plan.tool
-        if tool and hasattr(tool, 'required_args'):
-            return tool.required_args  #  It's already a list
-        return []
 
     def _validate_argument_types(self, plan: ExecutionPlan) -> List[str]:
         """Validate argument types."""
@@ -149,7 +158,6 @@ class Validator:
                 errors.append(f"Plausibility: search query too short: '{query}'")
 
         return errors
-
 
 
 

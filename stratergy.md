@@ -143,3 +143,38 @@ LLM Raw Output (untrusted string)
         │
         ▼
     Validated ExecutionPlan
+
+    1. User Input
+
+    
+The user provides a natural language query — something like 'What's the weather in Delhi?' or 'How many stars does nanoGPT have?'
+
+2. Brain — Intent Planning
+The query goes to the Brain, which is an LLM-powered intent planner. It's provider-agnostic — today it uses Groq, but it could be Gemini, Claude, or any other model.
+
+The Brain does two things. First, the Prompt Builder constructs a structured system prompt from rules and tool metadata — this ensures consistent, testable prompts rather than hardcoded strings. Second, it calls the LLM to interpret the user's intent and return structured JSON with four fields: the interpreted intent, the chosen tool, extracted arguments, and a confidence score.
+
+3. Intent Parser — Syntactic Validation
+The raw LLM response goes through an Intent Parser. This is the first defense layer. It handles messy LLM outputs — stripping markdown, parsing JSON, and building a typed ExecutionPlan object using Pydantic. If the LLM returns garbage, it degrades gracefully by falling back to a web search with the original query.
+
+4. Validator — Semantic Validation
+The ExecutionPlan then goes through a multi-check Validator. This is where the reliability engineering happens. It runs five sequential checks: tool existence, required argument presence, argument type correctness, intent-tool plausibility, and confidence threshold.
+
+The plausibility check is interesting — it uses domain-specific signal words to detect when the LLM chose a tool that doesn't match the user's intent. For example, if the intent mentions 'stars' and 'repository' but the LLM chose the weather tool, the validator flags it.
+
+5. Retry with Error Feedback
+If validation fails, the system doesn't just crash. It feeds the validation errors back to the LLM as a retry prompt — saying 'your previous response was invalid because of X, please fix it.' This gives the LLM one chance to self-correct.
+
+6. Graceful Degradation
+If retry also fails, the system degrades gracefully. Instead of returning an error to the user, it falls back to web search with the original query. The principle is: an imperfect response is better than no response.
+
+7. Execution
+Once validated, the plan becomes an ExecutionRequest and goes to the Executor. The Executor doesn't know anything about the tools — it just routes to the Tool Registry, finds the right tool, and invokes it with retry and timeout logic built in.
+
+8. Response
+The tool executes — calling an external API, normalizing the response — and returns a structured ExecutionResponse with the result, metadata, and a full trace of every step for observability.
+
+Key Architectural Decisions
+The entire system is built on three principles. First, defense in depth — syntactic parsing, semantic validation, plausibility checks, and retry form multiple safety layers. Second, graceful degradation — when components fail, the system falls back rather than crashing. Third, separation of concerns — the Brain plans, the Validator validates, the Executor executes. Each layer has one responsibility.
+
+The result is a framework where LLMs can make mistakes, but the system reliably recovers — which is exactly what production AI infrastructure needs."
