@@ -45,6 +45,7 @@ def _extract_tools_metadata(registry: ToolRegistry) -> list:
         metadata.append({
             "name": tool.name,
             "description": tool.description,
+            "supported_operations": getattr(tool, 'supported_operations', []),
             "capabilities": tool.capabilities if hasattr(tool, 'capabilities') else [],
             "required_args": required_args_map.get(tool_name, [])
         })
@@ -62,6 +63,7 @@ def process_query(query: str, brain, validator, executor):
 
     # Step 1: Think
     plan = brain.think(query)
+    print(f"   DEBUG: tool={plan.tool}, args={plan.arguments}, cap={plan.requested_capability}")
     print(f" Brain: {plan.tool}({plan.arguments}) [confidence: {plan.confidence}]")
     # returns the plan
     # Step 2: Validate
@@ -77,6 +79,7 @@ def process_query(query: str, brain, validator, executor):
         plan = ExecutionPlan(
             intent="fallback search",
             tool="search",
+            operation="web_search",
             arguments={"query": query},
             requested_capability="web_search",
             confidence=0.3,
@@ -106,8 +109,8 @@ def _attempt_retry(query: str, plan: ExecutionPlan, brain, validator) -> Executi
 
 def _execute_plan(plan: ExecutionPlan, executor):
     """Convert plan to request and execute."""
-    capability = plan.requested_capability or "not specified"
-    print(f" Plan: {plan.tool}({plan.arguments}) [capability: {capability}]")
+    operation = plan.operation or "not specified"
+    print(f"✅ Plan: {plan.tool}.{operation}({plan.arguments})")
 
     request = ExecutionRequest(
         tool=plan.tool,
@@ -208,6 +211,7 @@ def run_full_test_suite(brain, validator, executor):
                 "query": display_query,
                 "status": plan.validation_status,
                 "tool": plan.tool,
+                "operation": plan.operation,
                 "capability": plan.requested_capability,
                 "confidence": plan.confidence,
                 "detail": detail,
@@ -231,11 +235,11 @@ def run_full_test_suite(brain, validator, executor):
 
     # Print table
     print(f"\n{'─' * 80}")
-    print(f"{'Cat':<12} {'Query':<35} {'St':<6} {'Tool':<10} {'Capability':<18} {'Conf':<6}")
+    print(f"{'Cat':<12} {'Query':<35} {'St':<6} {'Tool.Operation':<22} {'Conf':<6}")
     print(f"{'─' * 80}")
 
     for r in results:
-        print(f"{r['category']:<12} {r['query']:<35} {r['icon']:<6} {r['tool']:<10} {r['capability']:<18} {r['confidence']:<6.1f}")
+        print(f"{r['category']:<12} {r['query']:<35} {r['icon']:<6} {r['tool']}.{r['operation']:<14} {r['confidence']:<6.1f}")
 
     # Summary
     passed = sum(1 for r in results if r['status'] == 'passed')

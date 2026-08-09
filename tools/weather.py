@@ -10,7 +10,7 @@ load_dotenv()
 
 class WeatherTool(BaseTool):
     """Fetches real-time weather data from OpenWeather API."""
-
+    supported_operations = ["current_weather"] 
     def __init__(self):
         self.api_key = os.getenv("OPENWEATHER_API_KEY")
         if not self.api_key:

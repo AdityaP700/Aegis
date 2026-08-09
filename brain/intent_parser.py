@@ -33,6 +33,7 @@ class IntentParser:
                     tool="search",
                     arguments={"query": user_query},
                     confidence=0.1,
+                    operation="web_search",
                     requested_capability="web_search",
                     validation_status="pending",
                     validation_errors=[
@@ -46,7 +47,8 @@ class IntentParser:
                     intent="parsing failed",
                     tool="unknown",
                     arguments={},
-                    requested_capability="", 
+                    operation="",          
+                    requested_capability="",
                     confidence=0.0,
                     validation_status="failed",
                     validation_errors=[f"Failed to parse LLM response: {raw_text[:100]}"]
@@ -56,6 +58,7 @@ class IntentParser:
         return ExecutionPlan(
             intent=data.get("intent", "unknown"),
             tool=data.get("tool", "unknown"),
+            operation=data.get("operation", ""),
             arguments=data.get("arguments", {}),
             requested_capability=data.get("requested_capability", ""),
             confidence=data.get("confidence", 0.5),

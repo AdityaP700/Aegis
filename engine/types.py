@@ -38,7 +38,12 @@ class ExecutionPlan(BaseModel):
     validation_status: Literal["pending", "passed", "failed"] = "pending"
     validation_errors: List[str] = []
     requested_capability:str=Field(
-        default="",
-        description="what capability the user is requesting (e.g. current_weather ,'historical_weather'"
+        default=""
+
         #LLm classifies what user wants
+    )
+    """Operation : what to do with that system"""
+    operation:str=Field(
+        default="",
+        description="specific operation requested (e.g. current_weather ,'historical_weather'"
     )

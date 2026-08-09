@@ -14,7 +14,7 @@ class SearchTool(BaseTool):
     The executor doesn't know if this is Google, Bing, or DuckDuckGo.
     It just sends a query and gets results.
     """
-
+    supported_operations = ["web_search"] 
     def __init__(self):
         self.api_key = os.getenv("SERPAPI_KEY")
         if not self.api_key:
@@ -36,7 +36,7 @@ class SearchTool(BaseTool):
     def capabilities(self) -> List[str]:        # ← NEW
         """Web search — handles general knowledge, current events, definitions."""
         return ["web_search"]
-        
+
     @property
     def required_args(self)-> List[str]:
         return ["query"]

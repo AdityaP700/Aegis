@@ -41,8 +41,16 @@ class Validator:
         elif not self.registry.get(plan.tool):
             errors.append(f"Tool '{plan.tool}' is not registered")
         else:
+
     # Check 2: Required arguments present?
             tool = self.registry.get(plan.tool)
+            if hasattr(tool, 'supported_operations') and plan.operation:
+                if plan.operation not in tool.supported_operations:
+                    errors.append(
+                    f"Operation mismatch: '{plan.tool}' does not support "
+                    f"'{plan.operation}'. Supported: {tool.supported_operations}"
+                )
+                
             if hasattr(tool, 'capabilities') and plan.requested_capability:
                 if plan.requested_capability not in tool.capabilities:
                     errors.append(
