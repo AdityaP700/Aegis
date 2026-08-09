@@ -76,6 +76,7 @@ def process_query(query: str, brain, validator, executor):
             intent="fallback search",
             tool="search",
             arguments={"query": query},
+            requested_capability="web_search",
             confidence=0.3,
             validation_status="passed"
         )

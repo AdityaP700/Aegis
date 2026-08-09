@@ -33,6 +33,7 @@ class IntentParser:
                     tool="search",
                     arguments={"query": user_query},
                     confidence=0.1,
+                    requested_capability="web_search",
                     validation_status="pending",
                     validation_errors=[
                         f"Failed to parse LLM response, falling back to search. "
@@ -45,6 +46,7 @@ class IntentParser:
                     intent="parsing failed",
                     tool="unknown",
                     arguments={},
+                    requested_capability="", 
                     confidence=0.0,
                     validation_status="failed",
                     validation_errors=[f"Failed to parse LLM response: {raw_text[:100]}"]
