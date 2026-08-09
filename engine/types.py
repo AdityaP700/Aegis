@@ -37,3 +37,8 @@ class ExecutionPlan(BaseModel):
     #when u dont want to use heavy enums
     validation_status: Literal["pending", "passed", "failed"] = "pending"
     validation_errors: List[str] = []
+    requested_capability:str=Field(
+        default="",
+        description="what capability the user is requesting (e.g. current_weather ,'historical_weather'"
+        #LLm classifies what user wants
+    )

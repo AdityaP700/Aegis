@@ -55,6 +55,7 @@ class IntentParser:
             intent=data.get("intent", "unknown"),
             tool=data.get("tool", "unknown"),
             arguments=data.get("arguments", {}),
+            requested_capability=data.get("requested_capability", ""),
             confidence=data.get("confidence", 0.5),
             validation_status="pending"
         )

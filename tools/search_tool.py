@@ -33,9 +33,14 @@ class SearchTool(BaseTool):
         return "Searches the web and returns top results with titles, URLs, and snippets"
 
     @property
+    def capabilities(self) -> List[str]:        # ← NEW
+        """Web search — handles general knowledge, current events, definitions."""
+        return ["web_search"]
+        
+    @property
     def required_args(self)-> List[str]:
         return ["query"]
-        
+
     def _fetch_from_api(self, query: str, num_results: int = 5) -> Dict[str, Any]:
         """
         Fetch search results from SerpAPI.

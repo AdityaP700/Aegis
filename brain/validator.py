@@ -43,6 +43,12 @@ class Validator:
         else:
     # Check 2: Required arguments present?
             tool = self.registry.get(plan.tool)
+            if hasattr(tool, 'capabilities') and plan.requested_capability:
+                if plan.requested_capability not in tool.capabilities:
+                    errors.append(
+                    f"Capability mismatch: requested '{plan.requested_capability}' "
+                    f"but tool '{plan.tool}' only supports {tool.capabilities}"
+                )
 
     # Use the tool we already have, don't fetch again
             if tool and hasattr(tool, 'required_args'):

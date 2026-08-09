@@ -28,6 +28,11 @@ class GitHubTool(BaseTool):
         return "Fetches GitHub repo stats: stars, language, license, forks, open issues"
 
     @property
+    def capabilities(self) -> List[str]:
+        """Currently supports repository metadata lookup."""
+        return ["repository_metadata"]
+
+    @property
     def required_args(self)-> List[str]:
         return ["repo"]
 

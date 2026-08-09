@@ -31,7 +31,12 @@ class WeatherTool(BaseTool):
     @property
     def required_args(self)-> List[str]:
         return ["city"]
-        
+
+    @property
+    def capabilities(self) -> List[str]:        # ← NEW
+        """This tool only supports current weather — not historical, not forecast."""
+        return ["current_weather"]
+
     def _fetch_from_api(self, city: str) -> Dict[str, Any]:
         """
         Raw API call to OpenWeather.

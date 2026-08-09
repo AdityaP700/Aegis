@@ -43,6 +43,7 @@ def _extract_tools_metadata(registry: ToolRegistry) -> list:
         metadata.append({
             "name": tool.name,
             "description": tool.description,
+            "capabilities": tool.capabilities if hasattr(tool, 'capabilities') else [],
             "required_args": required_args_map.get(tool_name, [])
         })
     return metadata
@@ -102,7 +103,8 @@ def _attempt_retry(query: str, plan: ExecutionPlan, brain, validator) -> Executi
 
 def _execute_plan(plan: ExecutionPlan, executor):
     """Convert plan to request and execute."""
-    print(f" Plan: {plan.tool}({plan.arguments})")
+    capability = plan.requested_capability or "not specified"
+    print(f" Plan: {plan.tool}({plan.arguments}) [capability: {capability}]")
 
     request = ExecutionRequest(
         tool=plan.tool,

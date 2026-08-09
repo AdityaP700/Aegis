@@ -47,7 +47,18 @@ class PromptBuilder:
 
         prompt += "\n" + self._build_tools_section()
         prompt += "\n" + self._build_examples()
-        prompt += "\nReturn ONLY JSON."
+        #Update Prompt to Ask for Capability
+        prompt += """
+Return ONLY valid JSON with this exact structure:
+{"intent": "what user wants", "tool": "tool_name", "arguments": {...}, "requested_capability": "what capability is needed", "confidence": 0.0-1.0}
+
+For requested_capability, choose from the tool's capabilities listed above.
+Examples:
+- "current_weather" for weather tool
+- "repository_metadata" for github tool
+- "web_search" for search tool
+- Use "" (empty string) if the tool is "unknown"
+"""
 
         return prompt
 
@@ -60,10 +71,11 @@ class PromptBuilder:
             desc = tool["description"]
             required = tool.get("required_args", [])
             optional = tool.get("optional_args", [])
-
+            capabilities = tool.get("capabilities", [])
             lines.append(f"\n{name}:")
             lines.append(f"  Description: {desc}")
             lines.append(f"  Required arguments: {required}")
+            lines.append(f"  Capabilities: {capabilities}")
             if optional:
                 lines.append(f"  Optional arguments: {optional}")
 
@@ -74,28 +86,19 @@ class PromptBuilder:
         return """EXAMPLES:
 
 User: "What's the weather in Tokyo?"
-Response: {"intent": "get weather for Tokyo", "tool": "weather", "arguments": {"city": "Tokyo"}, "confidence": 1.0}
+Response: {"intent": "get weather for Tokyo", "tool": "weather", "arguments": {"city": "Tokyo"}, "requested_capability": "current_weather", "confidence": 1.0}
+
+User: "What was the weather in Delhi yesterday?"
+Response: {"intent": "get historical weather for Delhi", "tool": "weather", "arguments": {"city": "Delhi"}, "requested_capability": "historical_weather", "confidence": 0.9}
 
 User: "How many stars does karpathy/nanoGPT have?"
-Response: {"intent": "get GitHub stats for nanoGPT", "tool": "github", "arguments": {"repo": "karpathy/nanoGPT"}, "confidence": 1.0}
+Response: {"intent": "get GitHub stats for nanoGPT", "tool": "github", "arguments": {"repo": "karpathy/nanoGPT"}, "requested_capability": "repository_metadata", "confidence": 1.0}
 
 User: "What is a transformer neural network?"
-Response: {"intent": "search for transformer neural network", "tool": "search", "arguments": {"query": "transformer neural network"}, "confidence": 0.9}
-
-User: "Tell me about Python"
-Response: {"intent": "ambiguous request about Python", "tool": "search", "arguments": {"query": "Python programming language"}, "confidence": 0.7}
+Response: {"intent": "search for transformer neural network", "tool": "search", "arguments": {"query": "transformer neural network"}, "requested_capability": "web_search", "confidence": 0.9}
 
 User: "asdfghjkl"
-Response: {"intent": "gibberish input", "tool": "unknown", "arguments": {}, "confidence": 0.0}
-
-User: "what's the current market condition in NSE index on 7th august 2026"
-Response: {"intent": "search for NSE market condition", "tool": "search", "arguments": {"query": "NSE index market condition August 2026"}, "confidence": 0.8}
-
-User: "who won the world cup in 2018"
-Response: {"intent": "search for world cup 2018 winner", "tool": "search", "arguments": {"query": "who won the world cup 2018"}, "confidence": 1.0}
-
-User: "how to make pasta"
-Response: {"intent": "search for pasta recipe", "tool": "search", "arguments": {"query": "how to make pasta"}, "confidence": 1.0}"""
+Response: {"intent": "gibberish input", "tool": "unknown", "arguments": {}, "requested_capability": "", "confidence": 0.0}"""
 
     def build_user_prompt(self, user_query: str) -> str:
         """Build the user prompt."""
