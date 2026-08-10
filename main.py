@@ -86,7 +86,7 @@ def process_query(query: str, brain, validator, executor):
         )
     # Step 4: Execute or fail
     if plan.validation_status == "passed":
-        _execute_plan(plan, executor)
+        _execute_plan(plan, executor,validator)
     else:
         print(f" Could not create valid plan after retry.")
         print(f"   Errors: {plan.validation_errors}")
@@ -106,19 +106,26 @@ def _attempt_retry(query: str, plan: ExecutionPlan, brain, validator) -> Executi
     return plan
 
 
-def _execute_plan(plan: ExecutionPlan, executor):
-    """Convert plan to request and execute."""
+def _execute_plan(plan: ExecutionPlan, executor, validator):
+    """Convert plan to request, execute, and post-validate."""
     operation = plan.operation or "not specified"
     print(f"✅ Plan: {plan.tool}.{operation}({plan.arguments})")
 
-    request = ExecutionRequest(
-        tool=plan.tool,
-        arguments=plan.arguments
-    )
-
+    request = ExecutionRequest(tool=plan.tool, arguments=plan.arguments)
     response = executor.execute(request)
-    _display_result(plan.tool, response)
 
+    if response.status == "success":
+        # ── POST-EXECUTION VALIDATION ──
+        post = validator.post_validate(plan, response)
+
+        if post.passed:
+            print(f"   ✅ Post-check: integrity ✓ | plausibility ✓ | completeness ✓")
+        else:
+            print(f"   ⚠️  Post-check FAILED:")
+            for err in post.all_errors:
+                print(f"      - {err}")
+
+    _display_result(plan.tool, response)
 
 def _display_result(tool_name: str, response):
     """Pretty-print the result based on tool type."""
@@ -277,26 +284,23 @@ def run_full_test_suite(brain, validator, executor):
     return results
 
 def main():
-    print("=" * 60)
-    print("AEGIS — Intent Planner")
-    print("=" * 60)
-
-    # Setup once
-    brain, validator, executor = setup_aegis()
-    print(f"✓ Brain: {brain.provider_name}")
-    print(f"✓ Tools: {executor.registry.list_tools()}")
-    print("✓ Ready\n")
-
     brain, validator, executor = setup_aegis()
 
-    # Run test suite
-    results = run_full_test_suite(brain, validator, executor)
+    query = "What's the weather in Delhi?"
 
-    # Optional: save results to file
+    plan = brain.think(query)
+    plan = validator.validate(plan, user_query=query)
 
-    with open("Data/test_results.json", "w") as f:
-        json.dump(results, f, indent=2)
+    if plan.validation_status == "passed":
+        request = ExecutionRequest(tool=plan.tool, arguments=plan.arguments)
+        response = executor.execute(request)
 
+        # Post-validation
+        post = validator.post_validate(plan, response)
+        print(f"\nPost-check: integrity={post.integrity}, plausibility={post.plausibility}, completeness={post.completeness}")
+        if not post.passed:
+            for err in post.all_errors:
+                print(f"  - {err}")
 
 if __name__ == "__main__":
     main()

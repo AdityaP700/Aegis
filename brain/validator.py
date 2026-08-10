@@ -1,5 +1,5 @@
 from typing import List
-from engine.types import ExecutionPlan
+from engine.types import ExecutionPlan,ExecutionRequest,PostExecutionResult
 from tools.registry import ToolRegistry
 """
 Validator
@@ -22,7 +22,7 @@ class Validator:
     def __init__(self, registry: ToolRegistry):
         self.registry = registry
 
-    def validate(self, plan: ExecutionPlan) -> ExecutionPlan:
+    def validate(self, plan: ExecutionPlan, user_query: str = "") -> ExecutionPlan:
         """
         Validate an ExecutionPlan.
         Modifies plan in-place and returns it.
@@ -50,7 +50,7 @@ class Validator:
                     f"Operation mismatch: '{plan.tool}' does not support "
                     f"'{plan.operation}'. Supported: {tool.supported_operations}"
                 )
-                
+
             if hasattr(tool, 'capabilities') and plan.requested_capability:
                 if plan.requested_capability not in tool.capabilities:
                     errors.append(
@@ -172,6 +172,23 @@ class Validator:
                 errors.append(f"Plausibility: search query too short: '{query}'")
 
         return errors
+
+    def post_validate(self, plan: ExecutionPlan, response) -> PostExecutionResult:
+        # 1. "Does the tool still exist?"
+        tool = self.registry.get(plan.tool)
+        if not tool:
+             # Something went wrong — tool was there pre-execution but not now
+            result = PostExecutionResult()
+            result.integrity = False
+            result.integrity_errors.append(f"Tool '{plan.tool}' not found for post-validation")
+            return result
+         # 2. "Can this tool validate its own results?"
+        if hasattr(tool, 'validate_result'):
+            # Yes → delegate to the tool. It knows its own domain.
+            return tool.validate_result(plan, response.result or {})
+        # 3. "Tool exists but doesn't have validation logic"
+        # → Pass by default (don't block execution for missing validation)
+        return PostExecutionResult()
 
 
 

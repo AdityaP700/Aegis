@@ -3,7 +3,7 @@ import requests
 from typing import Dict, Any, List
 from dotenv import load_dotenv
 from tools.base import BaseTool
-from engine.types import ExecutionRequest
+from engine.types import ExecutionRequest,ExecutionPlan,PostExecutionResult
 
 load_dotenv()
 
@@ -14,7 +14,7 @@ class SearchTool(BaseTool):
     The executor doesn't know if this is Google, Bing, or DuckDuckGo.
     It just sends a query and gets results.
     """
-    supported_operations = ["web_search"] 
+    supported_operations = ["web_search"]
     def __init__(self):
         self.api_key = os.getenv("SERPAPI_KEY")
         if not self.api_key:
@@ -181,3 +181,39 @@ class SearchTool(BaseTool):
                 "error": str(e)
             })
             raise
+    def validate_result(self, plan: ExecutionPlan, result: Dict[str, Any]) -> PostExecutionResult:
+
+        post = PostExecutionResult()
+
+    # ── Integrity ──
+        if "results" not in result:
+            post.integrity = False
+            post.integrity_errors.append("Missing 'results' field")
+        else:
+            results = result.get("results", [])
+        if not results:
+            post.integrity = False
+            post.integrity_errors.append("Search returned empty results")
+        else:
+            for i, r in enumerate(results):
+                if "title" not in r:
+                    post.integrity = False
+                    post.integrity_errors.append(f"Result {i}: missing 'title'")
+                if "url" not in r:
+                    post.integrity = False
+                    post.integrity_errors.append(f"Result {i}: missing 'url'")
+
+    # ── Plausibility ──
+        results = result.get("results", [])
+        for i, r in enumerate(results):
+            url = r.get("url", "")
+            if url and not (url.startswith("http://") or url.startswith("https://")):
+                post.plausibility = False
+                post.plausibility_errors.append(f"Result {i}: invalid URL '{url}'")
+
+    # ── Completeness: Results exist and query is represented ──
+        if not result.get("results"):
+            post.completeness = False
+            post.completeness_errors.append("No search results returned for the query")
+
+        return post

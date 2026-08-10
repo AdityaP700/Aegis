@@ -3,13 +3,13 @@ import requests
 from typing import Dict, Any,List
 from dotenv import load_dotenv
 from tools.base import BaseTool
-from engine.types import ExecutionRequest
+from engine.types import ExecutionRequest,ExecutionPlan,PostExecutionResult
 
 load_dotenv()
 
 class GitHubTool(BaseTool):
     """Fetches repository stats from GitHub API."""
-    supported_operations = ["repository_metadata"] 
+    supported_operations = ["repository_metadata"]
     def __init__(self):
         self.token = os.getenv("GITHUB_TOKEN")
         self.base_url = "https://api.github.com/repos"
@@ -175,11 +175,39 @@ class GitHubTool(BaseTool):
                 "error": str(e)
             })
             raise
+    def validate_result(self, plan: ExecutionPlan, result: Dict[str, Any]) -> PostExecutionResult:
+        """Check if the GitHub result matches what was requested."""
+        post = PostExecutionResult()
 
-"""Not for now, but worth keeping on your roadmap:
+    # ── Integrity ──
+        required_fields = ["full_name", "stars", "language"]
+        for field in required_fields:
+            if field not in result:
+                post.integrity = False
+                post.integrity_errors.append(f"Missing required field: '{field}'")
 
-Handle GitHub rate limits (403 with rate-limit headers).
-Cache repeated repository lookups to reduce API calls.
-Support authenticated requests via personal access tokens.
-Expose additional metadata like last updated time or default branch if needed.
-Save raw API responses optionally for debugging while still returning normalized results."""
+    # ── Plausibility ──
+        if "stars" in result:
+            stars = result["stars"]
+            if stars < 0:
+                post.plausibility = False
+                post.plausibility_errors.append(f"Stars cannot be negative: {stars}")
+
+        if "forks" in result:
+            forks = result["forks"]
+            if forks < 0:
+                post.plausibility = False
+                post.plausibility_errors.append(f"Forks cannot be negative: {forks}")
+
+    # ── Completeness: Check if requested repo matches returned repo ──
+        requested_repo = plan.arguments.get("repo", "").lower()
+        returned_repo = result.get("full_name", "").lower()
+
+        if requested_repo and returned_repo:
+            if requested_repo != returned_repo:
+                post.completeness = False
+                post.completeness_errors.append(
+                f"Repo mismatch: requested '{requested_repo}', got '{returned_repo}'"
+            )
+
+        return post

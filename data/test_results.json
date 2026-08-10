@@ -83,7 +83,7 @@
     "tool": "weather",
     "operation": "current_weather",
     "capability": "current_weather",
-    "confidence": 0.5,
+    "confidence": 0.4,
     "detail": "weather(current_weather)",
     "icon": "\u2705"
   },
@@ -116,7 +116,7 @@
     "tool": "weather",
     "operation": "current_weather",
     "capability": "current_weather",
-    "confidence": 0.9,
+    "confidence": 1.0,
     "detail": "weather(current_weather)",
     "icon": "\u2705"
   },
