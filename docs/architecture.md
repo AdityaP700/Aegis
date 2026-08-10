@@ -30,3 +30,23 @@ Aegis is a reliability-oriented execution runtime for LLM-powered tool-calling a
 | API timeout | Executor | Retry with backoff |
 | API rate limit | Executor | Retry with backoff |
 | All retries exhausted | Pipeline | Graceful degradation to search |
+
+
+Aegis Reliability Runtime
+├── Pre-execution checks (7 layers)
+│   ├── Confidence gate (≥ 0.3)
+│   ├── Tool existence
+│   ├── Operation support
+│   ├── Capability match
+│   ├── Required arguments
+│   ├── Argument contract (multi-city, repo format)
+│   └── Argument types + plausibility
+├── Execution layer
+│   ├── Retry with backoff
+│   └── Timeout handling
+├── Post-execution checks (3 layers)
+│   ├── Integrity (structural validity)
+│   ├── Plausibility (value bounds)
+│   └── Completeness (plan vs result)
+└── Graceful degradation
+    └── Failed plans → search fallback
