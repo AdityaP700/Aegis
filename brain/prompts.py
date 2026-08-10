@@ -12,7 +12,10 @@ class PromptBuilder:
     ],
             "argument_extraction": [
                 "Extract arguments exactly as the user stated them",
-    "For GitHub repos: extract the username AFTER the last name",
+    "For GitHub repositories:"
+"- Preserve an explicitly stated owner/repo pair."
+"- If only a repository name is provided, do not invent an owner."
+"- If ownership is ambiguous, preserve the repository name and let validation/recovery handle the missing information.",
     "  Example: 'andrej karpathy's repo' → owner is 'karpathy', not 'andrejkarpathy'",
     "  Example: 'repo by john smith' → owner is 'smith' or full username if given",
     "Don't infer missing arguments — leave them empty",
