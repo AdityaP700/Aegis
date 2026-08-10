@@ -1,5 +1,4 @@
 import os
-import json
 from dotenv import load_dotenv
 from brain.base import BaseBrain
 from brain.prompts import PromptBuilder

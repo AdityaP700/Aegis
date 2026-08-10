@@ -1,5 +1,3 @@
-from typing import List, Dict, Any
-
 class PromptBuilder:
     def __init__(self, tools_metadata):
         self.tools_metadata = tools_metadata
@@ -86,12 +84,16 @@ If the tool is 'unknown', use empty strings for both.
         return """EXAMPLES:
 User: "What's the weather in Tokyo?"
 Response: {"intent": "get current weather for Tokyo", "tool": "weather", "operation": "current_weather", "arguments": {"city": "Tokyo"}, "requested_capability": "current_weather", "confidence": 1.0}
-
+User: "Is it going to be sunny?"
+Response: {"intent": "check if sunny now", "tool": "weather", "operation": "current_weather", "arguments": {"city": ""}, "requested_capability": "current_weather", "confidence": 0.5},
 User: "What was the weather in Delhi yesterday?"
 Response: {"intent": "get historical weather for Delhi", "tool": "weather", "operation": "historical_weather", "arguments": {"city": "Delhi"}, "requested_capability": "historical_weather", "confidence": 0.9}
 
 User: "Will it rain in Tokyo tomorrow?"
 Response: {"intent": "get weather forecast for Tokyo", "tool": "weather", "operation": "weather_forecast", "arguments": {"city": "Tokyo"}, "requested_capability": "weather_forecast", "confidence": 0.9}
+,
+User: "How's the climate in Paris?"
+Response: {"intent": "get weather for Paris", "tool": "weather", "operation": "current_weather", "arguments": {"city": "Paris"}, "requested_capability": "current_weather", "confidence": 0.9}.
 
 User: "How many stars does karpathy/nanoGPT have?"
 Response: {"intent": "get repository metadata for nanoGPT", "tool": "github", "operation": "repository_metadata", "arguments": {"repo": "karpathy/nanoGPT"}, "requested_capability": "repository_metadata", "confidence": 1.0}

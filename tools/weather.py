@@ -1,16 +1,19 @@
 import os
 import requests
-from typing import Dict, Any,List
+from typing import Dict, Any, List
 from dotenv import load_dotenv
 from tools.base import BaseTool
-from engine.types import ExecutionRequest
+from engine.types import ExecutionRequest, PostExecutionResult,ExecutionPlan
 
 
 load_dotenv()
 
+
 class WeatherTool(BaseTool):
     """Fetches real-time weather data from OpenWeather API."""
-    supported_operations = ["current_weather"] 
+
+    supported_operations = ["current_weather"]
+
     def __init__(self):
         self.api_key = os.getenv("OPENWEATHER_API_KEY")
         if not self.api_key:
@@ -29,11 +32,11 @@ class WeatherTool(BaseTool):
         return "Fetches current weather for a city: temperature, condition, humidity"
 
     @property
-    def required_args(self)-> List[str]:
+    def required_args(self) -> List[str]:
         return ["city"]
 
     @property
-    def capabilities(self) -> List[str]:        # ← NEW
+    def capabilities(self) -> List[str]:  # ← NEW
         """This tool only supports current weather — not historical, not forecast."""
         return ["current_weather"]
 
@@ -52,11 +55,11 @@ class WeatherTool(BaseTool):
             ConnectionError: If network issues
         """
         params = {
-            "q": city, #sending the city as the param
-            "appid": self.api_key, #sending the api key as a param
-            "units": "metric"  # Celsius
+            "q": city,  # sending the city as the param
+            "appid": self.api_key,  # sending the api key as a param
+            "units": "metric",  # Celsius
         }
-    # Just send raw data
+        # Just send raw data
         response = requests.get(self.base_url, params=params, timeout=10)
 
         if response.status_code == 200:
@@ -72,7 +75,9 @@ class WeatherTool(BaseTool):
                 f"API returned status {response.status_code}: {response.text}"
             )
 
-    def _normalize_response(self, raw_data: Dict[str, Any], city: str) -> Dict[str, Any]:
+    def _normalize_response(
+        self, raw_data: Dict[str, Any], city: str
+    ) -> Dict[str, Any]:
         """
         Transform OpenWeather's verbose response into clean, normalized format.
 
@@ -92,7 +97,7 @@ class WeatherTool(BaseTool):
             "humidity": raw_data["main"]["humidity"],
             "pressure": raw_data["main"]["pressure"],
             "wind_speed": raw_data["wind"]["speed"],
-            "country": raw_data["sys"]["country"]
+            "country": raw_data["sys"]["country"],
         }
 
     def execute(self, request: ExecutionRequest, trace: list) -> Dict[str, Any]:
@@ -112,54 +117,102 @@ class WeatherTool(BaseTool):
             raise ValueError("'city' argument is required")
 
         # Trace: Starting API call
-        trace.append({
-            "component": "weather_tool",
-            "event": "api_call_started",
-            "city": city
-        })
+        trace.append(
+            {"component": "weather_tool", "event": "api_call_started", "city": city}
+        )
 
         try:
             # now define which city to be fetched
             raw_data = self._fetch_from_api(city)
 
             # Trace: API responded successfully
-            trace.append({
-                "component": "weather_tool",
-                "event": "api_response_received",
-                "city": city,
-                "status_code": 200
-            })
+            trace.append(
+                {
+                    "component": "weather_tool",
+                    "event": "api_response_received",
+                    "city": city,
+                    "status_code": 200,
+                }
+            )
 
             # Normalize the response
             normalized = self._normalize_response(raw_data, city)
 
             # Trace: Normalization complete
-            trace.append({
-                "component": "weather_tool",
-                "event": "response_normalized",
-                "city": city,
-                "fields_extracted": list(normalized.keys())
-            })
+            trace.append(
+                {
+                    "component": "weather_tool",
+                    "event": "response_normalized",
+                    "city": city,
+                    "fields_extracted": list(normalized.keys()),
+                }
+            )
 
             return normalized
 
         except ValueError as e:
             # City not found or bad API key — fatal, don't retry
-            trace.append({
-                "component": "weather_tool",
-                "event": "api_error_fatal",
-                "city": city,
-                "error": str(e)
-            })
+            trace.append(
+                {
+                    "component": "weather_tool",
+                    "event": "api_error_fatal",
+                    "city": city,
+                    "error": str(e),
+                }
+            )
             raise  # Re-raise for executor to handle as fatal
 
         except Exception as e:
             # Network errors, rate limits — retryable
-            trace.append({
-                "component": "weather_tool",
-                "event": "api_error_operational",
-                "city": city,
-                "error": str(e)
-            })
+            trace.append(
+                {
+                    "component": "weather_tool",
+                    "event": "api_error_operational",
+                    "city": city,
+                    "error": str(e),
+                }
+            )
             raise  # Re-raise for executor to retry
 
+    def validate_result(
+        self, plan: ExecutionPlan, result: Dict[str, Any]
+    ) -> PostExecutionResult:
+        post = PostExecutionResult()
+        required_fields = ["city", "temperature", "condition", "humidity"]
+
+        for field in required_fields:
+            if field not in result:
+                post.integrity = False
+                post.integrity_errors.append(f"Missing required field: '{field}'")
+
+    # ── Plausibility ──
+        if "temperature" in result:
+            temp = result["temperature"]
+            if not (-50 <= temp <= 55):
+                post.plausibility = False
+                post.plausibility_errors.append(f"Temperature out of range: {temp}°C")
+
+        if "humidity" in result:
+            humidity = result["humidity"]
+            if not (0 <= humidity <= 100):
+                post.plausibility = False
+                post.plausibility_errors.append(f"Humidity out of range: {humidity}%")
+
+        if "wind_speed" in result:
+            wind = result["wind_speed"]
+            if wind < 0:
+                post.plausibility = False
+                post.plausibility_errors.append(f"Wind speed negative: {wind}")
+
+    # ── Completeness: Check if requested city matches returned city ──
+        requested_city = plan.arguments.get("city", "")
+        returned_city = result.get("city", "")
+
+        if requested_city and returned_city:
+            if requested_city.lower() != returned_city.lower():
+                post.completeness = False
+                post.completeness_errors.append(
+                f"City mismatch: requested '{requested_city}', got '{returned_city}'"
+            )
+
+        return post

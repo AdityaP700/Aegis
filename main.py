@@ -1,7 +1,6 @@
 import time
 import json
 from google.protobuf import unknown_fields
-from brain.gemini_brain import GeminiBrain
 from brain.validator import Validator
 from tools.weather import WeatherTool
 from tools.github import GitHubTool
@@ -212,6 +211,7 @@ def run_full_test_suite(brain, validator, executor):
                 "status": plan.validation_status,
                 "tool": plan.tool,
                 "operation": plan.operation,
+                "operation": plan.operation,
                 "capability": plan.requested_capability,
                 "confidence": plan.confidence,
                 "detail": detail,
@@ -227,6 +227,7 @@ def run_full_test_suite(brain, validator, executor):
                 "query": display_query,
                 "status": "CRASHED",
                 "tool": "ERROR",
+                "operation": "-",
                 "capability": "-",
                 "confidence": 0.0,
                 "detail": str(e)[:50],

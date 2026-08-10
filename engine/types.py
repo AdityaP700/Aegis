@@ -47,3 +47,20 @@ class ExecutionPlan(BaseModel):
         default="",
         description="specific operation requested (e.g. current_weather ,'historical_weather'"
     )
+
+class PostExecutionResult(BaseModel):
+    """Result of post-execution validation."""
+    integrity: bool = True
+    integrity_errors: List[str] = []
+    plausibility: bool = True
+    plausibility_errors: List[str] = []
+    completeness: bool = True
+    completeness_errors: List[str] = []
+
+    @property
+    def passed(self) -> bool:
+        return self.integrity and self.plausibility and self.completeness
+
+    @property
+    def all_errors(self) -> List[str]:
+        return self.integrity_errors + self.plausibility_errors + self.completeness_errors

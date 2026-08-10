@@ -83,31 +83,31 @@
     "tool": "weather",
     "operation": "current_weather",
     "capability": "current_weather",
-    "confidence": 0.4,
+    "confidence": 0.5,
     "detail": "weather(current_weather)",
     "icon": "\u2705"
   },
   {
     "category": "ROUTING",
     "query": "Is it going to be sunny?",
-    "status": "failed",
+    "status": "passed",
     "tool": "weather",
-    "operation": "weather_forecast",
-    "capability": "weather_forecast",
-    "confidence": 0.7,
-    "detail": "Operation mismatch: 'weather' does not support 'we",
-    "icon": "\u274c"
+    "operation": "current_weather",
+    "capability": "current_weather",
+    "confidence": 0.5,
+    "detail": "weather(current_weather)",
+    "icon": "\u2705"
   },
   {
     "category": "ROUTING",
     "query": "How's the climate in Paris?",
-    "status": "failed",
+    "status": "passed",
     "tool": "weather",
-    "operation": "climate_information",
-    "capability": "climate_information",
+    "operation": "current_weather",
+    "capability": "current_weather",
     "confidence": 0.9,
-    "detail": "Operation mismatch: 'weather' does not support 'cl",
-    "icon": "\u274c"
+    "detail": "weather(current_weather)",
+    "icon": "\u2705"
   },
   {
     "category": "ARGUMENTS",
@@ -116,7 +116,7 @@
     "tool": "weather",
     "operation": "current_weather",
     "capability": "current_weather",
-    "confidence": 1.0,
+    "confidence": 0.9,
     "detail": "weather(current_weather)",
     "icon": "\u2705"
   },
@@ -127,7 +127,7 @@
     "tool": "github",
     "operation": "repository_metadata",
     "capability": "repository_metadata",
-    "confidence": 1.0,
+    "confidence": 0.9,
     "detail": "github(repository_metadata)",
     "icon": "\u2705"
   },
@@ -182,7 +182,7 @@
     "tool": "search",
     "operation": "web_search",
     "capability": "web_search",
-    "confidence": 0.4,
+    "confidence": 0.9,
     "detail": "search(web_search)",
     "icon": "\u2705"
   },

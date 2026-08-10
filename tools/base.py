@@ -1,7 +1,6 @@
 from abc import ABC ,abstractmethod
-from engine.types import ExecutionRequest,ExecutionResponse
-#"Every tool should have these methods."
-from typing import List
+from engine.types import ExecutionPlan, PostExecutionResult
+from typing import List,Dict,Any
 
 class BaseTool(ABC):
     @property
@@ -23,13 +22,20 @@ class BaseTool(ABC):
         """Required arguments for this tool."""
         pass
 
+    @property
     @abstractmethod
-    def execute(
-        self,
-        request:ExecutionRequest
-    )->ExecutionResponse:
-      pass
+    def execute(self, request, trace: list) -> Dict[str, Any]:
+        pass
 
+    def validate_result(self, plan: ExecutionPlan, result: Dict[str, Any]) -> PostExecutionResult:
+        """
+        Validate the tool's result against the plan.
+        Override in each tool for domain-specific checks.
+        Default: pass everything.
+        """
+        return PostExecutionResult()
+
+    @property
     @abstractmethod
     def description(self) -> str:
         """What this tool does."""
