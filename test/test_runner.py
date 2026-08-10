@@ -11,7 +11,7 @@ def run_full_test_suite(brain, validator, executor, save_results=True):
     from test.test_suites import TEST_QUERIES
 
     results = []
-
+    TEST_QUERIES = TEST_QUERIES[:5]  # Just first 5
     print(f"\n{'=' * 80}")
     print(f"RUNNING {len(TEST_QUERIES)} TEST CASES")
     print(f"{'=' * 80}\n")

@@ -1,0 +1,52 @@
+[
+  {
+    "category": "CAPABILITY",
+    "query": "What was the temperature in Paris last Monday?",
+    "status": "failed",
+    "tool": "search",
+    "operation": "web_search",
+    "confidence": 0.1,
+    "post_validation_passed": null,
+    "post_errors": []
+  },
+  {
+    "category": "CAPABILITY",
+    "query": "Will it rain in Tokyo tomorrow?",
+    "status": "failed",
+    "tool": "search",
+    "operation": "web_search",
+    "confidence": 0.1,
+    "post_validation_passed": null,
+    "post_errors": []
+  },
+  {
+    "category": "CAPABILITY",
+    "query": "Show me the README of karpathy/nanoGPT",
+    "status": "failed",
+    "tool": "search",
+    "operation": "web_search",
+    "confidence": 0.1,
+    "post_validation_passed": null,
+    "post_errors": []
+  },
+  {
+    "category": "CAPABILITY",
+    "query": "What's the commit history of torvalds/linux?",
+    "status": "failed",
+    "tool": "search",
+    "operation": "web_search",
+    "confidence": 0.1,
+    "post_validation_passed": null,
+    "post_errors": []
+  },
+  {
+    "category": "ROUTING",
+    "query": "Delhi",
+    "status": "passed",
+    "tool": "search",
+    "operation": "web_search",
+    "confidence": 0.4,
+    "post_validation_passed": true,
+    "post_errors": []
+  }
+]

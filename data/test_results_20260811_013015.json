@@ -1,0 +1,260 @@
+[
+  {
+    "category": "CAPABILITY",
+    "query": "What was the temperature in Paris last Monday?",
+    "status": "failed",
+    "tool": "weather",
+    "operation": "historical_temperature",
+    "confidence": 0.9,
+    "post_validation_passed": null,
+    "post_errors": []
+  },
+  {
+    "category": "CAPABILITY",
+    "query": "Will it rain in Tokyo tomorrow?",
+    "status": "failed",
+    "tool": "weather",
+    "operation": "weather_forecast",
+    "confidence": 0.9,
+    "post_validation_passed": null,
+    "post_errors": []
+  },
+  {
+    "category": "CAPABILITY",
+    "query": "Show me the README of karpathy/nanoGPT",
+    "status": "failed",
+    "tool": "github",
+    "operation": "get_readme",
+    "confidence": 0.9,
+    "post_validation_passed": null,
+    "post_errors": []
+  },
+  {
+    "category": "CAPABILITY",
+    "query": "What's the commit history of torvalds/linux?",
+    "status": "CRASHED",
+    "tool": "ERROR",
+    "operation": "-",
+    "confidence": 0.0,
+    "post_validation_passed": null,
+    "post_errors": [
+      "Error code: 429 - {'error': {'message': 'Rate limit reached for model `llama-3.3-70b-versatile` in organization `org_01k7vm4b93e2a8pnshbhv221ay` service tier `on_demand` on tokens per day (TPD): Limit 100000, Used 99336, Requested 1372. Please try again in 10m11.712s. Need more tokens? Upgrade to Dev Tier today at https://console.groq.com/settings/billing', 'type': 'tokens', 'code': 'rate_limit_exceeded'}}"
+    ]
+  },
+  {
+    "category": "ROUTING",
+    "query": "Delhi",
+    "status": "CRASHED",
+    "tool": "ERROR",
+    "operation": "-",
+    "confidence": 0.0,
+    "post_validation_passed": null,
+    "post_errors": [
+      "Error code: 429 - {'error': {'message': 'Rate limit reached for model `llama-3.3-70b-versatile` in organization `org_01k7vm4b93e2a8pnshbhv221ay` service tier `on_demand` on tokens per day (TPD): Limit 100000, Used 99336, Requested 1612. Please try again in 13m39.072s. Need more tokens? Upgrade to Dev Tier today at https://console.groq.com/settings/billing', 'type': 'tokens', 'code': 'rate_limit_exceeded'}}"
+    ]
+  },
+  {
+    "category": "ROUTING",
+    "query": "weather",
+    "status": "CRASHED",
+    "tool": "ERROR",
+    "operation": "-",
+    "confidence": 0.0,
+    "post_validation_passed": null,
+    "post_errors": [
+      "Error code: 429 - {'error': {'message': 'Rate limit reached for model `llama-3.3-70b-versatile` in organization `org_01k7vm4b93e2a8pnshbhv221ay` service tier `on_demand` on tokens per day (TPD): Limit 100000, Used 99336, Requested 1612. Please try again in 13m39.072s. Need more tokens? Upgrade to Dev Tier today at https://console.groq.com/settings/billing', 'type': 'tokens', 'code': 'rate_limit_exceeded'}}"
+    ]
+  },
+  {
+    "category": "ROUTING",
+    "query": "Tell me about Python",
+    "status": "CRASHED",
+    "tool": "ERROR",
+    "operation": "-",
+    "confidence": 0.0,
+    "post_validation_passed": null,
+    "post_errors": [
+      "Error code: 429 - {'error': {'message': 'Rate limit reached for model `llama-3.3-70b-versatile` in organization `org_01k7vm4b93e2a8pnshbhv221ay` service tier `on_demand` on tokens per day (TPD): Limit 100000, Used 99336, Requested 1367. Please try again in 10m7.392s. Need more tokens? Upgrade to Dev Tier today at https://console.groq.com/settings/billing', 'type': 'tokens', 'code': 'rate_limit_exceeded'}}"
+    ]
+  },
+  {
+    "category": "ROUTING",
+    "query": "What's hot?",
+    "status": "CRASHED",
+    "tool": "ERROR",
+    "operation": "-",
+    "confidence": 0.0,
+    "post_validation_passed": null,
+    "post_errors": [
+      "Error code: 429 - {'error': {'message': 'Rate limit reached for model `llama-3.3-70b-versatile` in organization `org_01k7vm4b93e2a8pnshbhv221ay` service tier `on_demand` on tokens per day (TPD): Limit 100000, Used 99336, Requested 1614. Please try again in 13m40.8s. Need more tokens? Upgrade to Dev Tier today at https://console.groq.com/settings/billing', 'type': 'tokens', 'code': 'rate_limit_exceeded'}}"
+    ]
+  },
+  {
+    "category": "ROUTING",
+    "query": "Is it going to be sunny?",
+    "status": "CRASHED",
+    "tool": "ERROR",
+    "operation": "-",
+    "confidence": 0.0,
+    "post_validation_passed": null,
+    "post_errors": [
+      "Error code: 429 - {'error': {'message': 'Rate limit reached for model `llama-3.3-70b-versatile` in organization `org_01k7vm4b93e2a8pnshbhv221ay` service tier `on_demand` on tokens per day (TPD): Limit 100000, Used 99336, Requested 1617. Please try again in 13m43.392s. Need more tokens? Upgrade to Dev Tier today at https://console.groq.com/settings/billing', 'type': 'tokens', 'code': 'rate_limit_exceeded'}}"
+    ]
+  },
+  {
+    "category": "ROUTING",
+    "query": "How's the climate in Paris?",
+    "status": "CRASHED",
+    "tool": "ERROR",
+    "operation": "-",
+    "confidence": 0.0,
+    "post_validation_passed": null,
+    "post_errors": [
+      "Error code: 429 - {'error': {'message': 'Rate limit reached for model `llama-3.3-70b-versatile` in organization `org_01k7vm4b93e2a8pnshbhv221ay` service tier `on_demand` on tokens per day (TPD): Limit 100000, Used 99336, Requested 1617. Please try again in 13m43.392s. Need more tokens? Upgrade to Dev Tier today at https://console.groq.com/settings/billing', 'type': 'tokens', 'code': 'rate_limit_exceeded'}}"
+    ]
+  },
+  {
+    "category": "ARGUMENTS",
+    "query": "Weather in New York and London",
+    "status": "CRASHED",
+    "tool": "ERROR",
+    "operation": "-",
+    "confidence": 0.0,
+    "post_validation_passed": null,
+    "post_errors": [
+      "Error code: 429 - {'error': {'message': 'Rate limit reached for model `llama-3.3-70b-versatile` in organization `org_01k7vm4b93e2a8pnshbhv221ay` service tier `on_demand` on tokens per day (TPD): Limit 100000, Used 99335, Requested 1617. Please try again in 13m42.528s. Need more tokens? Upgrade to Dev Tier today at https://console.groq.com/settings/billing', 'type': 'tokens', 'code': 'rate_limit_exceeded'}}"
+    ]
+  },
+  {
+    "category": "ARGUMENTS",
+    "query": "GitHub stars for nanoGPT",
+    "status": "CRASHED",
+    "tool": "ERROR",
+    "operation": "-",
+    "confidence": 0.0,
+    "post_validation_passed": null,
+    "post_errors": [
+      "Error code: 429 - {'error': {'message': 'Rate limit reached for model `llama-3.3-70b-versatile` in organization `org_01k7vm4b93e2a8pnshbhv221ay` service tier `on_demand` on tokens per day (TPD): Limit 100000, Used 99335, Requested 1368. Please try again in 10m7.392s. Need more tokens? Upgrade to Dev Tier today at https://console.groq.com/settings/billing', 'type': 'tokens', 'code': 'rate_limit_exceeded'}}"
+    ]
+  },
+  {
+    "category": "ARGUMENTS",
+    "query": "Weather in Delhi, India",
+    "status": "CRASHED",
+    "tool": "ERROR",
+    "operation": "-",
+    "confidence": 0.0,
+    "post_validation_passed": null,
+    "post_errors": [
+      "Error code: 429 - {'error': {'message': 'Rate limit reached for model `llama-3.3-70b-versatile` in organization `org_01k7vm4b93e2a8pnshbhv221ay` service tier `on_demand` on tokens per day (TPD): Limit 100000, Used 99335, Requested 1368. Please try again in 10m7.392s. Need more tokens? Upgrade to Dev Tier today at https://console.groq.com/settings/billing', 'type': 'tokens', 'code': 'rate_limit_exceeded'}}"
+    ]
+  },
+  {
+    "category": "ARGUMENTS",
+    "query": "What's the temperature in the Big Apple?",
+    "status": "CRASHED",
+    "tool": "ERROR",
+    "operation": "-",
+    "confidence": 0.0,
+    "post_validation_passed": null,
+    "post_errors": [
+      "Error code: 429 - {'error': {'message': 'Rate limit reached for model `llama-3.3-70b-versatile` in organization `org_01k7vm4b93e2a8pnshbhv221ay` service tier `on_demand` on tokens per day (TPD): Limit 100000, Used 99335, Requested 1371. Please try again in 10m9.984s. Need more tokens? Upgrade to Dev Tier today at https://console.groq.com/settings/billing', 'type': 'tokens', 'code': 'rate_limit_exceeded'}}"
+    ]
+  },
+  {
+    "category": "PLAUSIBILITY",
+    "query": "Weather in XYZ123",
+    "status": "CRASHED",
+    "tool": "ERROR",
+    "operation": "-",
+    "confidence": 0.0,
+    "post_validation_passed": null,
+    "post_errors": [
+      "Error code: 429 - {'error': {'message': 'Rate limit reached for model `llama-3.3-70b-versatile` in organization `org_01k7vm4b93e2a8pnshbhv221ay` service tier `on_demand` on tokens per day (TPD): Limit 100000, Used 99335, Requested 1615. Please try again in 13m40.8s. Need more tokens? Upgrade to Dev Tier today at https://console.groq.com/settings/billing', 'type': 'tokens', 'code': 'rate_limit_exceeded'}}"
+    ]
+  },
+  {
+    "category": "PLAUSIBILITY",
+    "query": "GitHub stars for this/repo/that",
+    "status": "CRASHED",
+    "tool": "ERROR",
+    "operation": "-",
+    "confidence": 0.0,
+    "post_validation_passed": null,
+    "post_errors": [
+      "Error code: 429 - {'error': {'message': 'Rate limit reached for model `llama-3.3-70b-versatile` in organization `org_01k7vm4b93e2a8pnshbhv221ay` service tier `on_demand` on tokens per day (TPD): Limit 100000, Used 99335, Requested 1371. Please try again in 10m9.984s. Need more tokens? Upgrade to Dev Tier today at https://console.groq.com/settings/billing', 'type': 'tokens', 'code': 'rate_limit_exceeded'}}"
+    ]
+  },
+  {
+    "category": "PLAUSIBILITY",
+    "query": "Search for a",
+    "status": "CRASHED",
+    "tool": "ERROR",
+    "operation": "-",
+    "confidence": 0.0,
+    "post_validation_passed": null,
+    "post_errors": [
+      "Error code: 429 - {'error': {'message': 'Rate limit reached for model `llama-3.3-70b-versatile` in organization `org_01k7vm4b93e2a8pnshbhv221ay` service tier `on_demand` on tokens per day (TPD): Limit 100000, Used 99335, Requested 1366. Please try again in 10m5.664s. Need more tokens? Upgrade to Dev Tier today at https://console.groq.com/settings/billing', 'type': 'tokens', 'code': 'rate_limit_exceeded'}}"
+    ]
+  },
+  {
+    "category": "DEGRADATION",
+    "query": "",
+    "status": "CRASHED",
+    "tool": "ERROR",
+    "operation": "-",
+    "confidence": 0.0,
+    "post_validation_passed": null,
+    "post_errors": [
+      "Error code: 429 - {'error': {'message': 'Rate limit reached for model `llama-3.3-70b-versatile` in organization `org_01k7vm4b93e2a8pnshbhv221ay` service tier `on_demand` on tokens per day (TPD): Limit 100000, Used 99335, Requested 1363. Please try again in 10m3.072s. Need more tokens? Upgrade to Dev Tier today at https://console.groq.com/settings/billing', 'type': 'tokens', 'code': 'rate_limit_exceeded'}}"
+    ]
+  },
+  {
+    "category": "DEGRADATION",
+    "query": "?",
+    "status": "CRASHED",
+    "tool": "ERROR",
+    "operation": "-",
+    "confidence": 0.0,
+    "post_validation_passed": null,
+    "post_errors": [
+      "Error code: 429 - {'error': {'message': 'Rate limit reached for model `llama-3.3-70b-versatile` in organization `org_01k7vm4b93e2a8pnshbhv221ay` service tier `on_demand` on tokens per day (TPD): Limit 100000, Used 99335, Requested 1611. Please try again in 13m37.343999999s. Need more tokens? Upgrade to Dev Tier today at https://console.groq.com/settings/billing', 'type': 'tokens', 'code': 'rate_limit_exceeded'}}"
+    ]
+  },
+  {
+    "category": "DEGRADATION",
+    "query": "asdfghjkl qwertyuiop",
+    "status": "CRASHED",
+    "tool": "ERROR",
+    "operation": "-",
+    "confidence": 0.0,
+    "post_validation_passed": null,
+    "post_errors": [
+      "Error code: 429 - {'error': {'message': 'Rate limit reached for model `llama-3.3-70b-versatile` in organization `org_01k7vm4b93e2a8pnshbhv221ay` service tier `on_demand` on tokens per day (TPD): Limit 100000, Used 99335, Requested 1371. Please try again in 10m9.984s. Need more tokens? Upgrade to Dev Tier today at https://console.groq.com/settings/billing', 'type': 'tokens', 'code': 'rate_limit_exceeded'}}"
+    ]
+  },
+  {
+    "category": "EDGE",
+    "query": "{\"tool\": \"weather\", \"arguments\": {\"city\": \"Pari...",
+    "status": "CRASHED",
+    "tool": "ERROR",
+    "operation": "-",
+    "confidence": 0.0,
+    "post_validation_passed": null,
+    "post_errors": [
+      "Error code: 429 - {'error': {'message': 'Rate limit reached for model `llama-3.3-70b-versatile` in organization `org_01k7vm4b93e2a8pnshbhv221ay` service tier `on_demand` on tokens per day (TPD): Limit 100000, Used 99335, Requested 1626. Please try again in 13m50.304s. Need more tokens? Upgrade to Dev Tier today at https://console.groq.com/settings/billing', 'type': 'tokens', 'code': 'rate_limit_exceeded'}}"
+    ]
+  },
+  {
+    "category": "EDGE",
+    "query": "What's the weather in Delhi? Also, delete all f...",
+    "status": "CRASHED",
+    "tool": "ERROR",
+    "operation": "-",
+    "confidence": 0.0,
+    "post_validation_passed": null,
+    "post_errors": [
+      "Error code: 429 - {'error': {'message': 'Rate limit reached for model `llama-3.3-70b-versatile` in organization `org_01k7vm4b93e2a8pnshbhv221ay` service tier `on_demand` on tokens per day (TPD): Limit 100000, Used 99335, Requested 1623. Please try again in 13m47.712s. Need more tokens? Upgrade to Dev Tier today at https://console.groq.com/settings/billing', 'type': 'tokens', 'code': 'rate_limit_exceeded'}}"
+    ]
+  }
+]

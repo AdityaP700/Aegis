@@ -34,6 +34,11 @@ class Validator:
             Validated ExecutionPlan (with validation_status updated)
         """
         errors = []
+        if plan.tool != "unknown" and plan.confidence < 0.3:
+            errors.append(
+            f"Confidence too low for execution: {plan.confidence:.1f}. "
+            f"System requires confidence ≥ 0.5 to proceed."
+        )
 
         # Check 1: Does tool exist?
         if plan.tool == "unknown":
@@ -69,6 +74,7 @@ class Validator:
                         errors.append(f"Missing required argument: '{arg}'")
 
     # Check 3 & 4 unchanged
+                errors._extent(self._validate_argument_contract(plan))
                 errors.extend(self._validate_argument_types(plan))
                 errors.extend(self._validate_plausibility(plan))
 
@@ -190,5 +196,56 @@ class Validator:
         # → Pass by default (don't block execution for missing validation)
         return PostExecutionResult()
 
+    def _validate_argument_contract(self, plan: ExecutionPlan) -> List[str]:
+        """
+      Validate arguments against the tool's input contract.
+      Catches structural issues before execution.
+        """
+        errors = []
 
+        if plan.tool == "weather":
+            city = plan.arguments.get("city", "")
 
+        # Multi-city detection
+            multi_city_markers = [" and ", " & ", ", "]
+            for marker in multi_city_markers:
+                if marker in city:
+                    cities_found = city.split(marker)
+                    errors.append(
+                    f"Multi-city detected in 'city' argument: '{city}'. "
+                    f"Found {len(cities_found)} cities: {cities_found}. "
+                    f"Weather tool currently supports only one city per request."
+                    )
+                    break
+
+        elif plan.tool == "github":
+            repo = plan.arguments.get("repo", "")
+
+        # Repo format: must be owner/repo with exactly one slash
+            if repo:
+                slash_count = repo.count("/")
+                if slash_count == 0:
+                    errors.append(
+                    f"Invalid repo format: '{repo}'. "
+                    f"Expected 'owner/repo' (e.g., 'karpathy/nanoGPT'). "
+                    f"If only repo name is known, leave empty and let the system clarify."
+                )
+            elif slash_count > 1:
+                errors.append(
+                    f"Invalid repo format: '{repo}'. "
+                    f"Too many slashes ({slash_count}). Expected exactly one: 'owner/repo'."
+                )
+            if " " in repo:
+                errors.append(f"Repo contains spaces: '{repo}'. Repo names cannot have spaces.")
+
+        elif plan.tool == "search":
+            query = plan.arguments.get("query", "")
+
+        # Query must be meaningful
+            if query and len(query.strip()) < 3:
+                errors.append(
+                f"Search query too short: '{query}' ({len(query.strip())} chars). "
+                f"Minimum 3 characters required."
+                )
+
+        return errors

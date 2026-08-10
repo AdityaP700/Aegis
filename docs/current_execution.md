@@ -59,3 +59,8 @@ Post-execution checks:
 ## One Line Summary
 
 > Post-execution completeness answers: "Did the tool fulfill the plan?" — not "Did the plan fulfill the user?" That's the clean boundary.
+
+Pre-execution catches "should I allow this plan?"
+Post-execution catches "did it actually work?"
+
+The pre-validator is too optimistic — it's letting plans through that should have been rejected.

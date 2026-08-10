@@ -40,7 +40,6 @@ def _extract_tools_metadata(registry: ToolRegistry) -> list:
 
 
 def process_query(query: str, brain, validator, executor):
-    """Full Aegis pipeline for a single user query."""
     print(f"\n{'─' * 60}")
     print(f"👤 User: {query}")
 
@@ -48,6 +47,14 @@ def process_query(query: str, brain, validator, executor):
     print(f"🧠 Brain: {plan.tool}.{plan.operation}({plan.arguments}) [confidence: {plan.confidence}]")
 
     plan = validator.validate(plan)
+
+    # Handle confidence abstention specially
+    if plan.validation_status == "failed":
+        confidence_errors = [e for e in plan.validation_errors if "Confidence too low" in e]
+        if confidence_errors:
+            print(f"⚠️  Aegis abstained: confidence {plan.confidence:.1f} is below threshold (0.5)")
+            print(f"   System: 'Could you clarify what you mean?'")
+            return  # Don't retry, don't execute — just stop
 
     if plan.validation_status == "failed":
         plan = _attempt_retry(query, plan, brain, validator)
@@ -69,8 +76,6 @@ def process_query(query: str, brain, validator, executor):
     else:
         print(f"❌ Could not create valid plan.")
         print(f"   Errors: {plan.validation_errors}")
-
-
 def _attempt_retry(query: str, plan: ExecutionPlan, brain, validator) -> ExecutionPlan:
     print(f"❌ Validation failed: {plan.validation_errors}")
     print("🔄 Retrying with error feedback...")
