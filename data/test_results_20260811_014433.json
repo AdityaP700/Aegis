@@ -1,0 +1,52 @@
+[
+  {
+    "category": "CAPABILITY",
+    "query": "What was the temperature in Paris last Monday?",
+    "status": "failed",
+    "tool": "weather",
+    "operation": "historical_temperature",
+    "confidence": 0.9,
+    "post_validation_passed": null,
+    "post_errors": []
+  },
+  {
+    "category": "CAPABILITY",
+    "query": "Will it rain in Tokyo tomorrow?",
+    "status": "failed",
+    "tool": "weather",
+    "operation": "weather_forecast",
+    "confidence": 0.9,
+    "post_validation_passed": null,
+    "post_errors": []
+  },
+  {
+    "category": "CAPABILITY",
+    "query": "Show me the README of karpathy/nanoGPT",
+    "status": "failed",
+    "tool": "github",
+    "operation": "get_readme",
+    "confidence": 0.9,
+    "post_validation_passed": null,
+    "post_errors": []
+  },
+  {
+    "category": "HAPPY",
+    "query": "What's the weather in Delhi?",
+    "status": "passed",
+    "tool": "weather",
+    "operation": "current_weather",
+    "confidence": 0.9,
+    "post_validation_passed": true,
+    "post_errors": []
+  },
+  {
+    "category": "ROUTING",
+    "query": "Delhi",
+    "status": "failed",
+    "tool": "unknown",
+    "operation": "",
+    "confidence": 0.4,
+    "post_validation_passed": null,
+    "post_errors": []
+  }
+]

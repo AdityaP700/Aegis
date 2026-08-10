@@ -3,12 +3,12 @@ class PromptBuilder:
         self.tools_metadata = tools_metadata
         self.rules = {
     "routing": [
-        "Match user intent to the most specific tool",
-        "If multiple tools could work, pick the most direct one",
-        "Always output the operation the USER wants, not what the tool supports",
-        "Let the validator reject unsupported operations — that's its job",
-        "If a query doesn't match weather or github, use search",
-        "Only return 'unknown' if the query is complete gibberish or empty"
+    "Match user intent to the most specific tool FIRST, even if it might not support the operation",
+    "Output the operation the USER wants, not what the tool supports",
+    "If weather is the right domain, say weather — even for historical/forecast requests",
+    "If github is the right domain, say github — even for README/commits requests",
+    "The validation system will handle unsupported operations gracefully",
+    "Only fall back to search if NO domain tool matches the intent",
     ],
             "argument_extraction": [
                 "Extract arguments exactly as the user stated them",
@@ -91,6 +91,9 @@ User: "Is it going to be sunny?"
 Response: {"intent": "check if sunny now", "tool": "weather", "operation": "current_weather", "arguments": {"city": ""}, "requested_capability": "current_weather", "confidence": 0.5},
 User: "What was the weather in Delhi yesterday?"
 Response: {"intent": "get historical weather for Delhi", "tool": "weather", "operation": "historical_weather", "arguments": {"city": "Delhi"}, "requested_capability": "historical_weather", "confidence": 0.9}
+,
+User: "What was the weather in Delhi yesterday?"
+Response: {"intent": "get historical weather for Delhi", "tool": "weather", "operation": "historical_temperature", "arguments": {"city": "Delhi"}, "requested_capability": "historical_temperature", "confidence": 0.9},
 
 User: "Will it rain in Tokyo tomorrow?"
 Response: {"intent": "get weather forecast for Tokyo", "tool": "weather", "operation": "weather_forecast", "arguments": {"city": "Tokyo"}, "requested_capability": "weather_forecast", "confidence": 0.9}

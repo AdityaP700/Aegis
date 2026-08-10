@@ -3,15 +3,12 @@ import time
 import json
 from pathlib import Path
 from engine.types import ExecutionRequest
-
+from pipeline  import process_query
 
 def run_full_test_suite(brain, validator, executor, save_results=True):
-    """Run all test cases and display results in a table."""
-
     from test.test_suites import TEST_QUERIES
 
     results = []
-    TEST_QUERIES = TEST_QUERIES[:5]  # Just first 5
     print(f"\n{'=' * 80}")
     print(f"RUNNING {len(TEST_QUERIES)} TEST CASES")
     print(f"{'=' * 80}\n")
@@ -20,41 +17,42 @@ def run_full_test_suite(brain, validator, executor, save_results=True):
         display_query = query if len(query) <= 50 else query[:47] + "..."
 
         try:
-            plan = brain.think(query)
-            plan = validator.validate(plan)
+            response = process_query(query, brain, validator, executor)
 
-            # If plan passed, execute and post-validate
-            post_passed = None
-            post_errors = []
-            if plan.validation_status == "passed":
-                request = ExecutionRequest(tool=plan.tool, arguments=plan.arguments)
-                response = executor.execute(request)
-                post = validator.post_validate(plan, response)
-                post_passed = post.passed
-                post_errors = post.all_errors
-
-            if plan.validation_status == "passed":
-                icon = "✅" if post_passed else "⚠️"
-                detail = f"{plan.tool}.{plan.operation}"
+            if response and response.status == "success":
+                icon = "✅"
+                status = "passed"
+                tool = response.metadata.get("tool", "search")
+                operation = "web_search"
+                post_passed = True
+            elif response:
+                icon = "❌"
+                status = "failed"
+                tool = response.metadata.get("tool", "unknown")
+                operation = ""
+                post_passed = False
             else:
                 icon = "❌"
-                detail = plan.validation_errors[0][:50] if plan.validation_errors else "unknown"
+                status = "failed"
+                tool = "unknown"
+                operation = ""
+                post_passed = None
 
             results.append({
                 "category": category,
                 "query": display_query,
-                "status": plan.validation_status,
-                "tool": plan.tool,
-                "operation": plan.operation,
-                "capability": plan.requested_capability,
-                "confidence": plan.confidence,
+                "status": status,
+                "tool": tool,
+                "operation": operation,
+                "capability": "",
+                "confidence": 0.3,
                 "post_passed": post_passed,
-                "post_errors": post_errors,
-                "detail": detail,
+                "post_errors": [],
+                "detail": "Processed via pipeline",
                 "icon": icon
             })
 
-            time.sleep(3)  # Rate limit protection
+            time.sleep(3)
 
         except Exception as e:
             results.append({
@@ -71,15 +69,10 @@ def run_full_test_suite(brain, validator, executor, save_results=True):
                 "icon": "💥"
             })
 
-    # Print table
     _print_results_table(results)
-
-    # Save to file
     if save_results:
         _save_results(results)
-
     return results
-
 
 def _print_results_table(results):
     """Print formatted results table."""

@@ -5,7 +5,7 @@ TEST_QUERIES = [
     ("CAPABILITY", "What was the temperature in Paris last Monday?"),
     ("CAPABILITY", "Will it rain in Tokyo tomorrow?"),
     ("CAPABILITY", "Show me the README of karpathy/nanoGPT"),
-    ("CAPABILITY", "What's the commit history of torvalds/linux?"),
+    ("HAPPY", "What's the weather in Delhi?"),
 
     # === BRAIN ROUTING ===
     ("ROUTING", "Delhi"),

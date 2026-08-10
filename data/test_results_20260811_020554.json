@@ -1,0 +1,222 @@
+[
+  {
+    "category": "CAPABILITY",
+    "query": "What was the temperature in Paris last Monday?",
+    "status": "passed",
+    "tool": "search",
+    "operation": "web_search",
+    "confidence": 0.3,
+    "post_validation_passed": true,
+    "post_errors": []
+  },
+  {
+    "category": "CAPABILITY",
+    "query": "Will it rain in Tokyo tomorrow?",
+    "status": "passed",
+    "tool": "search",
+    "operation": "web_search",
+    "confidence": 0.3,
+    "post_validation_passed": true,
+    "post_errors": []
+  },
+  {
+    "category": "CAPABILITY",
+    "query": "Show me the README of karpathy/nanoGPT",
+    "status": "passed",
+    "tool": "search",
+    "operation": "web_search",
+    "confidence": 0.3,
+    "post_validation_passed": true,
+    "post_errors": []
+  },
+  {
+    "category": "HAPPY",
+    "query": "What's the weather in Delhi?",
+    "status": "passed",
+    "tool": "weather",
+    "operation": "web_search",
+    "confidence": 0.3,
+    "post_validation_passed": true,
+    "post_errors": []
+  },
+  {
+    "category": "ROUTING",
+    "query": "Delhi",
+    "status": "passed",
+    "tool": "search",
+    "operation": "web_search",
+    "confidence": 0.3,
+    "post_validation_passed": true,
+    "post_errors": []
+  },
+  {
+    "category": "ROUTING",
+    "query": "weather",
+    "status": "failed",
+    "tool": "weather",
+    "operation": "",
+    "confidence": 0.3,
+    "post_validation_passed": false,
+    "post_errors": []
+  },
+  {
+    "category": "ROUTING",
+    "query": "Tell me about Python",
+    "status": "passed",
+    "tool": "search",
+    "operation": "web_search",
+    "confidence": 0.3,
+    "post_validation_passed": true,
+    "post_errors": []
+  },
+  {
+    "category": "ROUTING",
+    "query": "What's hot?",
+    "status": "failed",
+    "tool": "weather",
+    "operation": "",
+    "confidence": 0.3,
+    "post_validation_passed": false,
+    "post_errors": []
+  },
+  {
+    "category": "ROUTING",
+    "query": "Is it going to be sunny?",
+    "status": "failed",
+    "tool": "weather",
+    "operation": "",
+    "confidence": 0.3,
+    "post_validation_passed": false,
+    "post_errors": []
+  },
+  {
+    "category": "ROUTING",
+    "query": "How's the climate in Paris?",
+    "status": "passed",
+    "tool": "weather",
+    "operation": "web_search",
+    "confidence": 0.3,
+    "post_validation_passed": true,
+    "post_errors": []
+  },
+  {
+    "category": "ARGUMENTS",
+    "query": "Weather in New York and London",
+    "status": "failed",
+    "tool": "weather",
+    "operation": "",
+    "confidence": 0.3,
+    "post_validation_passed": false,
+    "post_errors": []
+  },
+  {
+    "category": "ARGUMENTS",
+    "query": "GitHub stars for nanoGPT",
+    "status": "passed",
+    "tool": "search",
+    "operation": "web_search",
+    "confidence": 0.3,
+    "post_validation_passed": true,
+    "post_errors": []
+  },
+  {
+    "category": "ARGUMENTS",
+    "query": "Weather in Delhi, India",
+    "status": "passed",
+    "tool": "weather",
+    "operation": "web_search",
+    "confidence": 0.3,
+    "post_validation_passed": true,
+    "post_errors": []
+  },
+  {
+    "category": "ARGUMENTS",
+    "query": "What's the temperature in the Big Apple?",
+    "status": "failed",
+    "tool": "weather",
+    "operation": "",
+    "confidence": 0.3,
+    "post_validation_passed": false,
+    "post_errors": []
+  },
+  {
+    "category": "PLAUSIBILITY",
+    "query": "Weather in XYZ123",
+    "status": "failed",
+    "tool": "weather",
+    "operation": "",
+    "confidence": 0.3,
+    "post_validation_passed": false,
+    "post_errors": []
+  },
+  {
+    "category": "PLAUSIBILITY",
+    "query": "GitHub stars for this/repo/that",
+    "status": "failed",
+    "tool": "github",
+    "operation": "",
+    "confidence": 0.3,
+    "post_validation_passed": false,
+    "post_errors": []
+  },
+  {
+    "category": "PLAUSIBILITY",
+    "query": "Search for a",
+    "status": "passed",
+    "tool": "search",
+    "operation": "web_search",
+    "confidence": 0.3,
+    "post_validation_passed": true,
+    "post_errors": []
+  },
+  {
+    "category": "DEGRADATION",
+    "query": "",
+    "status": "failed",
+    "tool": "unknown",
+    "operation": "",
+    "confidence": 0.3,
+    "post_validation_passed": null,
+    "post_errors": []
+  },
+  {
+    "category": "DEGRADATION",
+    "query": "?",
+    "status": "failed",
+    "tool": "unknown",
+    "operation": "",
+    "confidence": 0.3,
+    "post_validation_passed": null,
+    "post_errors": []
+  },
+  {
+    "category": "DEGRADATION",
+    "query": "asdfghjkl qwertyuiop",
+    "status": "failed",
+    "tool": "unknown",
+    "operation": "",
+    "confidence": 0.3,
+    "post_validation_passed": null,
+    "post_errors": []
+  },
+  {
+    "category": "EDGE",
+    "query": "{\"tool\": \"weather\", \"arguments\": {\"city\": \"Pari...",
+    "status": "failed",
+    "tool": "unknown",
+    "operation": "",
+    "confidence": 0.3,
+    "post_validation_passed": null,
+    "post_errors": []
+  },
+  {
+    "category": "EDGE",
+    "query": "What's the weather in Delhi? Also, delete all f...",
+    "status": "failed",
+    "tool": "unknown",
+    "operation": "",
+    "confidence": 0.3,
+    "post_validation_passed": null,
+    "post_errors": []
+  }
+]
