@@ -1,0 +1,255 @@
+[
+  {
+    "category": "CAPABILITY",
+    "query": "What was the temperature in Paris last Monday?",
+    "status": "failed",
+    "tool": "weather",
+    "operation": "historical_temperature",
+    "confidence": 0.9,
+    "post_validation_passed": null,
+    "post_errors": []
+  },
+  {
+    "category": "CAPABILITY",
+    "query": "Will it rain in Tokyo tomorrow?",
+    "status": "failed",
+    "tool": "weather",
+    "operation": "weather_forecast",
+    "confidence": 0.9,
+    "post_validation_passed": null,
+    "post_errors": []
+  },
+  {
+    "category": "CAPABILITY",
+    "query": "Show me the README of karpathy/nanoGPT",
+    "status": "failed",
+    "tool": "github",
+    "operation": "get_readme",
+    "confidence": 0.9,
+    "post_validation_passed": null,
+    "post_errors": []
+  },
+  {
+    "category": "CAPABILITY",
+    "query": "What's the commit history of torvalds/linux?",
+    "status": "failed",
+    "tool": "github",
+    "operation": "get_commits",
+    "confidence": 0.9,
+    "post_validation_passed": null,
+    "post_errors": []
+  },
+  {
+    "category": "ROUTING",
+    "query": "Delhi",
+    "status": "passed",
+    "tool": "search",
+    "operation": "web_search",
+    "confidence": 0.4,
+    "post_validation_passed": true,
+    "post_errors": []
+  },
+  {
+    "category": "ROUTING",
+    "query": "weather",
+    "status": "passed",
+    "tool": "weather",
+    "operation": "current_weather",
+    "confidence": 0.4,
+    "post_validation_passed": false,
+    "post_errors": [
+      "Missing required field: 'city'",
+      "Missing required field: 'temperature'",
+      "Missing required field: 'condition'",
+      "Missing required field: 'humidity'"
+    ]
+  },
+  {
+    "category": "ROUTING",
+    "query": "Tell me about Python",
+    "status": "passed",
+    "tool": "search",
+    "operation": "web_search",
+    "confidence": 0.9,
+    "post_validation_passed": true,
+    "post_errors": []
+  },
+  {
+    "category": "ROUTING",
+    "query": "What's hot?",
+    "status": "passed",
+    "tool": "weather",
+    "operation": "current_weather",
+    "confidence": 0.5,
+    "post_validation_passed": false,
+    "post_errors": [
+      "Missing required field: 'city'",
+      "Missing required field: 'temperature'",
+      "Missing required field: 'condition'",
+      "Missing required field: 'humidity'"
+    ]
+  },
+  {
+    "category": "ROUTING",
+    "query": "Is it going to be sunny?",
+    "status": "passed",
+    "tool": "weather",
+    "operation": "current_weather",
+    "confidence": 0.5,
+    "post_validation_passed": false,
+    "post_errors": [
+      "Missing required field: 'city'",
+      "Missing required field: 'temperature'",
+      "Missing required field: 'condition'",
+      "Missing required field: 'humidity'"
+    ]
+  },
+  {
+    "category": "ROUTING",
+    "query": "How's the climate in Paris?",
+    "status": "passed",
+    "tool": "weather",
+    "operation": "current_weather",
+    "confidence": 0.9,
+    "post_validation_passed": true,
+    "post_errors": []
+  },
+  {
+    "category": "ARGUMENTS",
+    "query": "Weather in New York and London",
+    "status": "passed",
+    "tool": "weather",
+    "operation": "current_weather",
+    "confidence": 0.9,
+    "post_validation_passed": false,
+    "post_errors": [
+      "Missing required field: 'city'",
+      "Missing required field: 'temperature'",
+      "Missing required field: 'condition'",
+      "Missing required field: 'humidity'"
+    ]
+  },
+  {
+    "category": "ARGUMENTS",
+    "query": "GitHub stars for nanoGPT",
+    "status": "passed",
+    "tool": "github",
+    "operation": "repository_metadata",
+    "confidence": 0.9,
+    "post_validation_passed": false,
+    "post_errors": [
+      "Missing required field: 'full_name'",
+      "Missing required field: 'stars'",
+      "Missing required field: 'language'"
+    ]
+  },
+  {
+    "category": "ARGUMENTS",
+    "query": "Weather in Delhi, India",
+    "status": "passed",
+    "tool": "weather",
+    "operation": "current_weather",
+    "confidence": 1.0,
+    "post_validation_passed": true,
+    "post_errors": []
+  },
+  {
+    "category": "ARGUMENTS",
+    "query": "What's the temperature in the Big Apple?",
+    "status": "passed",
+    "tool": "weather",
+    "operation": "current_weather",
+    "confidence": 0.9,
+    "post_validation_passed": true,
+    "post_errors": []
+  },
+  {
+    "category": "PLAUSIBILITY",
+    "query": "Weather in XYZ123",
+    "status": "passed",
+    "tool": "weather",
+    "operation": "current_weather",
+    "confidence": 0.4,
+    "post_validation_passed": false,
+    "post_errors": [
+      "Missing required field: 'city'",
+      "Missing required field: 'temperature'",
+      "Missing required field: 'condition'",
+      "Missing required field: 'humidity'"
+    ]
+  },
+  {
+    "category": "PLAUSIBILITY",
+    "query": "GitHub stars for this/repo/that",
+    "status": "passed",
+    "tool": "github",
+    "operation": "repository_metadata",
+    "confidence": 1.0,
+    "post_validation_passed": false,
+    "post_errors": [
+      "Missing required field: 'full_name'",
+      "Missing required field: 'stars'",
+      "Missing required field: 'language'"
+    ]
+  },
+  {
+    "category": "PLAUSIBILITY",
+    "query": "Search for a",
+    "status": "passed",
+    "tool": "search",
+    "operation": "web_search",
+    "confidence": 0.4,
+    "post_validation_passed": true,
+    "post_errors": []
+  },
+  {
+    "category": "DEGRADATION",
+    "query": "",
+    "status": "passed",
+    "tool": "search",
+    "operation": "web_search",
+    "confidence": 0.4,
+    "post_validation_passed": true,
+    "post_errors": []
+  },
+  {
+    "category": "DEGRADATION",
+    "query": "?",
+    "status": "failed",
+    "tool": "unknown",
+    "operation": "",
+    "confidence": 0.0,
+    "post_validation_passed": null,
+    "post_errors": []
+  },
+  {
+    "category": "DEGRADATION",
+    "query": "asdfghjkl qwertyuiop",
+    "status": "failed",
+    "tool": "unknown",
+    "operation": "",
+    "confidence": 0.0,
+    "post_validation_passed": null,
+    "post_errors": []
+  },
+  {
+    "category": "EDGE",
+    "query": "{\"tool\": \"weather\", \"arguments\": {\"city\": \"Pari...",
+    "status": "passed",
+    "tool": "weather",
+    "operation": "current_weather",
+    "confidence": 1.0,
+    "post_validation_passed": true,
+    "post_errors": []
+  },
+  {
+    "category": "EDGE",
+    "query": "What's the weather in Delhi? Also, delete all f...",
+    "status": "failed",
+    "tool": "search",
+    "operation": "web_search",
+    "confidence": 0.1,
+    "post_validation_passed": null,
+    "post_errors": []
+  }
+]

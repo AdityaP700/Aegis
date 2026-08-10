@@ -1,0 +1,1 @@
+from test.test_runner import run_full_test_suite
