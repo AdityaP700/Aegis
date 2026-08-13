@@ -1,11 +1,21 @@
+import sys
+if hasattr(sys.stdout, 'reconfigure'):
+    sys.stdout.reconfigure(encoding='utf-8')
+
 from evals.loader import load_cases
 from evals.runner import run_cases
+from evals.grader import grade_all, print_grades
+from main import setup_aegis
 
-def test_runner(brain, validator, executor):
+def test_runner(brain, validator, executor,max_cases: int =None):
     cases = load_cases()
 
-    # Run all cases
+    if max_cases:
+        cases = cases[:max_cases]
+
     outcomes = run_cases(cases, brain, validator, executor)
+    grades = grade_all(outcomes)     # ← Grade each outcome
+    print_grades(grades)
 
     # Print summary
     print(f"\n{'=' * 80}")
@@ -23,3 +33,7 @@ def test_runner(brain, validator, executor):
         print(f"  Duration: {result.duration_ms}ms")
 
     return outcomes
+
+if __name__ == "__main__":
+    brain, validator, executor = setup_aegis()
+    test_runner(brain, validator, executor,max_cases=15)
