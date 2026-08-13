@@ -1,26 +1,59 @@
 """Aegis pipeline — shared between main and test runner."""
-from engine.types import ExecutionRequest, ExecutionPlan
+from engine.types import ExecutionRequest, ExecutionPlan,TrialResult
+import time
 
+def process_query(query: str, brain, validator, executor)->TrialResult:
 
-def process_query(query: str, brain, validator, executor):
+    start_time = time.perf_counter()
+    result = TrialResult(query=query)
+
     print(f"\n{'─' * 60}")
     print(f"👤 User: {query}")
 
     plan = brain.think(query)
+    result.confidence = plan.confidence
+    result.tool = plan.tool
+    result.operation = plan.operation
+    result.arguments = plan.arguments
     print(f"🧠 Brain: {plan.tool}.{plan.operation}({plan.arguments}) [confidence: {plan.confidence}]")
 
     plan = validator.validate(plan)
 
     if plan.validation_status == "failed":
+        result.validation_failed = True
+        result.trace.append({
+            "component": "validator",
+            "event": "validation_failed",
+            "errors": plan.validation_errors
+        })
+
+    if plan.validation_status == "failed":
         confidence_errors = [e for e in plan.validation_errors if "Confidence too low" in e]
         if confidence_errors:
-            print(f"⚠️  Aegis abstained: confidence {plan.confidence:.1f} below threshold")
-            return None
+            result.trace.append({
+                "component": "validator",
+                "event": "abstained_low_confidence",
+                "confidence": plan.confidence
+            })
+            result.final_status = "abstained"
+            result.duration_ms = round((time.perf_counter() - start_time) * 1000, 2)
+            return result
 
     if plan.validation_status == "failed":
         plan = _attempt_retry(query, plan, brain, validator)
+        result.retry_attempted = True
+        result.trace.append({
+            "component": "pipeline",
+            "event": "retry_attempted"
+        })
 
     if plan.validation_status == "failed" or plan.tool == "unknown":
+        result.fallback_triggered = True
+        result.trace.append({
+            "component": "pipeline",
+            "event": "fallback_to_search",
+            "reason": "validation_failed" if plan.validation_status == "failed" else "unknown_tool"
+        })
         print("🔄 Falling back to search...")
         plan = ExecutionPlan(
             intent="fallback search",
@@ -31,18 +64,27 @@ def process_query(query: str, brain, validator, executor):
             confidence=0.3,
             validation_status="passed"
         )
+        result.tool = "search"
+        result.operation = "web_search"
+        result.arguments = {"query": query}
 
     if plan.validation_status == "passed":
-        return _execute_plan(plan, executor, validator)
+        response =  _execute_plan(plan, executor, validator)
+        result.fnal_status= response.status if response else "failed"
+        result.post_validation_passed =getattr[response,'post_passed',None]
+        result.trace.extend(getattr(response,'trace',[]))
     else:
+        result.final_status="failed"
         print(f"❌ Could not create valid plan.")
         print(f"   Errors: {plan.validation_errors}")
-        return None
+    result.duration_ms = round((time.perf_counter() - start_time) * 1000, 2)
+    return result
 
 
+#its just a method right ??
 def _attempt_retry(query, plan, brain, validator):
-    print(f"❌ Validation failed: {plan.validation_errors}")
-    print("🔄 Retrying with error feedback...")
+    print(f" Validation failed: {plan.validation_errors}")
+    print("Retrying with error feedback...")
     previous_response = f'{{"tool": "{plan.tool}", "arguments": {plan.arguments}}}'
     error_msg = "; ".join(plan.validation_errors)
     plan = brain.retry(query, error_msg, previous_response)
@@ -58,6 +100,8 @@ def _execute_plan(plan, executor, validator):
 
     if response.status == "success":
         post = validator.post_validate(plan, response)
+        response.post_passed = post.passed
+        response.post_errors = post.all_errors
         if post.passed:
             print(f"   ✅ Post-check: integrity ✓ | plausibility ✓ | completeness ✓")
         else:

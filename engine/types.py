@@ -1,7 +1,7 @@
 #this is the language every component speaks
 # we will define the contracts
 
-from typing import Any,List,Dict,Literal
+from typing import Any,List,Dict,Literal,Optional
 from pydantic import BaseModel ,Field
 
 #define two of the classes : executioneRequest ,ExecutionResponse
@@ -64,3 +64,20 @@ class PostExecutionResult(BaseModel):
     @property
     def all_errors(self) -> List[str]:
         return self.integrity_errors + self.plausibility_errors + self.completeness_errors
+
+class TrialResult(BaseModel):
+    """Structured result of running one query through Aegis."""
+    query: str = ""
+    final_status: str = "pending"  # "success", "failed", "unknown", "crash"
+    tool: str = ""
+    operation: str = ""
+    arguments: Dict[str, Any] = {}
+    confidence: float = 0.0
+    fallback_triggered: bool = False
+    capability_rejected: bool = False
+    validation_failed: bool = False
+    retry_attempted: bool = False
+    post_validation_passed: Optional[bool] = None
+    post_validation_errors: List[str] = []
+    trace: List[Dict[str, Any]] = []
+    duration_ms: float = 0.0

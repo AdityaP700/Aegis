@@ -35,3 +35,6 @@ Customer (your script) — buys from storefront, not warehouse directly
 
 ## load cases
 load_cases is a factory function — it creates many EvalCase objects. If it were inside the class, you'd need an instance to call it, which doesn't make sense when you're trying to create the first instance.
+
+## Property
+Think of a Property as a "Secretary" that you hire for your object.Instead of you digging through filing cabinets yourself, you just ask the secretary for the information. The secretary does the work behind the scenes and hands it to you instantly.
