@@ -15,7 +15,8 @@ class ExecutionResponse(BaseModel):
     error : str | None = None
     metadata : dict[str,Any ]= Field(default_factory=dict)
     trace : List[Dict[str,Any]]=[] # string keys, any values
-
+    post_passed: Optional[bool] = None
+    post_errors:List[str]=[]
 class ExecutionPlan(BaseModel):
     """
     in a brain ,what are the thing we first think of :

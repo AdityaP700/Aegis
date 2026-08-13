@@ -70,9 +70,9 @@ def process_query(query: str, brain, validator, executor)->TrialResult:
 
     if plan.validation_status == "passed":
         response =  _execute_plan(plan, executor, validator)
-        result.fnal_status= response.status if response else "failed"
-        result.post_validation_passed =getattr[response,'post_passed',None]
-        result.trace.extend(getattr(response,'trace',[]))
+        result.final_status= response.status if response else "failed"
+        result.post_validation_passed = getattr(response, 'post_passed', None)
+        result.trace.extend(getattr(response, 'trace', []))
     else:
         result.final_status="failed"
         print(f"❌ Could not create valid plan.")
