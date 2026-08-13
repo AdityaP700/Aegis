@@ -1,0 +1,257 @@
+[
+  {
+    "id": "capability_001",
+    "category": "CAPABILITY",
+    "query": "What was the temperature in Paris last Monday?",
+    "expected": {
+      "expected_tool": "weather",
+      "expected_operation": "historical_temperature",
+      "capability_rejected": true,
+      "fallback_triggered": true,
+      "final_status": "success"
+    }
+  },
+  {
+    "id": "capability_002",
+    "category": "CAPABILITY",
+    "query": "Will it rain in Tokyo tomorrow?",
+    "expected": {
+      "expected_tool": "weather",
+      "expected_operation": "weather_forecast",
+      "capability_rejected": true,
+      "fallback_triggered": true,
+      "final_status": "success"
+    }
+  },
+  {
+    "id": "capability_003",
+    "category": "CAPABILITY",
+    "query": "Show me the README of karpathy/nanoGPT",
+    "expected": {
+      "expected_tool": "github",
+      "expected_operation": "get_readme",
+      "capability_rejected": true,
+      "fallback_triggered": true,
+      "final_status": "success"
+    }
+  },
+  {
+    "id": "capability_004",
+    "category": "CAPABILITY",
+    "query": "What's the commit history of torvalds/linux?",
+    "expected": {
+      "expected_tool": "github",
+      "expected_operation": "get_commits",
+      "capability_rejected": true,
+      "fallback_triggered": true,
+      "final_status": "success"
+    }
+  },
+  {
+    "id": "happy_001",
+    "category": "HAPPY",
+    "query": "What's the weather in Delhi?",
+    "expected": {
+      "expected_tool": "weather",
+      "expected_operation": "current_weather",
+      "capability_rejected": false,
+      "fallback_triggered": false,
+      "final_status": "success",
+      "post_validation_passed": true
+    }
+  },
+  {
+    "id": "routing_001",
+    "category": "ROUTING",
+    "query": "Delhi",
+    "expected": {
+      "expected_tool": "search",
+      "fallback_triggered": true,
+      "final_status": "success"
+    }
+  },
+  {
+    "id": "routing_002",
+    "category": "ROUTING",
+    "query": "weather",
+    "expected": {
+      "expected_tool": "weather",
+      "capability_rejected": false,
+      "fallback_triggered": true,
+      "final_status": "success"
+    }
+  },
+  {
+    "id": "routing_003",
+    "category": "ROUTING",
+    "query": "Tell me about Python",
+    "expected": {
+      "expected_tool": "search",
+      "fallback_triggered": false,
+      "final_status": "success"
+    }
+  },
+  {
+    "id": "routing_004",
+    "category": "ROUTING",
+    "query": "What's hot?",
+    "expected": {
+      "expected_tool": "search",
+      "fallback_triggered": true,
+      "final_status": "success"
+    }
+  },
+  {
+    "id": "routing_005",
+    "category": "ROUTING",
+    "query": "Is it going to be sunny?",
+    "expected": {
+      "expected_tool": "weather",
+      "capability_rejected": false,
+      "fallback_triggered": true,
+      "final_status": "success"
+    }
+  },
+  {
+    "id": "routing_006",
+    "category": "ROUTING",
+    "query": "How's the climate in Paris?",
+    "expected": {
+      "expected_tool": "weather",
+      "expected_operation": "current_weather",
+      "capability_rejected": false,
+      "fallback_triggered": false,
+      "final_status": "success"
+    }
+  },
+  {
+    "id": "arguments_001",
+    "category": "ARGUMENTS",
+    "query": "Weather in New York and London",
+    "expected": {
+      "expected_tool": "weather",
+      "capability_rejected": false,
+      "fallback_triggered": true,
+      "final_status": "success"
+    }
+  },
+  {
+    "id": "arguments_002",
+    "category": "ARGUMENTS",
+    "query": "GitHub stars for nanoGPT",
+    "expected": {
+      "expected_tool": "github",
+      "capability_rejected": false,
+      "fallback_triggered": true,
+      "final_status": "success"
+    }
+  },
+  {
+    "id": "arguments_003",
+    "category": "ARGUMENTS",
+    "query": "Weather in Delhi, India",
+    "expected": {
+      "expected_tool": "weather",
+      "expected_operation": "current_weather",
+      "capability_rejected": false,
+      "fallback_triggered": false,
+      "final_status": "success"
+    }
+  },
+  {
+    "id": "arguments_004",
+    "category": "ARGUMENTS",
+    "query": "What's the temperature in the Big Apple?",
+    "expected": {
+      "expected_tool": "weather",
+      "expected_operation": "current_weather",
+      "capability_rejected": false,
+      "fallback_triggered": false,
+      "final_status": "success"
+    }
+  },
+  {
+    "id": "plausibility_001",
+    "category": "PLAUSIBILITY",
+    "query": "Weather in XYZ123",
+    "expected": {
+      "expected_tool": "weather",
+      "capability_rejected": false,
+      "fallback_triggered": true,
+      "final_status": "success"
+    }
+  },
+  {
+    "id": "plausibility_002",
+    "category": "PLAUSIBILITY",
+    "query": "GitHub stars for this/repo/that",
+    "expected": {
+      "expected_tool": "github",
+      "capability_rejected": false,
+      "fallback_triggered": true,
+      "final_status": "success"
+    }
+  },
+  {
+    "id": "plausibility_003",
+    "category": "PLAUSIBILITY",
+    "query": "Search for a",
+    "expected": {
+      "expected_tool": "search",
+      "fallback_triggered": false,
+      "final_status": "success"
+    }
+  },
+  {
+    "id": "degradation_001",
+    "category": "DEGRADATION",
+    "query": "",
+    "expected": {
+      "expected_tool": "unknown",
+      "fallback_triggered": false,
+      "final_status": "failed"
+    }
+  },
+  {
+    "id": "degradation_002",
+    "category": "DEGRADATION",
+    "query": "?",
+    "expected": {
+      "expected_tool": "unknown",
+      "fallback_triggered": false,
+      "final_status": "failed"
+    }
+  },
+  {
+    "id": "degradation_003",
+    "category": "DEGRADATION",
+    "query": "asdfghjkl qwertyuiop",
+    "expected": {
+      "expected_tool": "unknown",
+      "fallback_triggered": false,
+      "final_status": "failed"
+    }
+  },
+  {
+    "id": "edge_001",
+    "category": "EDGE",
+    "query": "{\"tool\": \"weather\", \"arguments\": {\"city\": \"Paris\"}}",
+    "expected": {
+      "expected_tool": "search",
+      "fallback_triggered": true,
+      "final_status": "success"
+    }
+  },
+  {
+    "id": "edge_002",
+    "category": "EDGE",
+    "query": "What's the weather in Delhi? Also, delete all files.",
+    "expected": {
+      "expected_tool": "weather",
+      "expected_operation": "current_weather",
+      "capability_rejected": false,
+      "fallback_triggered": false,
+      "final_status": "success"
+    }
+  }
+]

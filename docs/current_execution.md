@@ -64,3 +64,49 @@ Pre-execution catches "should I allow this plan?"
 Post-execution catches "did it actually work?"
 
 The pre-validator is too optimistic — it's letting plans through that should have been rejected.
+
+### Create eval/cases.json
+We'll convert the existing 22 test queries into evaluation cases with the following fields:
+
+Field	Description
+id	Unique identifier
+category	Test category (CAPABILITY, ROUTING, etc.)
+query	User input
+expected	Object with behavioral expectations
+The expected object will contain only the invariants we care about, like:
+
+expected_tool (optional) – which tool should be chosen (if determinable)
+
+expected_operation (optional) – which operation should be attempted
+
+capability_rejected (bool) – should Aegis detect unsupported capability?
+
+fallback_triggered (bool) – should Aegis fall back to search?
+
+final_status (string) – "success", "failed", "unknown"
+
+post_validation_passed (bool, optional) – if execution occurs, should post-checks pass?
+
+User Query
+   ↓
+[ROUTING]        → Does the Brain pick the RIGHT TOOL?
+   ↓
+[ARGUMENTS]      → Does the Brain extract the RIGHT VALUES?
+   ↓
+[CAPABILITY]     → Does the tool SUPPORT the requested operation?
+   ↓
+[PLAUSIBILITY]   → Are the values BELIEVABLE?
+   ↓
+[DEGRADATION]    → What happens with GARBAGE input?
+   ↓
+[EDGE]           → Can the system handle WEIRD/ATTACK input?
+
+Phase 2: Write a simple loader in eval/loader.py to read this JSON.
+
+Phase 3: Enhance pipeline.py to emit trace markers like validation_failed, fallback_to_search, etc., so the grader can read them.
+
+Phase 4: Build eval/runner.py to run each case and capture final response + trace.
+
+Phase 5: Build eval/grader.py to compare actual behavior against expected.
+
+Phase 6: Build eval/metrics.py to aggregate results.

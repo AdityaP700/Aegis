@@ -19,3 +19,19 @@ Only after validation passes does the plan reach the Executor. The Executor does
 The result is a system where the LLM can be wrong, but the user never sees a crash. Every failure degrades gracefully, every execution is traced, and the architecture is completely provider-agnostic — swap Groq for Claude without touching the pipeline.
 
 That's Aegis. It's not just 'LLM calls tools.' It's 'LLM calls tools reliably
+
+
+text
+evals/loader.py          ← Where load_cases is DEFINED
+evals/__init__.py        ← Imports it for convenience
+test script              ← Uses from evals import load_cases
+It's like a store front:
+
+Warehouse (loader.py) — where items are made
+
+Storefront (__init__.py) — where customers pick up items
+
+Customer (your script) — buys from storefront, not warehouse directly
+
+## load cases
+load_cases is a factory function — it creates many EvalCase objects. If it were inside the class, you'd need an instance to call it, which doesn't make sense when you're trying to create the first instance.

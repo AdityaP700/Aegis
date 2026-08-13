@@ -50,3 +50,26 @@ Aegis Reliability Runtime
 │   └── Completeness (plan vs result)
 └── Graceful degradation
     └── Failed plans → search fallback
+
+
+Evaluation Layer
+Create eval/cases.json
+Convert existing 22 tests into structured cases with expected behaviors.
+
+Enhance trace markers
+In pipeline.py, add events like validation_failed, fallback_to_search, recovery_attempted.
+
+Build eval/grader.py
+Deterministic checks based on final response + trace markers.
+
+Build eval/runner.py
+Loop over cases, call pipeline.process_query, capture TrialResult.
+
+Build eval/metrics.py
+Aggregate pass rate, category breakdown, recovery rate, etc.
+
+Run and produce first evaluation report
+This becomes your README's "Failure Modes & Recovery" table.
+
+Later: baseline comparison
+Add pipeline.run_baseline() and run same cases, same grader.
