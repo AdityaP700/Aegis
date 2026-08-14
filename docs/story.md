@@ -45,3 +45,25 @@ The LLM is the semantic interpreter. Everything else in Aegis is the safety net 
 ## Problem :
 Aegis does catch the capability mismatch. It rejects the plan. But it forgets to write down that it rejected it.
 Person tries to enter → Bouncer says "No, you're underage" → Person leaves
+
+## latencies :
+there are a few metrics through which we determine how's the overall and generic experience
+
+one of the ways is to calculate the
+p50 median ,where we determine the typical experience of the user "lets say most users wait X ms ,
+
+another way is to be more specific and representative and that could be calculated using the p95 :
+
+- where we usually tells about the worst case experience ,lets suppose "5% of users wait longer than X ms"
+
+P99 : it tells about outlier detection i.e.  1% of users have terrible experience
+
+Aegis adds layers — validation, retry, fallback, post-check. Each layer adds latency. You need to prove the overhead is worth it.
+
+Scenario	Latency
+Happy path (no issues)	~1000ms
+Validation failure + retry	~2000ms
+Capability mismatch + fallback	~3000ms
+Multiple retries	~5000ms
+P50 tells you: "The typical query takes X ms."
+P95 tells you: "Even with retries and fallbacks, 95% of queries finish within Y ms."

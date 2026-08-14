@@ -1,0 +1,40 @@
+{
+  "total_cases": 16,
+  "passed": 6,
+  "failed": 10,
+  "crashed": 0,
+  "pass_rate": 37.5,
+  "crash_rate": 0.0,
+  "avg_latency_ms": 1415.3462499999998,
+  "p50_latency_ms": 941.76,
+  "p95_latency_ms": 6324.75,
+  "by_category": {
+    "ROUTING": {
+      "passed": 2,
+      "total": 4
+    },
+    "ARGUMENTS": {
+      "passed": 2,
+      "total": 4
+    },
+    "PLAUSIBILITY": {
+      "passed": 1,
+      "total": 3
+    },
+    "DEGRADATION": {
+      "passed": 0,
+      "total": 3
+    },
+    "EDGE": {
+      "passed": 1,
+      "total": 2
+    }
+  },
+  "failure_reasons": {
+    "missing_argument": 2,
+    "invalid_value": 2,
+    "invalid_format": 2,
+    "low_confidence": 3,
+    "none": 1
+  }
+}

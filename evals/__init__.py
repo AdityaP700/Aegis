@@ -3,6 +3,7 @@ from evals.loader import load_cases, EvalCase
 from evals.runner import run_cases, run_single_case, TrialOutcome
 from evals.grader import grade_trial, grade_all, GradeResult
 from evals.classifier import classify_failure
+from evals.metrics import build_report ,print_report ,save_report ,EvalReport
 __all__ = [
     "load_cases",
     "EvalCase",
@@ -14,5 +15,9 @@ __all__ = [
     "grade_trial",
     "grade_all",
     "GradeResult",
-    "classify_failure"
+    "classify_failure",
+    "build_report",
+    "print_report",
+    "save_report",
+    "EvalReport"
     ]

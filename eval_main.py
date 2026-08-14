@@ -6,6 +6,7 @@ from evals.loader import load_cases
 from evals.runner import run_cases
 from evals.grader import grade_all, print_grades
 from main import setup_aegis
+from evals.metrics import build_report,print_report,save_report
 
 def test_runner(brain, validator, executor,max_cases: int =None):
     cases = load_cases()
@@ -16,7 +17,10 @@ def test_runner(brain, validator, executor,max_cases: int =None):
     outcomes = run_cases(cases, brain, validator, executor)
     grades = grade_all(outcomes)     # ← Grade each outcome
     print_grades(grades)
-
+    report = build_report(grades,outcomes)
+    print(report)
+    save_report(report)
+    return report
     # Print summary
     print(f"\n{'=' * 80}")
     print(f"COMPLETED {len(outcomes)} CASES")
@@ -36,4 +40,4 @@ def test_runner(brain, validator, executor,max_cases: int =None):
 
 if __name__ == "__main__":
     brain, validator, executor = setup_aegis()
-    test_runner(brain, validator, executor,max_cases=6)
+    test_runner(brain, validator, executor,max_cases=20)
