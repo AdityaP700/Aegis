@@ -4,6 +4,8 @@ from evals.runner import run_cases, run_single_case, TrialOutcome
 from evals.grader import grade_trial, grade_all, GradeResult
 from evals.classifier import classify_failure
 from evals.metrics import build_report ,print_report ,save_report ,EvalReport
+from evals.baseline_runner import run_baseline_query, run_baseline_cases
+
 __all__ = [
     "load_cases",
     "EvalCase",
@@ -19,5 +21,7 @@ __all__ = [
     "build_report",
     "print_report",
     "save_report",
-    "EvalReport"
+    "EvalReport",
+    "run_baseline_query",
+    "run_baseline_cases"
     ]
