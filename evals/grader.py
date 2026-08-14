@@ -1,7 +1,7 @@
 """Deterministic grader — compares TrialOutcome against expected behavior."""
 from typing import Dict, Any, List
 from evals.runner import TrialOutcome
-
+from evals.classifier import classify_failure
 
 class GradeResult:
     """Result of grading one trial."""
@@ -30,19 +30,20 @@ class GradeResult:
 def grade_trial(outcome: TrialOutcome) -> GradeResult:
     """
     Grade one trial by checking behavioral invariants.
-
-    Args:
-        outcome: TrialOutcome from runner
-
-    Returns:
-        GradeResult with pass/fail and individual checks
-    """
+"""
     case = outcome.case
     result = outcome.result
     expected = case.expected
 
     grade = GradeResult(case.id)
-
+    failure_reason = classify_failure(result)
+    result.failure_reason = failure_reason
+    grade.add_check(
+        "failure_reason",
+        expected.get("failure_reason", "none"),
+        failure_reason,
+        failure_reason == expected.get("failure_reason", "none")
+    )
     # Check 1: Final status
     if "final_status" in expected:
         expected_status = expected["final_status"]

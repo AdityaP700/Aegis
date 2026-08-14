@@ -82,3 +82,4 @@ class TrialResult(BaseModel):
     post_validation_errors: List[str] = []
     trace: List[Dict[str, Any]] = []
     duration_ms: float = 0.0
+    failure_reason : str=""

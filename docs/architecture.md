@@ -79,3 +79,14 @@ The system now distinguishes:
 ❌ Missing argument → ask user
 ❌ Invalid format → ask user
 ❌ Unsupported capability → fallback to search
+
+### seperation of concerns
+Pipeline → Emits structured events (no classification)
+     ↓
+Observer/Telemetry → Classifies based on events
+     ↓
+Grader → Uses pre-classified signals
+
+Pipeline          →  EMITS events (no judgment)
+Classifier        →  READS events, assigns category
+Grader            →  COMPARES category against expected
