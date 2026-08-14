@@ -73,3 +73,9 @@ This becomes your README's "Failure Modes & Recovery" table.
 
 Later: baseline comparison
 Add pipeline.run_baseline() and run same cases, same grader.
+
+The system now distinguishes:
+✅ Clear intent → execute → post-check
+❌ Missing argument → ask user
+❌ Invalid format → ask user
+❌ Unsupported capability → fallback to search
