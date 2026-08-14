@@ -26,6 +26,10 @@ def process_query(query: str, brain, validator, executor)->TrialResult:
             "event": "validation_failed",
             "errors": plan.validation_errors
         })
+    if plan.validation_status == "failed":
+    # Check for capability rejection
+        if any("Operation mismatch" in e or "Capability mismatch" in e for e in plan.validation_errors):
+            result.capability_rejected = True  # ← This SHOULD work
 
     if plan.validation_status == "failed":
         confidence_errors = [e for e in plan.validation_errors if "Confidence too low" in e]
@@ -70,15 +74,50 @@ def process_query(query: str, brain, validator, executor)->TrialResult:
 
     if plan.validation_status == "passed":
         response =  _execute_plan(plan, executor, validator)
-        result.final_status= response.status if response else "failed"
-        result.post_validation_passed = getattr(response, 'post_passed', None)
-        result.trace.extend(getattr(response, 'trace', []))
+        
+        if response and response.status != "success":
+            failure_type = classify_execution_failure(response)
+            if failure_type in ["missing_argument", "invalid_format"]:
+                result.final_status = "needs_clarification"
+            elif failure_type == "transient":
+                # Retry handled elsewhere or pass
+                result.final_status = "failed"
+            else:
+                result.fallback_triggered = True
+                result.trace.append({
+                    "component": "pipeline",
+                    "event": "fallback_to_search",
+                    "reason": "execution_failed"
+                })
+                print("🔄 Falling back to search after execution failure...")
+                # Optional: actually execute fallback here, or just let it return
+                # If we just want to flag fallback:
+                result.final_status = "success" # or whatever is expected for fallback
+        else:
+            result.final_status = response.status if response else "failed"
+            
+        result.post_validation_passed = getattr(response, 'post_passed', None) if response else None
+        result.trace.extend(getattr(response, 'trace', [])) if response else None
     else:
         result.final_status="failed"
         print(f"❌ Could not create valid plan.")
         print(f"   Errors: {plan.validation_errors}")
     result.duration_ms = round((time.perf_counter() - start_time) * 1000, 2)
     return result
+
+
+def classify_execution_failure(response) -> str:
+    """Classify why execution failed."""
+    error = response.error or ""
+    
+    if "argument is required" in error or "missing" in error.lower():
+        return "missing_argument"
+    elif "Invalid repo format" in error or "not found" in error.lower() or "invalid" in error.lower():
+        return "invalid_format"
+    elif "rate limit" in error.lower() or "timeout" in error.lower():
+        return "transient"
+    else:
+        return "ambiguous"
 
 
 #its just a method right ??

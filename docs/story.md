@@ -38,3 +38,10 @@ load_cases is a factory function — it creates many EvalCase objects. If it wer
 
 ## Property
 Think of a Property as a "Secretary" that you hire for your object.Instead of you digging through filing cabinets yourself, you just ask the secretary for the information. The secretary does the work behind the scenes and hands it to you instantly.
+
+## why LLM provider??
+The LLM is the semantic interpreter. Everything else in Aegis is the safety net around it.
+
+## Problem :
+Aegis does catch the capability mismatch. It rejects the plan. But it forgets to write down that it rejected it.
+Person tries to enter → Bouncer says "No, you're underage" → Person leaves

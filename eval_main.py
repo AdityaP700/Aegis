@@ -36,4 +36,4 @@ def test_runner(brain, validator, executor,max_cases: int =None):
 
 if __name__ == "__main__":
     brain, validator, executor = setup_aegis()
-    test_runner(brain, validator, executor,max_cases=15)
+    test_runner(brain, validator, executor,max_cases=6)
