@@ -18,7 +18,7 @@ def test_runner(brain, validator, executor,max_cases: int =None):
     grades = grade_all(outcomes)     # ← Grade each outcome
     print_grades(grades)
     report = build_report(grades,outcomes)
-    print(report)
+    print_report(report)
     save_report(report)
     return report
     # Print summary
