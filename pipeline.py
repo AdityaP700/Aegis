@@ -14,7 +14,7 @@ def process_query(query: str, brain, validator, executor) -> TrialResult:
     result.tool = plan.tool
     result.operation = plan.operation
     result.arguments = plan.arguments
-    print(f"🧠 Brain: {plan.tool}.{plan.operation}({plan.arguments}) [confidence: {plan.confidence}]")
+    print(f"Brain: {plan.tool}.{plan.operation}({plan.arguments}) [confidence: {plan.confidence}]")
 
     # Model guard — check immediately after Brain
     if plan.confidence < 0.2 and plan.tool == "search":
@@ -47,6 +47,13 @@ def process_query(query: str, brain, validator, executor) -> TrialResult:
                 "errors": capability_errors,
                 "error_type": "capability_mismatch"
             })
+        else:
+            plan = _attempt_retry(query,plan,brain,validator)
+            result.retry_attempted = True
+            result.trace.append({
+            "component":"pipeline",
+            "event": "retry_attempted"
+        })
 
     if plan.validation_status == "failed":
         confidence_errors = [e for e in plan.validation_errors if "Confidence too low" in e]
@@ -60,14 +67,6 @@ def process_query(query: str, brain, validator, executor) -> TrialResult:
             result.final_status = "abstained"
             result.duration_ms = round((time.perf_counter() - start_time) * 1000, 2)
             return result
-
-    if plan.validation_status == "failed":
-        plan = _attempt_retry(query, plan, brain, validator)
-        result.retry_attempted = True
-        result.trace.append({
-            "component": "pipeline",
-            "event": "retry_attempted"
-        })
 
     if plan.validation_status == "failed" or plan.tool == "unknown":
         result.fallback_triggered = True
