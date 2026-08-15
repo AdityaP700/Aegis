@@ -1,5 +1,4 @@
 """Compares Aegis vs Baseline agent on the same test cases."""
-import time
 from typing import List, Any
 from evals.loader import EvalCase, load_cases
 from evals.runner import run_cases, TrialOutcome

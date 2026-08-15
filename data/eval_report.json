@@ -1,45 +1,22 @@
 {
-  "total_cases": 20,
-  "passed": 7,
-  "failed": 13,
+  "total_cases": 5,
+  "passed": 5,
+  "failed": 0,
   "crashed": 0,
-  "pass_rate": 35.0,
+  "pass_rate": 100.0,
   "crash_rate": 0.0,
-  "avg_latency_ms": 1809.5950000000005,
-  "p50_latency_ms": 1100.56,
-  "p95_latency_ms": 4922.06,
+  "avg_latency_ms": 6380.688,
+  "p50_latency_ms": 3567.83,
+  "p95_latency_ms": 18374.72,
   "by_category": {
     "CAPABILITY": {
-      "passed": 0,
+      "passed": 4,
       "total": 4
     },
     "HAPPY": {
       "passed": 1,
       "total": 1
-    },
-    "ROUTING": {
-      "passed": 2,
-      "total": 6
-    },
-    "ARGUMENTS": {
-      "passed": 2,
-      "total": 4
-    },
-    "PLAUSIBILITY": {
-      "passed": 1,
-      "total": 3
-    },
-    "DEGRADATION": {
-      "passed": 1,
-      "total": 2
     }
   },
-  "failure_reasons": {
-    "capability_mismatch": 4,
-    "none": 1,
-    "missing_argument": 3,
-    "invalid_value": 2,
-    "invalid_format": 2,
-    "low_confidence": 1
-  }
+  "failure_reasons": {}
 }

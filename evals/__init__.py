@@ -6,6 +6,7 @@ from evals.classifier import classify_failure
 from evals.metrics import build_report ,print_report ,save_report ,EvalReport
 from evals.baseline_runner import run_baseline_query, run_baseline_cases
 from evals.compare import run_comparison, print_comparison_table, save_comparison
+from evals.passk_runner import run_passk,print_passk_results,compare_passk
 __all__ = [
     "load_cases",
     "EvalCase",
@@ -26,5 +27,8 @@ __all__ = [
     "run_baseline_cases",
     "run_comparison",
     "print_comparison_table",
-    "save_comparison"
+    "save_comparison",
+    "run_passk",
+    "print_passk_results",
+    "compare_passk"
     ]

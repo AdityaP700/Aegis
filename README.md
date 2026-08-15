@@ -14,3 +14,6 @@ Model Comparison for Brain Routing:
 **Root Cause:** The classifier checked trace events in order and returned "capability_mismatch" as soon as it saw a rejection event — without checking if the system later recovered.
 **Fix:** Moved `final_status == "success"` check to the top of the classifier.
 **Lesson:** The final outcome is the source of truth. Intermediate events like `capability_rejected` are signals, not verdicts.
+
+## result 
+It wraps any LLM router with 9 pre-execution checks, 3 post-execution checks, and intelligent recovery. In evaluation across 22 test cases, the baseline agent (no safety net) achieved 20% success with multiple silent failures. Aegis improved success to 50% with zero silent failures and zero crashes. The evaluation harness includes a deterministic grader, failure classifier, latency tracking, and side-by-side comparison."

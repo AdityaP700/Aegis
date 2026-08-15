@@ -110,3 +110,5 @@ Phase 4: Build eval/runner.py to run each case and capture final response + trac
 Phase 5: Build eval/grader.py to compare actual behavior against expected.
 
 Phase 6: Build eval/metrics.py to aggregate results.
+
+Implementing the pass^k now
