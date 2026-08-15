@@ -112,6 +112,8 @@ def grade_trial(outcome: TrialOutcome) -> GradeResult:
 
     return grade
 
+    
+
 
 def grade_all(outcomes: List[TrialOutcome]) -> List[GradeResult]:
     """

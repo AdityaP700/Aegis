@@ -2,8 +2,7 @@
 from engine.types import ExecutionRequest, ExecutionPlan,TrialResult
 import time
 
-def process_query(query: str, brain, validator, executor)->TrialResult:
-
+def process_query(query: str, brain, validator, executor) -> TrialResult:
     start_time = time.perf_counter()
     result = TrialResult(query=query)
 
@@ -17,6 +16,17 @@ def process_query(query: str, brain, validator, executor)->TrialResult:
     result.arguments = plan.arguments
     print(f"🧠 Brain: {plan.tool}.{plan.operation}({plan.arguments}) [confidence: {plan.confidence}]")
 
+    # Model guard — check immediately after Brain
+    if plan.confidence < 0.2 and plan.tool == "search":
+        result.trace.append({
+            "component": "brain",
+            "event": "model_did_not_understand",
+            "confidence": plan.confidence
+        })
+        result.final_status = "model_failure"
+        result.duration_ms = round((time.perf_counter() - start_time) * 1000, 2)
+        return result
+
     plan = validator.validate(plan)
 
     if plan.validation_status == "failed":
@@ -25,10 +35,10 @@ def process_query(query: str, brain, validator, executor)->TrialResult:
             "component": "validator",
             "event": "validation_failed",
             "errors": plan.validation_errors,
-            "error_type":"validation_error"
+            "error_type": "validation_error"
         })
         capability_errors = [e for e in plan.validation_errors
-        if "Operation mismatch" in e or "Capability mismatch" in e]
+                            if "Operation mismatch" in e or "Capability mismatch" in e]
         if capability_errors:
             result.capability_rejected = True
             result.trace.append({
@@ -37,10 +47,6 @@ def process_query(query: str, brain, validator, executor)->TrialResult:
                 "errors": capability_errors,
                 "error_type": "capability_mismatch"
             })
-    if plan.validation_status == "failed":
-    # Check for capability rejection
-        if any("Operation mismatch" in e or "Capability mismatch" in e for e in plan.validation_errors):
-            result.capability_rejected = True  # ← This SHOULD work
 
     if plan.validation_status == "failed":
         confidence_errors = [e for e in plan.validation_errors if "Confidence too low" in e]
@@ -49,7 +55,7 @@ def process_query(query: str, brain, validator, executor)->TrialResult:
                 "component": "validator",
                 "event": "abstained_low_confidence",
                 "confidence": plan.confidence,
-                "error_types":"low_confidence"
+                "error_type": "low_confidence"
             })
             result.final_status = "abstained"
             result.duration_ms = round((time.perf_counter() - start_time) * 1000, 2)
@@ -85,11 +91,8 @@ def process_query(query: str, brain, validator, executor)->TrialResult:
         result.arguments = {"query": query}
 
     if plan.validation_status == "passed":
-        response =  _execute_plan(plan, executor, validator)
-
+        response = _execute_plan(plan, executor, validator)
         if response and response.status != "success":
-
-
             result.trace.append({
                 "component": "executor",
                 "event": "execution_failed",
@@ -103,13 +106,12 @@ def process_query(query: str, brain, validator, executor)->TrialResult:
             result.post_validation_passed = getattr(response, 'post_passed', None)
             result.trace.extend(getattr(response, 'trace', []))
     else:
-        result.final_status="failed"
+        result.final_status = "failed"
         print(f"❌ Could not create valid plan.")
         print(f"   Errors: {plan.validation_errors}")
+
     result.duration_ms = round((time.perf_counter() - start_time) * 1000, 2)
-    return result
-    
-#its just a method right ??
+    return result#its just a method right ??
 def _attempt_retry(query, plan, brain, validator):
     print(f" Validation failed: {plan.validation_errors}")
     print("Retrying with error feedback...")

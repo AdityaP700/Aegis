@@ -7,7 +7,8 @@ def classify_failure(result) -> str:
     Determine the failure reason from trace events.
     """
     trace = result.trace
-
+    if result.final_status == "success":
+        return "none"
     # Check capability rejection first (most specific)
     for event in trace:
         if event.get("event") == "capability_rejected":
@@ -53,9 +54,6 @@ def classify_failure(result) -> str:
             return "recovered_via_fallback"
 
     # Check success
-    if result.final_status == "success":
-        return "none"
-
     if result.final_status == "needs_clarification":
         return "needs_clarification"
 

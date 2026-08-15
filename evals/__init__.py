@@ -5,7 +5,7 @@ from evals.grader import grade_trial, grade_all, GradeResult
 from evals.classifier import classify_failure
 from evals.metrics import build_report ,print_report ,save_report ,EvalReport
 from evals.baseline_runner import run_baseline_query, run_baseline_cases
-
+from evals.compare import run_comparison, print_comparison_table, save_comparison
 __all__ = [
     "load_cases",
     "EvalCase",
@@ -23,5 +23,8 @@ __all__ = [
     "save_report",
     "EvalReport",
     "run_baseline_query",
-    "run_baseline_cases"
+    "run_baseline_cases",
+    "run_comparison",
+    "print_comparison_table",
+    "save_comparison"
     ]

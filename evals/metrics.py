@@ -77,7 +77,7 @@ class EvalReport:
     def p50_latency(self) -> float:
         if not self.latencies:
             return 0.0
-            #sort the latencies 
+            #sort the latencies
         sorted_latencies = sorted(self.latencies)
         index = len(sorted_latencies) // 2
         return sorted_latencies[index]
@@ -107,7 +107,6 @@ def print_report(report: EvalReport):
     print(f"\n{'=' * 80}")
     print(f"AEGIS EVALUATION REPORT")
     print(f"{'=' * 80}")
-
     # Overall
     print(f"\nOVERALL")
     print(f"{'─' * 80}")

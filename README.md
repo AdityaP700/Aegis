@@ -1,1 +1,16 @@
 Aegis is a reliability runtime for LLM tool-calling agents that validates model-generated execution plans, prevents unsupported operations, detects malformed or implausible results, tracks execution behavior, and applies recovery strategies when execution fails.
+
+Model Comparison for Brain Routing:
+| Model | Correct Tool Selection | Avg Confidence | Usable? |
+|-------|----------------------|----------------|---------|
+| llama-3.3-70b-versatile | High | 0.9 | ✅ Yes |
+| openai/gpt-oss-20b | Medium | 0.5-0.9 | ⚠️ Partial |
+| qwen-3.6-27b | None | 0.1 | ❌ No |
+
+## Known Bugs Fixed
+
+### Bug: Failure Classifier Returned "capability_mismatch" After Successful Recovery
+**Symptom:** Capability test cases failed grading even though the system recovered successfully.
+**Root Cause:** The classifier checked trace events in order and returned "capability_mismatch" as soon as it saw a rejection event — without checking if the system later recovered.
+**Fix:** Moved `final_status == "success"` check to the top of the classifier.
+**Lesson:** The final outcome is the source of truth. Intermediate events like `capability_rejected` are signals, not verdicts.

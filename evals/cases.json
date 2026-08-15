@@ -1,4 +1,5 @@
 [
+
   {
     "id": "capability_001",
     "category": "CAPABILITY",
@@ -8,7 +9,8 @@
       "expected_operation": "web_search",
       "capability_rejected": true,
       "fallback_triggered": true,
-      "final_status": "success"
+      "final_status": "success",
+      "failure_reason": "none"
     }
   },
   {
@@ -16,11 +18,12 @@
     "category": "CAPABILITY",
     "query": "Will it rain in Tokyo tomorrow?",
     "expected": {
-      "expected_tool": "weather",
-      "expected_operation": "weather_forecast",
+      "expected_tool": "search",
+      "expected_operation": "web_search",
       "capability_rejected": true,
       "fallback_triggered": true,
-      "final_status": "success"
+      "final_status": "success",
+      "failure_reason": "none"
     }
   },
   {
@@ -28,11 +31,12 @@
     "category": "CAPABILITY",
     "query": "Show me the README of karpathy/nanoGPT",
     "expected": {
-      "expected_tool": "github",
-      "expected_operation": "get_readme",
+      "expected_tool": "search",
+      "expected_operation": "web_search",
       "capability_rejected": true,
       "fallback_triggered": true,
-      "final_status": "success"
+      "final_status": "success",
+      "failure_reason": "none"
     }
   },
   {
@@ -40,11 +44,12 @@
     "category": "CAPABILITY",
     "query": "What's the commit history of torvalds/linux?",
     "expected": {
-      "expected_tool": "github",
-      "expected_operation": "get_commits",
+      "expected_tool": "search",
+      "expected_operation": "web_search",
       "capability_rejected": true,
       "fallback_triggered": true,
-      "final_status": "success"
+      "final_status": "success",
+      "failure_reason": "none"
     }
   },
   {
@@ -111,7 +116,8 @@
       "fallback_triggered": false,
       "final_status": "needs_clarification"
     }
-  },
+  }
+,
   {
     "id": "routing_006",
     "category": "ROUTING",

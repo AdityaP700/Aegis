@@ -1,0 +1,92 @@
+[
+  {
+    "case_id": "capability_001",
+    "category": "CAPABILITY",
+    "baseline_status": "success",
+    "aegis_status": "success",
+    "baseline_passed": false,
+    "aegis_passed": false,
+    "improvement": "\u2796 SAME (both failed)"
+  },
+  {
+    "case_id": "capability_002",
+    "category": "CAPABILITY",
+    "baseline_status": "success",
+    "aegis_status": "success",
+    "baseline_passed": false,
+    "aegis_passed": true,
+    "improvement": "\u2705 IMPROVED"
+  },
+  {
+    "case_id": "capability_003",
+    "category": "CAPABILITY",
+    "baseline_status": "success",
+    "aegis_status": "success",
+    "baseline_passed": false,
+    "aegis_passed": true,
+    "improvement": "\u2705 IMPROVED"
+  },
+  {
+    "case_id": "capability_004",
+    "category": "CAPABILITY",
+    "baseline_status": "success",
+    "aegis_status": "success",
+    "baseline_passed": false,
+    "aegis_passed": true,
+    "improvement": "\u2705 IMPROVED"
+  },
+  {
+    "case_id": "happy_001",
+    "category": "HAPPY",
+    "baseline_status": "success",
+    "aegis_status": "success",
+    "baseline_passed": true,
+    "aegis_passed": true,
+    "improvement": "\u2796 SAME (both passed)"
+  },
+  {
+    "case_id": "routing_001",
+    "category": "ROUTING",
+    "baseline_status": "success",
+    "aegis_status": "success",
+    "baseline_passed": false,
+    "aegis_passed": false,
+    "improvement": "\u2796 SAME (both failed)"
+  },
+  {
+    "case_id": "routing_002",
+    "category": "ROUTING",
+    "baseline_status": "failed",
+    "aegis_status": "needs_clarification",
+    "baseline_passed": false,
+    "aegis_passed": false,
+    "improvement": "\u2796 SAME (both failed)"
+  },
+  {
+    "case_id": "routing_003",
+    "category": "ROUTING",
+    "baseline_status": "success",
+    "aegis_status": "success",
+    "baseline_passed": true,
+    "aegis_passed": true,
+    "improvement": "\u2796 SAME (both passed)"
+  },
+  {
+    "case_id": "routing_004",
+    "category": "ROUTING",
+    "baseline_status": "failed",
+    "aegis_status": "needs_clarification",
+    "baseline_passed": false,
+    "aegis_passed": false,
+    "improvement": "\u2796 SAME (both failed)"
+  },
+  {
+    "case_id": "routing_005",
+    "category": "ROUTING",
+    "baseline_status": "failed",
+    "aegis_status": "needs_clarification",
+    "baseline_passed": false,
+    "aegis_passed": false,
+    "improvement": "\u2796 SAME (both failed)"
+  }
+]
