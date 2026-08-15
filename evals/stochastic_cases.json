@@ -1,0 +1,63 @@
+[
+  {
+    "id": "stoch_happy_001",
+    "category": "STOCHASTIC",
+    "query": "What's the current weather in Delhi?",
+    "expected": {
+      "expected_tool": "weather",
+      "expected_operation": "current_weather",
+      "capability_rejected": false,
+      "fallback_triggered": false,
+      "final_status": "success",
+      "failure_reason": "none"
+    }
+  },
+  {
+    "id": "stoch_ambiguous_001",
+    "category": "STOCHASTIC",
+    "query": "Python",
+    "expected": {
+      "expected_tool": "search",
+      "fallback_triggered": false,
+      "final_status": "success",
+      "failure_reason": "none"
+    }
+  },
+  {
+    "id": "stoch_arguments_001",
+    "category": "STOCHASTIC",
+    "query": "Weather in Delhi tomorrow",
+    "expected": {
+      "expected_tool": "search",
+      "expected_operation": "web_search",
+      "capability_rejected": true,
+      "fallback_triggered": true,
+      "final_status": "success",
+      "failure_reason": "none"
+    }
+  },
+  {
+    "id": "stoch_recovery_001",
+    "category": "STOCHASTIC",
+    "query": "Stars for karpathy's nanoGPT",
+    "expected": {
+      "expected_tool": "github",
+      "expected_operation": "repository_metadata",
+      "capability_rejected": false,
+      "fallback_triggered": false,
+      "final_status": "success",
+      "failure_reason": "none"
+    }
+  },
+  {
+    "id": "stoch_edge_001",
+    "category": "STOCHASTIC",
+    "query": "What's hot in tech right now",
+    "expected": {
+      "expected_tool": "search",
+      "fallback_triggered": false,
+      "final_status": "success",
+      "failure_reason": "none"
+    }
+  }
+]

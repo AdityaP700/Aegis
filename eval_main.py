@@ -7,7 +7,7 @@ from evals.runner import run_cases
 from evals.grader import grade_all, print_grades
 from evals.metrics import build_report, print_report, save_report
 from evals.passk_runner import run_passk, print_passk_results, compare_passk
-
+from evals.stochastic_runner import run_stochastic_eval
 
 def setup_aegis():
     """Initialize all Aegis components."""
@@ -119,8 +119,9 @@ def main():
     print("  1. Single Evaluation (1 trial per case)")
     print("  2. Pass@k Evaluation (multiple trials per case)")
     print("  3. Run Both")
+    print("  4. Stochasticity Evaluation (5 representative cases × k trials)")
 
-    choice = input("\nSelect mode (1/2/3): ").strip()
+    choice = input("\nSelect mode (1/2/3/4): ").strip()
 
     max_cases = None
     k = 3
@@ -144,7 +145,13 @@ def main():
         if k_input:
             k = int(k_input)
         run_passk_eval(brain, validator, executor, max_cases=max_cases, k=k)
-
+        
+    if choice == "4":
+        k = 3
+        k_input = input(f"Trials per case (default {k}): ").strip()
+        if k_input:
+            k = int(k_input)
+        run_stochastic_eval(brain, validator, executor, executor.registry, k=k)
     else:
         print("Invalid choice. Running single evaluation...")
         run_single_eval(brain, validator, executor, max_cases=max_cases)

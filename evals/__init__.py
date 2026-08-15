@@ -7,6 +7,7 @@ from evals.metrics import build_report ,print_report ,save_report ,EvalReport
 from evals.baseline_runner import run_baseline_query, run_baseline_cases
 from evals.compare import run_comparison, print_comparison_table, save_comparison
 from evals.passk_runner import run_passk,print_passk_results,compare_passk
+from evals.loader import load_cases_from_file
 __all__ = [
     "load_cases",
     "EvalCase",
@@ -30,5 +31,6 @@ __all__ = [
     "save_comparison",
     "run_passk",
     "print_passk_results",
-    "compare_passk"
+    "compare_passk",
+    "load_cases_from_file"
     ]
