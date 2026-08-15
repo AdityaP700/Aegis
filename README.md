@@ -22,3 +22,5 @@ It wraps any LLM router with 9 pre-execution checks, 3 post-execution checks, an
 In a 5-task stochastic evaluation repeated across 5 trials (25 total trials), Aegis achieved 100% Pass@5 and 80% Pass^5, compared with 0% for an unguarded baseline.
 
 Aegis succeeded in 24/25 trials; the single failure was caused by an upstream LLM-provider rate limit and was classified separately as an external dependency failure.
+
+Results are from a targeted 5-task reliability suite; the broader 22-task benchmark is reported separately.

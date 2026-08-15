@@ -4,7 +4,7 @@ from typing import Dict, Any, List
 from dotenv import load_dotenv
 from tools.base import BaseTool
 from engine.types import ExecutionRequest, PostExecutionResult,ExecutionPlan
-
+from engine.tool_contract import ToolContract
 
 load_dotenv()
 
@@ -22,24 +22,26 @@ class WeatherTool(BaseTool):
                 "Get a free key at https://openweathermap.org/api"
             )
         self.base_url = "https://api.openweathermap.org/data/2.5/weather"
-
+        self._contract=ToolContract(
+         name="weather",
+         description="Fetches current weather for a city",
+            supported_operations=["current_weather"],
+            required_args=["city"],
+            argument_types={"city": str},
+            output_schema={
+                "city": str,
+                "temperature": float,
+                "condition": str,
+                "humidity": int
+            },
+            retry_policy="exponential",
+            timeout_seconds=10.0,
+            capabilities=["current_weather"]
+        )
     @property
-    def name(self) -> str:
-        return "weather"
-
-    @property
-    def description(self) -> str:
-        return "Fetches current weather for a city: temperature, condition, humidity"
-
-    @property
-    def required_args(self) -> List[str]:
-        return ["city"]
-
-    @property
-    def capabilities(self) -> List[str]:  # ← NEW
-        """This tool only supports current weather — not historical, not forecast."""
-        return ["current_weather"]
-
+    def contract(self) -> ToolContract:
+        return self._contract
+    
     def _fetch_from_api(self, city: str) -> Dict[str, Any]:
         """
         Raw API call to OpenWeather.

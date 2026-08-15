@@ -5,9 +5,9 @@
   "crashed": 0,
   "pass_rate": 100.0,
   "crash_rate": 0.0,
-  "avg_latency_ms": 6380.688,
-  "p50_latency_ms": 3567.83,
-  "p95_latency_ms": 18374.72,
+  "avg_latency_ms": 1154.368,
+  "p50_latency_ms": 965.47,
+  "p95_latency_ms": 1927.5,
   "by_category": {
     "CAPABILITY": {
       "passed": 4,

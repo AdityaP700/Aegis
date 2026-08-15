@@ -4,6 +4,7 @@ from typing import Dict, Any,List
 from dotenv import load_dotenv
 from tools.base import BaseTool
 from engine.types import ExecutionRequest,ExecutionPlan,PostExecutionResult
+from engine.tool_contract import ToolContract
 
 load_dotenv()
 
@@ -18,24 +19,27 @@ class GitHubTool(BaseTool):
         }
         if self.token:
             self.headers["Authorization"] = f"token {self.token}"
+        self._contract = ToolContract(
+            name="github",
+            description="Fetches GitHub repo stats",
+            supported_operations=["repository_metadata"],
+            required_args=["repo"],
+            argument_types={"repo": str},
+            output_schema={
+                "full_name": str,
+                "stars": int,
+                "language": str,
+                "license": str
+            },
+            retry_policy="exponential",
+            timeout_seconds=10.0,
+            capabilities=["repository_metadata"]
+        )
 
     @property
-    def name(self) -> str:
-        return "github"
-
-    @property
-    def description(self) -> str:
-        return "Fetches GitHub repo stats: stars, language, license, forks, open issues"
-
-    @property
-    def capabilities(self) -> List[str]:
-        """Currently supports repository metadata lookup."""
-        return ["repository_metadata"]
-
-    @property
-    def required_args(self)-> List[str]:
-        return ["repo"]
-
+    def contract(self) -> ToolContract:
+        return self._contract
+    
     def _fetch_from_api(self, repo: str) -> Dict[str, Any]:
         """
         Fetch repository data from GitHub API.

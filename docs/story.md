@@ -67,3 +67,5 @@ Capability mismatch + fallback	~3000ms
 Multiple retries	~5000ms
 P50 tells you: "The typical query takes X ms."
 P95 tells you: "Even with retries and fallbacks, 95% of queries finish within Y ms."
+
+

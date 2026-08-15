@@ -25,12 +25,13 @@ def setup_aegis():
 def _extract_tools_metadata(registry: ToolRegistry) -> list:
     metadata = []
     for tool_name, tool in registry._tools.items():
+        contract = tool.contract
         metadata.append({
-            "name": tool.name,
-            "description": tool.description,
-            "supported_operations": getattr(tool, 'supported_operations', []),
-            "capabilities": getattr(tool, 'capabilities', []),
-            "required_args": getattr(tool, 'required_args', [])
+            "name": contract.name,
+            "description": contract.description,
+            "supported_operations": contract.supported_operations,
+            "capabilities": contract.capabilities,
+            "required_args": contract.required_args
         })
     return metadata
 

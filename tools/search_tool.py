@@ -4,7 +4,7 @@ from typing import Dict, Any, List
 from dotenv import load_dotenv
 from tools.base import BaseTool
 from engine.types import ExecutionRequest,ExecutionPlan,PostExecutionResult
-
+from engine.tool_contract import ToolContract
 load_dotenv()
 
 class SearchTool(BaseTool):
@@ -23,23 +23,23 @@ class SearchTool(BaseTool):
                 "Get a free key at https://serpapi.com (100 searches/month)"
             )
         self.base_url = "https://serpapi.com/search"
+        self._contract = ToolContract(
+            name="search",
+            description="Searches the web and returns top results",
+            supported_operations=["web_search"],
+            required_args=["query"],
+            argument_types={"query": str},
+            output_schema={
+                "results": list
+            },
+            retry_policy="exponential",
+            timeout_seconds=15.0,
+            capabilities=["web_search"]
+        )
 
     @property
-    def name(self) -> str:
-        return "search"
-
-    @property
-    def description(self) -> str:
-        return "Searches the web and returns top results with titles, URLs, and snippets"
-
-    @property
-    def capabilities(self) -> List[str]:        # ← NEW
-        """Web search — handles general knowledge, current events, definitions."""
-        return ["web_search"]
-
-    @property
-    def required_args(self)-> List[str]:
-        return ["query"]
+    def contract(self) -> ToolContract:
+        return self._contract
 
     def _fetch_from_api(self, query: str, num_results: int = 5) -> Dict[str, Any]:
         """

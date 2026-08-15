@@ -1,24 +1,23 @@
 import sys
 if hasattr(sys.stdout, 'reconfigure'):
     sys.stdout.reconfigure(encoding='utf-8')
-
 from evals.loader import load_cases
 from evals.runner import run_cases
 from evals.grader import grade_all, print_grades
 from evals.metrics import build_report, print_report, save_report
 from evals.passk_runner import run_passk, print_passk_results, compare_passk
 from evals.stochastic_runner import run_stochastic_eval
+from brain.groq_brain import GroqBrain
+from brain.validator import Validator
+from tools.weather import WeatherTool
+from tools.github import GitHubTool
+from tools.search_tool import SearchTool
+from tools.registry import ToolRegistry
+from executor import Executor
 
 def setup_aegis():
     """Initialize all Aegis components."""
-    from brain.groq_brain import GroqBrain
-    from brain.validator import Validator
-    from tools.weather import WeatherTool
-    from tools.github import GitHubTool
-    from tools.search_tool import SearchTool
-    from tools.registry import ToolRegistry
-    from executor import Executor
-
+    
     registry = ToolRegistry()
     registry.register(WeatherTool())
     registry.register(GitHubTool())
@@ -36,12 +35,13 @@ def _extract_tools_metadata(registry) -> list:
     """Tell the Brain what tools exist and what they need."""
     metadata = []
     for tool_name, tool in registry._tools.items():
+        contract = tool.contract
         metadata.append({
-            "name": tool.name,
-            "description": tool.description,
-            "supported_operations": getattr(tool, 'supported_operations', []),
-            "capabilities": getattr(tool, 'capabilities', []),
-            "required_args": getattr(tool, 'required_args', [])
+            "name": contract.name,
+            "description": contract.description,
+            "supported_operations": contract.supported_operations,
+            "capabilities": contract.capabilities,
+            "required_args": contract.required_args
         })
     return metadata
 
@@ -145,7 +145,7 @@ def main():
         if k_input:
             k = int(k_input)
         run_passk_eval(brain, validator, executor, max_cases=max_cases, k=k)
-        
+
     if choice == "4":
         k = 3
         k_input = input(f"Trials per case (default {k}): ").strip()

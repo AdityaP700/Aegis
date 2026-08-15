@@ -112,3 +112,9 @@ Phase 5: Build eval/grader.py to compare actual behavior against expected.
 Phase 6: Build eval/metrics.py to aggregate results.
 
 Implementing the pass^k now
+
+currently i am implementing a toolContract as a blueprint for all the tools to incorporate as a single point blueprint ,instead of messing around with diff other files
+
+removed the abstract class declaration so as to keep the different methods clean ,
+
+already in the contract these are defined ,now to make it concrete and not to make it mess ,i removed the abstract classes from the following
