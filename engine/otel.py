@@ -1,11 +1,14 @@
+"""OpenTelemetry setup for Aegis — Grafana Cloud with Basic Auth."""
+import os
+import base64
 from opentelemetry import trace
 from opentelemetry.sdk.trace import TracerProvider
 from opentelemetry.sdk.trace.export import BatchSpanProcessor
 from opentelemetry.sdk.resources import Resource
-from opentelemetry.exporter.otlp.proto.grpc.trace_exporter import OTLPSpanExporter
+from opentelemetry.exporter.otlp.proto.http.trace_exporter import OTLPSpanExporter
 
 _tracer = None
-#to check if a provider already exists
+
 def setup_tracing():
     global _tracer
     if _tracer is not None:
@@ -17,7 +20,26 @@ def setup_tracing():
     })
 
     provider = TracerProvider(resource=resource)
-    exporter = OTLPSpanExporter(endpoint="http://localhost:4317", insecure=True)
+
+    endpoint = os.getenv(
+        "OTEL_EXPORTER_OTLP_ENDPOINT",
+        "https://otlp-gateway-prod-ap-south-1.grafana.net/otlp"
+    )
+
+    # For Grafana Cloud: username = instance ID, password = API token
+    instance_id = os.getenv("GRAFANA_INSTANCE_ID", "")
+    token = os.getenv("GRAFANA_API_TOKEN", "")
+
+    credentials = f"{instance_id}:{token}"
+    encoded = base64.b64encode(credentials.encode()).decode()
+
+    exporter = OTLPSpanExporter(
+        endpoint=f"{endpoint}/v1/traces",
+        headers={
+            "Authorization": f"Basic {encoded}"
+        }
+    )
+
     processor = BatchSpanProcessor(exporter)
     provider.add_span_processor(processor)
     trace.set_tracer_provider(provider)
