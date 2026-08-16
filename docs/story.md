@@ -68,4 +68,19 @@ Multiple retries	~5000ms
 P50 tells you: "The typical query takes X ms."
 P95 tells you: "Even with retries and fallbacks, 95% of queries finish within Y ms."
 
+Attributes are stable metadata: "which tool," "what confidence"
 
+Events are points-in-time: "retry happened," "fallback triggered"
+
+You don't make "retry" a separate span because retry isn't a separate operation — it's something that happens during tool execution. So it's an event on the tool.execute span.
+
+## Why OpenTelemetry instead of custom JSON?
+Because:
+
+It's the industry standard — every observability tool understands it
+
+It handles trace IDs, parent-child relationships, timing automatically
+
+It's portable — you can send the same traces to Jaeger, Grafana, Datadog, or console without changing your code
+
+It has stable APIs — you don't maintain it yourself

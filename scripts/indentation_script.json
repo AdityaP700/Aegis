@@ -1,0 +1,11 @@
+python -c "
+with open('d:/Development/Projects/core/Aegis/pipeline.py', 'r') as f:
+    lines = f.readlines()
+
+for i in range(24, 123):
+    if lines[i].strip():
+        lines[i] = '    ' + lines[i]
+
+with open('d:/Development/Projects/core/Aegis/pipeline.py', 'w') as f:
+    f.writelines(lines)
+"

@@ -1,19 +1,15 @@
 {
-  "total_cases": 5,
-  "passed": 5,
+  "total_cases": 1,
+  "passed": 1,
   "failed": 0,
   "crashed": 0,
   "pass_rate": 100.0,
   "crash_rate": 0.0,
-  "avg_latency_ms": 1154.368,
-  "p50_latency_ms": 965.47,
-  "p95_latency_ms": 1927.5,
+  "avg_latency_ms": 868.55,
+  "p50_latency_ms": 868.55,
+  "p95_latency_ms": 868.55,
   "by_category": {
     "CAPABILITY": {
-      "passed": 4,
-      "total": 4
-    },
-    "HAPPY": {
       "passed": 1,
       "total": 1
     }

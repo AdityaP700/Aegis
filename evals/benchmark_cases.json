@@ -1,0 +1,124 @@
+[
+  {
+    "id": "bench_happy_001",
+    "category": "HAPPY",
+    "query": "What's the weather in Delhi?",
+    "expected": {
+      "expected_tool": "weather",
+      "expected_operation": "current_weather",
+      "capability_rejected": false,
+      "fallback_triggered": false,
+      "final_status": "success",
+      "failure_reason": "none"
+    }
+  },
+  {
+    "id": "bench_happy_002",
+    "category": "HAPPY",
+    "query": "Stars for karpathy/nanoGPT",
+    "expected": {
+      "expected_tool": "github",
+      "expected_operation": "repository_metadata",
+      "capability_rejected": false,
+      "fallback_triggered": false,
+      "final_status": "success",
+      "failure_reason": "none"
+    }
+  },
+  {
+    "id": "bench_routing_001",
+    "category": "ROUTING",
+    "query": "Python",
+    "expected": {
+      "expected_tool": "search",
+      "fallback_triggered": false,
+      "final_status": "success",
+      "failure_reason": "none"
+    }
+  },
+  {
+    "id": "bench_routing_002",
+    "category": "ROUTING",
+    "query": "Is it going to rain?",
+    "expected": {
+      "expected_tool": "weather",
+      "capability_rejected": false,
+      "fallback_triggered": false,
+      "final_status": "needs_clarification",
+      "failure_reason": "missing_argument"
+    }
+  },
+  {
+    "id": "bench_args_001",
+    "category": "ARGUMENTS",
+    "query": "Weather in New York and London",
+    "expected": {
+      "expected_tool": "weather",
+      "capability_rejected": false,
+      "fallback_triggered": false,
+      "final_status": "needs_clarification",
+      "failure_reason": "invalid_value"
+    }
+  },
+  {
+    "id": "bench_args_002",
+    "category": "ARGUMENTS",
+    "query": "GitHub stars for nanoGPT",
+    "expected": {
+      "expected_tool": "github",
+      "capability_rejected": false,
+      "fallback_triggered": false,
+      "final_status": "needs_clarification",
+      "failure_reason": "invalid_format"
+    }
+  },
+  {
+    "id": "bench_capability_001",
+    "category": "CAPABILITY",
+    "query": "Will it rain in Tokyo tomorrow?",
+    "expected": {
+      "expected_tool": "search",
+      "expected_operation": "web_search",
+      "capability_rejected": true,
+      "fallback_triggered": true,
+      "final_status": "success",
+      "failure_reason": "none"
+    }
+  },
+  {
+    "id": "bench_recovery_001",
+    "category": "RECOVERY",
+    "query": "Show me the README of karpathy/nanoGPT",
+    "expected": {
+      "expected_tool": "search",
+      "expected_operation": "web_search",
+      "capability_rejected": true,
+      "fallback_triggered": true,
+      "final_status": "success",
+      "failure_reason": "none"
+    }
+  },
+  {
+    "id": "bench_edge_001",
+    "category": "EDGE",
+    "query": "What's hot in tech right now",
+    "expected": {
+      "expected_tool": "search",
+      "fallback_triggered": false,
+      "final_status": "success",
+      "failure_reason": "none"
+    }
+  },
+  {
+    "id": "bench_dependency_001",
+    "category": "DEPENDENCY",
+    "query": "Weather in XYZ123",
+    "expected": {
+      "expected_tool": "weather",
+      "capability_rejected": false,
+      "fallback_triggered": false,
+      "final_status": "needs_clarification",
+      "failure_reason": "invalid_value"
+    }
+  }
+]

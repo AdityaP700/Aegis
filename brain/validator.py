@@ -18,8 +18,10 @@ class Validator:
         elif not self.registry.get(plan.tool):
             errors.append(f"Tool '{plan.tool}' is not registered")
         else:
+            print(f"DEBUG: Validating tool={plan.tool}, operation={plan.operation}")
             tool = self.registry.get(plan.tool)
             contract: ToolContract = tool.contract
+            print(f"DEBUG: Contract supports={contract.supported_operations}")
 
             # Operation check
             if plan.operation and not contract.supports_operation(plan.operation):
@@ -27,6 +29,8 @@ class Validator:
                     f"Operation mismatch: '{plan.tool}' does not support "
                     f"'{plan.operation}'. Supported: {contract.supported_operations}"
                 )
+            
+            print(f"DEBUG: Errors after operation check={errors}")
 
             # Capability check
             if plan.requested_capability and not contract.supports_capability(plan.requested_capability):
