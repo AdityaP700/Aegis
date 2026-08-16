@@ -3,7 +3,7 @@
   {
     "id": "capability_001",
     "category": "CAPABILITY",
-    "query": "What was the temperature in Paris last Monday?",
+    "query": "Will it rain tomorrow?",
     "expected": {
       "expected_tool": "search",
       "expected_operation": "web_search",

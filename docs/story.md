@@ -84,3 +84,37 @@ It handles trace IDs, parent-child relationships, timing automatically
 It's portable — you can send the same traces to Jaeger, Grafana, Datadog, or console without changing your code
 
 It has stable APIs — you don't maintain it yourself
+
+
+"This trace shows Aegis handling a capability mismatch. The Brain chose weather.weather_forecast with 0.7 confidence. Validation caught in under 1 millisecond that the weather tool doesn't support forecasts. Recovery then redirected to search, which succeeded in 533ms. The entire failure-to-recovery path is visible in the distributed trace."
+
+That's the money trace. It demonstrates:
+
+Property	Evidence
+Fast validation	0μs (sub-millisecond)
+Correct detection	Caught forecast operation mismatch
+Graceful recovery	Fallback weather → search
+No wasted execution	Search succeeded first try
+Full observability	Every stage visible with timing
+The Complete Portfolio Trace Set
+You now have two complementary traces:
+
+Trace 1: Recovery Path (This One)
+text
+agent.plan → validation(failed) → recovery(fallback) → tool.execute(search) → success
+Shows: Detection + Fallback + Recovery
+
+Trace 2: Fatal Error Path (From "Weather in XYZ123")
+text
+agent.plan → validation(passed) → tool.execute(weather) → fatal_error(ValueError)
+Shows: Correct fatal error classification, no wasted retries
+
+What's Left for v1.0
+text
+✅ Reliability runtime
+✅ Evaluation + Pass@k/Pass^k
+✅ Tool contracts
+✅ OpenTelemetry + Jaeger
+✅ Failure trace captured
+⏳ FastAPI /execute
+⏳ Docker

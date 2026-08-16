@@ -79,6 +79,10 @@ def process_query(query: str, brain, validator, executor) -> TrialResult:
                 return result
 
         if plan.validation_status == "failed" or plan.tool == "unknown":
+            with tracer.start_as_current_span("recovery") as span:
+                span.set_attribute("type", "fallback")
+                span.set_attribute("from", plan.tool)
+                span.set_attribute("to", "search")
             result.fallback_triggered = True
             result.trace.append({
                 "component": "pipeline",
@@ -140,16 +144,17 @@ def _execute_plan(plan, executor, validator):
         request = ExecutionRequest(tool=plan.tool, arguments=plan.arguments)
         response = executor.execute(request)
 
-    if response.status == "success":
-        post = validator.post_validate(plan, response)
-        response.post_passed = post.passed
-        response.post_errors = post.all_errors
-        if post.passed:
-            print(f"   ✅ Post-check: integrity ✓ | plausibility ✓ | completeness ✓")
-        else:
-            print(f"   ⚠️  Post-check FAILED:")
-            for err in post.all_errors:
-                print(f"      - {err}")
+        if response.status == "success":
+            post = validator.post_validate(plan, response)
+            response.post_passed = post.passed
+            response.post_errors = post.all_errors
+            if post.passed:
+                print(f"   ✅ Post-check: integrity ✓ | plausibility ✓ | completeness ✓")
+            else:
+                span.set_attribute("errors",str(post.all_errors))
+                print(f"   ⚠️  Post-check FAILED:")
+                for err in post.all_errors:
+                    print(f"      - {err}")
 
     _display_result(plan.tool, response)
     return response
