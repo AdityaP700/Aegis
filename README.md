@@ -24,3 +24,5 @@ In a 5-task stochastic evaluation repeated across 5 trials (25 total trials), Ae
 Aegis succeeded in 24/25 trials; the single failure was caused by an upstream LLM-provider rate limit and was classified separately as an external dependency failure.
 
 Results are from a targeted 5-task reliability suite; the broader 22-task benchmark is reported separately.
+
+Evaluated against an unprotected baseline using Pass@K/Pass^K, improving Pass@5 from 0% to 100% while eliminating silent failures. Deployed as a FastAPI service with Jaeger-based execution tracing
