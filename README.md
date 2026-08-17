@@ -15,6 +15,9 @@ model itself.
 > **The LLM proposes what it wants to do. The runtime decides what is allowed
 > to execute.**
 
+> Aegis was originally evaluated with Llama 3.3 70B and subsequently migrated to **GPT-OSS 120B** following provider deprecation.
+
+> The same runtime and evaluation harness were retained to measure behavioral differences across Brain implementations.
 
 ---
 
@@ -242,6 +245,9 @@ to Grafana Tempo for inspection and latency analysis.
 
 The evaluation harness runs identical tasks against a baseline agent and
 Aegis, then compares success, consistency, failure categories and latency.
+> "In a five-case stress suite, Aegis did not improve raw task success (80% vs 80%). What changed was the execution behavior: unsupported capabilities were detected before tool execution, invalid inputs were classified explicitly, and successful fallbacks became observable through structured traces."
+
+> I initially expected the reliability layer itself to become a performance bottleneck. I instrumented Aegis with OpenTelemetry and looked at the execution traces. Across five initial runs, validation consistently took less than 1 ms, while model planning ranged from 697 ms to 10.36 seconds and tool execution ranged from 482 ms to 8.23 seconds. The preliminary result was surprising: the deterministic reliability checks were not the latency problem. The expensive components were the model and external tools.
 ### The Three Questions Every Layer Answers
 
 | Layer | Question |

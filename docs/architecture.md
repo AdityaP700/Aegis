@@ -90,3 +90,12 @@ Grader → Uses pre-classified signals
 Pipeline          →  EMITS events (no judgment)
 Classifier        →  READS events, assigns category
 Grader            →  COMPARES category against expected
+
+Runtime
+Can I safely execute this?
+
+Evaluation
+Does my runtime actually improve agent reliability?
+
+Observability
+What happened during execution, and why?

@@ -1,0 +1,64 @@
+[
+    {
+        "id": "stress_capability",
+        "category": "STRESS",
+        "query": "What was the weather in Paris last Monday?",
+        "expected": {
+            "expected_tool": "search",
+            "expected_operation": "web_search",
+            "capability_rejected": "True",
+            "fallback_triggered": "True",
+            "final_status": "success",
+            "failure_reason": "none"
+        }
+    },
+    {
+        "id": "stress_forecast",
+        "category": "STRESS",
+        "query": "Will it rain in Tokyo tomorrow?",
+        "expected": {
+            "expected_tool": "search",
+            "expected_operation": "web_search",
+            "capability_rejected": "True",
+            "fallback_triggered": "True",
+            "final_status": "success",
+            "failure_reason": "none"
+        }
+    },
+    {
+        "id": "stress_invalid_city",
+        "category": "STRESS",
+        "query": "Weather in XYZ123",
+        "expected": {
+            "expected_tool": "weather",
+            "capability_rejected": "False",
+            "fallback_triggered": "False",
+            "final_status": "needs_clarification",
+            "failure_reason": "invalid_value"
+        }
+    },
+    {
+        "id": "stress_readme",
+        "category": "STRESS",
+        "query": "Show me the README of karpathy/nanoGPT",
+        "expected": {
+            "expected_tool": "search",
+            "expected_operation": "web_search",
+            "capability_rejected": "True",
+            "fallback_triggered": "True",
+            "final_status": "success",
+            "failure_reason": "none"
+        }
+    },
+    {
+        "id": "stress_python",
+        "category": "STRESS",
+        "query": "Tell me about Python",
+        "expected": {
+            "expected_tool": "search",
+            "fallback_triggered": "False",
+            "final_status": "success",
+            "failure_reason": "none"
+        }
+    }
+]
