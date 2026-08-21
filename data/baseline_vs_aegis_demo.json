@@ -1,0 +1,33 @@
+{
+  "query": "What was the weather in Paris last Monday?",
+  "baseline": {
+    "status": "success",
+    "tool": "weather",
+    "operation": "historical_weather",
+    "arguments": {
+      "city": "Paris"
+    },
+    "confidence": 1.0,
+    "duration_ms": 3036.36,
+    "what_user_got": "Today's Paris weather (WRONG \u2014 user asked for last Monday)",
+    "silent_failure": true,
+    "validation_performed": false,
+    "recovery_attempted": false
+  },
+  "aegis": {
+    "status": "success",
+    "tool": "search",
+    "operation": "web_search",
+    "arguments": {
+      "query": "What was the weather in Paris last Monday?"
+    },
+    "confidence": 1.0,
+    "duration_ms": 8178.7,
+    "capability_rejected": true,
+    "fallback_triggered": true,
+    "validation_performed": true,
+    "what_user_got": "Historical Paris weather via search (CORRECT)",
+    "silent_failure": false,
+    "recovery_attempted": true
+  }
+}

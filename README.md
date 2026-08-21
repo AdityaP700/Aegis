@@ -452,13 +452,7 @@ Aegis uses **OpenTelemetry** with **Grafana Cloud** for tracing.
 
 Every execution produces a trace:
 
-```
-http.execute (1.31s)
-└── agent.request (1.31s)
-    ├── agent.plan (626.99ms)    — tool, operation, confidence
-    ├── validation (0μs)         — status
-    └── tool.execute (683.05ms)  — tool, attempts, status
-```
+![alt text](public/image.png)
 
 This shows:
 - Where time is spent (planning vs execution vs validation)

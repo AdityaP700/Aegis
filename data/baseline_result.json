@@ -1,0 +1,19 @@
+{
+  "query": "What was the weather in Paris last Monday?",
+  "tool": "weather",
+  "operation": "historical_weather",
+  "arguments": {
+    "city": "Paris"
+  },
+  "confidence": 1.0,
+  "status": "success",
+  "duration_ms": 3515.81,
+  "failure_reason": "",
+  "trace": [
+    {
+      "component": "baseline",
+      "event": "executed_without_validation",
+      "tool": "weather"
+    }
+  ]
+}
